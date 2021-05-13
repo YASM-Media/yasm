@@ -47,7 +47,7 @@ services:
       - yasm_net
 
 networks:
-  full_stack_net:
+  yasm_net:
     name: yasm_net
 
 volumes:
