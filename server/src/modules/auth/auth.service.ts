@@ -87,7 +87,7 @@ export class AuthService {
 
   getFifteenMinutesLater(): Date {
     const date = new Date();
-    date.setMinutes(date.getMinutes() + 15);
+    date.setMinutes(date.getMinutes() + 1);
 
     return date;
   }
@@ -102,5 +102,9 @@ export class AuthService {
 
   jwtSign(payload: any, expiresIn: string): string {
     return this.jwtService.sign(payload, { expiresIn });
+  }
+
+  public async findUserByEmailAddress(emailAddress: string): Promise<User> {
+    return await this.userService.findOneUserByEmailAddress(emailAddress);
   }
 }

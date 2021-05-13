@@ -43,12 +43,14 @@ export class JwtAuthGuard implements CanActivate {
             sameSite: 'strict',
             httpOnly: true,
           });
+
+          request.user = this.authService.findUserByEmailAddress(email);
+          return true;
         }
       } else {
+        request.user = this.authService.findUserByEmailAddress(email);
         return true;
       }
-
-      return true;
     } catch (error) {
       response.clearCookie('accessToken');
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
