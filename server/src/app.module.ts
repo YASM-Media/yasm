@@ -1,6 +1,8 @@
+import { UserModule } from './modules/user/user.module';
 import { DummyModule } from './modules/dummy/dummy.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './models/user.model';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
-      entities: [],
+      entities: [User],
     }),
+    UserModule,
     DummyModule,
   ],
   controllers: [],
