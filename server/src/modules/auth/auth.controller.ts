@@ -29,11 +29,6 @@ export class AuthController {
       httpOnly: true,
     });
 
-    response.cookie('refreshToken', token.refreshToken, {
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-
     return response.sendStatus(HttpStatus.OK);
   }
 }

@@ -4,20 +4,14 @@ import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
 import { LoginUserDto } from 'src/DTOs/loginUser.dto';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { RefreshToken } from 'src/models/refreshToken.model';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepository: Repository<RefreshToken>,
   ) {}
 
   public async registerUser(registerUserDto: RegisterUserDto): Promise<User> {
@@ -37,27 +31,17 @@ export class AuthService {
     );
 
     if (user) {
-      const accessPayload = {
-        email: user.emailAddress,
-      };
-
-      const refreshPayload = {
-        token: crypto.randomBytes(20),
-      };
-
-      const refreshToken = this.jwtService.sign(refreshPayload, {
-        expiresIn: '7d',
-      });
-
-      const refreshTokenModel = new RefreshToken();
-      refreshTokenModel.user = user;
-      refreshTokenModel.refreshToken = refreshToken;
-
-      await this.refreshTokenRepository.save(refreshTokenModel);
-
       return {
-        accessToken: this.jwtService.sign(accessPayload, { expiresIn: '15m' }),
-        refreshToken,
+        accessToken: this.jwtService.sign(
+          {
+            email: user.emailAddress,
+            accessTimeLimit: this.getFifteenMinutesLater(),
+            refreshTimeLimit: this.getSevenDaysLater(),
+          },
+          {
+            expiresIn: '7d',
+          },
+        ),
       };
     } else {
       throw new HttpException(
@@ -92,5 +76,31 @@ export class AuthService {
       'Account does not exist with the given email address',
       HttpStatus.FORBIDDEN,
     );
+  }
+
+  getSevenDaysLater(): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+
+    return date;
+  }
+
+  getFifteenMinutesLater(): Date {
+    const date = new Date();
+    date.setMinutes(date.getMinutes() + 15);
+
+    return date;
+  }
+
+  async jwtVerify(jwt: string): Promise<any> {
+    return await this.jwtService.verify(jwt);
+  }
+
+  jwtDecode(jwt: string): any {
+    return this.jwtService.decode(jwt);
+  }
+
+  jwtSign(payload: any, expiresIn: string): string {
+    return this.jwtService.sign(payload, { expiresIn });
   }
 }
