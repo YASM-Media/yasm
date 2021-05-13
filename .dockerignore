@@ -1,0 +1,11 @@
+client/.gitignore
+client/dist/
+client/Dockerfile
+client/README.md
+client/node_modules/
+
+server/.gitignore
+server/dist/
+server/Dockerfile
+server/README.md
+server/node_modules/
