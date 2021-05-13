@@ -1,6 +1,6 @@
-# Full Stack TypeScript Starter Project 🌟
+# YASM!! 🌟
 
-Use this template project to quickly spin up development containers for your project!
+Yet another social media!!
 
 ## Configurations:
  - Client side: ReactJS
