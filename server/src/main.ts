@@ -8,6 +8,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('/v1/api');
 
   await app.listen(process.env.PORT || 5000);
 }
