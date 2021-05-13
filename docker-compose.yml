@@ -1,26 +1,26 @@
 version: '3'
 
 services:
-  app_client:
+  yasm_client:
     build:
       context: client
       dockerfile: Dockerfile
-    container_name: app_client
+    container_name: yasm_client
     ports:
       - '3000:3000'
     volumes:
       - ./client:/client
       - /client/node_modules
     networks:
-      - full_stack_net
+      - yasm_net
     depends_on:
-      - app_server
+      - yasm_server
 
-  app_server:
+  yasm_server:
     build:
       context: server
       dockerfile: Dockerfile
-    container_name: app_server
+    container_name: yasm_server
     env_file:
       - server.env
     ports:
@@ -29,27 +29,27 @@ services:
       - ./server:/server
       - /server/node_modules
     networks:
-      - full_stack_net
+      - yasm_net
     depends_on:
-      - app_postgres
+      - yasm_postgres
 
-  app_postgres:
+  yasm_postgres:
     image: postgres
-    container_name: app_postgres
+    container_name: yasm_postgres
     restart: always
     ports:
       - '5432:5432'
     env_file:
       - postgres.env
     volumes:
-      - app_postgres:/var/lib/postgresql/data
+      - yasm_postgres:/var/lib/postgresql/data
     networks:
-      - full_stack_net
+      - yasm_net
 
 networks:
   full_stack_net:
-    name: full_stack_net
+    name: yasm_net
 
 volumes:
-  app_postgres:
+  yasm_postgres:
     driver: local

@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://app_server:5000/",
+  "proxy": "http://yasm_server:5000/",
   "dependencies": {
     "@chakra-ui/react": "^1.6.1",
     "@emotion/react": "^11.4.0",
