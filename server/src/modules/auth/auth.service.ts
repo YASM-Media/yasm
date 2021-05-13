@@ -7,12 +7,17 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { LoginUserDto } from 'src/DTOs/loginUser.dto';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RefreshToken } from 'src/models/refreshToken.model';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    @InjectRepository(RefreshToken)
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
   ) {}
 
   public async registerUser(registerUserDto: RegisterUserDto): Promise<User> {
@@ -40,13 +45,19 @@ export class AuthService {
         token: crypto.randomBytes(20),
       };
 
-      // TODO: STORE REFRESH TOKEN IN DATABASE.
+      const refreshToken = this.jwtService.sign(refreshPayload, {
+        expiresIn: '7d',
+      });
+
+      const refreshTokenModel = new RefreshToken();
+      refreshTokenModel.user = user;
+      refreshTokenModel.refreshToken = refreshToken;
+
+      await this.refreshTokenRepository.save(refreshTokenModel);
 
       return {
         accessToken: this.jwtService.sign(accessPayload, { expiresIn: '15m' }),
-        refreshToken: this.jwtService.sign(refreshPayload, {
-          expiresIn: '7d',
-        }),
+        refreshToken,
       };
     } else {
       throw new HttpException(
