@@ -15,7 +15,6 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
       credentials: 'include',
     })
       .then((response: Response) => {
-        console.log(response.status);
         setAuthenticated(response.ok);
         setLoading(false);
       })
