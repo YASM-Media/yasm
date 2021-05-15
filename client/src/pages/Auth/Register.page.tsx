@@ -15,26 +15,9 @@ import { useFormik } from 'formik';
 import FormField from '../../components/form/formField.component';
 import { RegisterUser } from '../../types/registerUser.type';
 import CustomModal from '../../components/modal/modal.component';
+import * as AuthService from './../../store/auth/service';
 
 export interface RegisterProps {}
-
-async function registerNewUser(user: User): Promise<void> {
-  const response = await fetch('/v1/api/auth/register', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  });
-
-  if (!response.ok) {
-    const responseJson = await response.json();
-    const message = responseJson.message;
-
-    throw new Error(message);
-  }
-}
 
 const Register: React.FunctionComponent<RegisterProps> = () => {
   const toast = useToast();
@@ -66,7 +49,7 @@ const Register: React.FunctionComponent<RegisterProps> = () => {
         values.password.toString()
       );
       onOpen();
-      await registerNewUser(user);
+      await AuthService.register(user);
       onClose();
 
       toast({

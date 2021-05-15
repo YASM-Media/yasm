@@ -42,6 +42,7 @@ export class AuthService {
             expiresIn: '7d',
           },
         ),
+        user,
       };
     } else {
       throw new HttpException(

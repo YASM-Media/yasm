@@ -14,30 +14,15 @@ import { useFormik } from 'formik';
 import FormField from '../../components/form/formField.component';
 import CustomModal from '../../components/modal/modal.component';
 import { LoginUser } from '../../types/loginUser.type';
+import * as AuthActions from './../../store/auth/actionCreators';
+import { useDispatch } from 'react-redux';
 
 export interface LoginProps {}
-
-async function loginUser(user: LoginUser): Promise<void> {
-  const response = await fetch('/v1/api/auth/login', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  });
-
-  if (!response.ok) {
-    const responseJson = await response.json();
-    const message = responseJson.message;
-
-    throw new Error(message);
-  }
-}
 
 const Login: React.FunctionComponent<LoginProps> = () => {
   const toast = useToast();
   const history = useHistory();
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues: LoginUser = {
@@ -53,7 +38,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
   const onSubmit = async (user: LoginUser) => {
     try {
       onOpen();
-      await loginUser(user);
+      await dispatch(AuthActions.login(user));
       onClose();
 
       toast({
@@ -68,6 +53,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
       history.push('/private');
     } catch (error) {
       onClose();
+      console.log(error);
       toast({
         title: 'Error Occured',
         description: error.message,

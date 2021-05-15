@@ -29,6 +29,6 @@ export class AuthController {
       httpOnly: true,
     });
 
-    return response.sendStatus(HttpStatus.OK);
+    return response.json(token.user);
   }
 }
