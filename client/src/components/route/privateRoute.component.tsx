@@ -30,6 +30,7 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
             setAuthenticated(false);
             dispatch(AuthActions.logout());
           }
+          setLoading(false);
         })
         .then((json) => {
           if (json) {
@@ -41,14 +42,13 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
             );
 
             dispatch(AuthActions.autoLogin(user));
-            setLoading(false);
           }
         })
         .finally(() => setLoading(false))
         .catch((error: Error) => console.log(error));
     else {
       setAuthenticated(true);
-      setLoading(true);
+      setLoading(false);
     }
   }, [auth.isLoggedIn, dispatch]);
 
