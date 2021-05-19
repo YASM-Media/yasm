@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -24,4 +30,12 @@ export class User {
 
   @Column()
   password: string;
+
+  @ManyToMany(() => User, (user) => user.followers)
+  @JoinTable()
+  followers: User[];
+
+  @ManyToMany(() => User, (user) => user.following)
+  @JoinTable()
+  following: User[];
 }
