@@ -6,6 +6,9 @@ import {
   JoinTable,
 } from 'typeorm';
 
+/**
+ * User Database model
+ */
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')

@@ -8,16 +8,31 @@ import { LoggedInUser } from './../../decorators/logged-in-user.decorator';
 import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 
+/**
+ * Controller Implementation for User Profile.
+ */
 @Controller('user')
 export class UserController {
+  // Injecting in User Service.
   constructor(private readonly userService: UserService) {}
 
+  /**
+   * Get the logged in user details.
+   * @param user Logged In User Details
+   * @returns User Details
+   */
   @UseGuards(JwtAuthGuard)
   @Get('me')
   public getLoggedInUser(@LoggedInUser() user: User): User {
     return user;
   }
 
+  /**
+   * API Endpoint for updating User Profile.
+   * @param profileDto User Profile Update DTO
+   * @param user Logged In User
+   * @returns Updated User Profile
+   */
   @UseGuards(JwtAuthGuard)
   @Post('update/profile')
   public async updateUserProfile(
@@ -27,6 +42,13 @@ export class UserController {
     return await this.userService.updateUserProfile(user, profileDto);
   }
 
+  /**
+   * API Endpoint for User Email Address Update.
+   * @param emailUpdateDto User Email Update DTO
+   * @param user Logged In User
+   * @param response Express Response Object
+   * @returns Cookie with token and User details.
+   */
   @UseGuards(JwtAuthGuard)
   @Post('update/email')
   public async updateEmailAddress(
@@ -47,6 +69,12 @@ export class UserController {
     return response.json(token.user);
   }
 
+  /**
+   * API Endpoint for User Password Update.
+   * @param passwordUpdateDto User Password Update DTO
+   * @param user Logged In User
+   * @returns User Details with updated details.
+   */
   @UseGuards(JwtAuthGuard)
   @Post('update/password')
   public async updatePassword(

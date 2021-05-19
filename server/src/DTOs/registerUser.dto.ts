@@ -1,5 +1,8 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
+/**
+ * User Registration API Body
+ */
 export class RegisterUserDto {
   @IsNotEmpty()
   firstName: string;
