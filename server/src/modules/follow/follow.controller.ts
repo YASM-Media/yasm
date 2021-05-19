@@ -1,6 +1,6 @@
 import { FollowService } from './follow.service';
 import { JwtAuthGuard } from './../../guards/auth.guard';
-import { Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { User } from 'src/models/user.model';
 
@@ -24,5 +24,21 @@ export class FollowController {
     @Param('id') id: string,
   ): Promise<User> {
     return await this.followService.unfollowUser(user, id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get')
+  public async getFollowersAndFollowing(
+    @LoggedInUser() user: User,
+  ): Promise<User> {
+    return await this.followService.getFollowersAndFollowing(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get/:id')
+  public async getFollowersAndFollowingForUser(
+    @Param('id') id: string,
+  ): Promise<User> {
+    return await this.followService.getFollowersAndFollowingForUser(id);
   }
 }

@@ -92,4 +92,14 @@ export class FollowService {
       );
     }
   }
+
+  public async getFollowersAndFollowing(loggedInUser: User): Promise<User> {
+    return await this.userService.findOneUserByEmailAddressWithRelations(
+      loggedInUser.emailAddress,
+    );
+  }
+
+  public async getFollowersAndFollowingForUser(id: string): Promise<User> {
+    return await this.userService.findOneUserByIdWithRelations(id);
+  }
 }
