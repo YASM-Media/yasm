@@ -1,3 +1,4 @@
+import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { DummyModule } from './modules/dummy/dummy.module';
@@ -20,6 +21,7 @@ import { User } from './models/user.model';
     }),
     UserModule,
     AuthModule,
+    FollowModule,
     DummyModule,
   ],
   controllers: [],

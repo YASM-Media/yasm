@@ -22,6 +22,30 @@ export class UserService {
     return this.userRepository.findOne({ emailAddress: emailAddress });
   }
 
+  public async findOneUserByEmailAddressWithRelations(
+    emailAddress: string,
+  ): Promise<User> {
+    return (
+      await this.userRepository.find({
+        relations: ['followers', 'following'],
+        where: { emailAddress },
+      })
+    )[0];
+  }
+
+  public async findOneUserById(id: string): Promise<User> {
+    return this.userRepository.findOne({ id: id });
+  }
+
+  public async findOneUserByIdWithRelations(id: string): Promise<User> {
+    return (
+      await this.userRepository.find({
+        relations: ['followers', 'following'],
+        where: { id },
+      })
+    )[0];
+  }
+
   public async registerNewUser(
     registerUserDto: RegisterUserDto,
   ): Promise<User> {
