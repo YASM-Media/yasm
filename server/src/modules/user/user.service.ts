@@ -8,6 +8,7 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { PasswordUpdateDto } from 'src/DTOs/passwordUpdate.dto';
 
 @Injectable()
 export class UserService {
@@ -87,6 +88,32 @@ export class UserService {
         accessToken: accessToken,
         user: updatedUser,
       };
+    } else {
+      throw new HttpException(
+        'Your password is incorrect',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  public async updatePassword(
+    user: User,
+    passwordUpdateDto: PasswordUpdateDto,
+  ): Promise<User> {
+    const checkPassword = await bcrypt.compare(
+      passwordUpdateDto.oldPassword,
+      user.password,
+    );
+
+    if (checkPassword === true) {
+      const saltOrRounds = 10;
+      const passwordHash = await bcrypt.hash(
+        passwordUpdateDto.newPassword,
+        saltOrRounds,
+      );
+
+      user.password = passwordHash;
+      return await this.userRepository.save(user);
     } else {
       throw new HttpException(
         'Your password is incorrect',

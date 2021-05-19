@@ -1,3 +1,4 @@
+import { PasswordUpdateDto } from './../../DTOs/passwordUpdate.dto';
 import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
 import { UserService } from 'src/modules/user/user.service';
 import { ProfileDto } from './../../DTOs/profile.dto';
@@ -44,5 +45,14 @@ export class UserController {
     });
 
     return response.json(token.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('update/password')
+  public async updatePassword(
+    @Body() passwordUpdateDto: PasswordUpdateDto,
+    @LoggedInUser() user: User,
+  ): Promise<User> {
+    return await this.userService.updatePassword(user, passwordUpdateDto);
   }
 }
