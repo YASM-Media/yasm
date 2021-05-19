@@ -1,7 +1,7 @@
 import { LoginUserDto } from './../../DTOs/loginUser.dto';
 import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Res, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import { Response } from 'express';
 import { Token } from 'src/types/token.type';
