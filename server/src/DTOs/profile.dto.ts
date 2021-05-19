@@ -1,5 +1,8 @@
 import { IsNotEmpty, IsUrl } from 'class-validator';
 
+/**
+ * User Profile Update API Body
+ */
 export class ProfileDto {
   @IsNotEmpty()
   firstName: string;
