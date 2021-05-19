@@ -47,4 +47,49 @@ export class FollowService {
       );
     }
   }
+
+  public async unfollowUser(
+    loggedInUser: User,
+    followId: string,
+  ): Promise<User> {
+    const rootUserWithRelations =
+      await this.userService.findOneUserByEmailAddressWithRelations(
+        loggedInUser.emailAddress,
+      );
+
+    const followUser = await this.userService.findOneUserById(followId);
+
+    if (!followUser) {
+      throw new HttpException(
+        'The user you are trying to unfollow does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const followUserWithRelations =
+      await this.userService.findOneUserByIdWithRelations(followId);
+
+    const check = rootUserWithRelations.following.find(
+      (user) => user.id === followUser.id,
+    );
+
+    if (check) {
+      rootUserWithRelations.following = rootUserWithRelations.following.filter(
+        (user) => user.id !== followId,
+      );
+
+      followUserWithRelations.followers =
+        followUserWithRelations.followers.filter(
+          (user) => user.id !== loggedInUser.id,
+        );
+
+      await this.userRepository.save(followUserWithRelations);
+      return await this.userRepository.save(rootUserWithRelations);
+    } else {
+      throw new HttpException(
+        'You are not following the user',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
 }

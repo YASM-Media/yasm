@@ -16,4 +16,13 @@ export class FollowController {
   ): Promise<User> {
     return await this.followService.followUser(user, id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('unfollow/:id')
+  public async unfollowUser(
+    @LoggedInUser() user: User,
+    @Param('id') id: string,
+  ): Promise<User> {
+    return await this.followService.unfollowUser(user, id);
+  }
 }
