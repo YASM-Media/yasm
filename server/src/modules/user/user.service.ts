@@ -1,9 +1,9 @@
+import { ProfileDto } from './../../DTOs/profile.dto';
+import { User } from 'src/models/user.model';
 import { RegisterUserDto } from './../../DTOs/registerUser.dto';
-import { User } from './../../models/user.model';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { throws } from 'assert';
 
 @Injectable()
 export class UserService {
@@ -40,5 +40,17 @@ export class UserService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
+  }
+
+  public async updateUserProfile(
+    loggedInUser: User,
+    profileDto: ProfileDto,
+  ): Promise<User> {
+    loggedInUser.firstName = profileDto.firstName;
+    loggedInUser.lastName = profileDto.lastName;
+    loggedInUser.biography = profileDto.biography;
+    loggedInUser.imageUrl = profileDto.imageUrl;
+
+    return await this.userRepository.save(loggedInUser);
   }
 }
