@@ -9,13 +9,13 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { User } from '../../models/user.model';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import FormField from '../../components/form/formField.component';
 import { RegisterUser } from '../../types/registerUser.type';
 import CustomModal from '../../components/modal/modal.component';
 import * as AuthService from './../../store/auth/service';
+import { UserType } from '../../types/user.type';
 
 export interface RegisterProps {}
 
@@ -42,14 +42,12 @@ const Register: React.FunctionComponent<RegisterProps> = () => {
 
   const onSubmit = async (values: RegisterUser) => {
     try {
-      const user = new User(
-        values.firstName,
-        values.lastName,
-        '',
-        '',
-        values.emailAddress,
-        values.password.toString()
-      );
+      const user: UserType = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        emailAddress: values.emailAddress,
+        password: values.password.toString(),
+      };
       onOpen();
       await AuthService.register(user);
       onClose();
