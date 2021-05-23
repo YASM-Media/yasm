@@ -29,12 +29,12 @@ export const login = (
     const action: AuthAction = {
       type: actionTypes.LOGIN,
       user: new User(
+        userJson.id,
         userJson.firstName,
         userJson.lastName,
         userJson.biography,
         userJson.imageUrl,
-        userJson.emailAddress,
-        userJson.password
+        userJson.emailAddress
       ),
     };
 

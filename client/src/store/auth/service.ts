@@ -1,12 +1,12 @@
+import { UserType } from './../../types/user.type';
 import { UpdatePasswordType } from './../../types/updatePassword.type';
 import { UpdateProfileType } from './../../types/updateProfile.type';
-import { User } from '../../models/user.model';
 import { firebaseStorage } from '../../utils/firebase';
 import { UpdateEmailType } from '../../types/updateEmail.type';
 
 const profilePictureStorage = firebaseStorage.child('/profile-pictures');
 
-export const register = async (user: User): Promise<void> => {
+export const register = async (user: UserType): Promise<void> => {
   const response = await fetch('/v1/api/auth/register', {
     method: 'POST',
     credentials: 'include',
@@ -86,9 +86,9 @@ export const updatePassword = async (
 
 export const uploadProfileImage = async (
   file: File | Blob | ArrayBuffer | Uint8Array,
-  email: string
+  uid: string
 ) => {
-  await profilePictureStorage.child(`${email}.jpg`).put(file);
+  await profilePictureStorage.child(`${uid}.jpg`).put(file);
 
-  return await profilePictureStorage.child(`${email}.jpg`).getDownloadURL();
+  return await profilePictureStorage.child(`${uid}.jpg`).getDownloadURL();
 };

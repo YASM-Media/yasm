@@ -29,12 +29,12 @@ const Splash: React.FunctionComponent<SplashProps> = () => {
       .then((json) => {
         if (json) {
           const user = new User(
+            json.id,
             json.firstName,
             json.lastName,
             json.biography,
             json.imageUrl,
-            json.emailAddress,
-            json.password
+            json.emailAddress
           );
 
           dispatch(AuthActions.autoLogin(user));

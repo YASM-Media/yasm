@@ -4,6 +4,7 @@ import Login from '../../pages/Auth/Login.page';
 import Register from '../../pages/Auth/Register.page';
 import Dummy from '../../pages/Dummy.page';
 import Private from '../../pages/Private.page';
+import CompleteUserProfile from '../../pages/Profile/CompleteUserProfile.page';
 import Splash from '../../pages/Splash.page';
 import UpdateAccount from '../../pages/UpdateAccount/UpdateAccount.page';
 import PrivateRoute from './privateRoute.component';
@@ -29,6 +30,24 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
           exact
           path='/account/update'
           component={UpdateAccount}
+        />
+        <PrivateRoute
+          redirectTo='/login'
+          exact
+          path='/account/profile/me'
+          component={CompleteUserProfile}
+        />
+
+        <PrivateRoute
+          redirectTo='/login'
+          exact
+          path='/account/profile/:id'
+          render={(props) => (
+            <CompleteUserProfile
+              ownProfile={false}
+              uid={props.match.params.id}
+            />
+          )}
         />
       </Switch>
     </Router>
