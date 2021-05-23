@@ -2,6 +2,7 @@ import { Flex, Heading } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 import React from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
+import UpdateEmail from '../../components/accountUpdate/UpdateEmail.component';
 import UpdateProfile from '../../components/accountUpdate/UpdateProfile.component';
 
 export interface UpdateAccountProps {}
@@ -29,7 +30,9 @@ const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
             <TabPanel>
               <UpdateProfile user={user.loggedInUser} />
             </TabPanel>
-            <TabPanel></TabPanel>
+            <TabPanel>
+              <UpdateEmail user={user.loggedInUser} />
+            </TabPanel>
             <TabPanel></TabPanel>
           </TabPanels>
         </Tabs>

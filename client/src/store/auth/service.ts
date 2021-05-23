@@ -1,6 +1,7 @@
 import { UpdateProfileType } from './../../types/updateProfile.type';
 import { User } from '../../models/user.model';
 import { firebaseStorage } from '../../utils/firebase';
+import { UpdateEmailType } from '../../types/updateEmail.type';
 
 const profilePictureStorage = firebaseStorage.child('/profile-pictures');
 
@@ -32,6 +33,26 @@ export const updateUserProfile = async (
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
+  });
+
+  if (!response.ok) {
+    const responseJson = await response.json();
+    const message = responseJson.message;
+
+    throw new Error(message);
+  }
+};
+
+export const updateEmailAddress = async (
+  data: UpdateEmailType
+): Promise<void> => {
+  const response = await fetch('/v1/api/user/update/email', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
