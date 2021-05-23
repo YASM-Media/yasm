@@ -1,9 +1,11 @@
 export class User {
   constructor(
-    private firstName: string,
-    private lastName: string,
-    private emailAddress: string,
-    private password: string
+    public firstName: string,
+    public lastName: string,
+    public biography: string,
+    public imageUrl: string,
+    public emailAddress: string,
+    public password: string
   ) {}
 
   fromJson(json: any) {
@@ -11,5 +13,7 @@ export class User {
     this.lastName = json.lastName;
     this.emailAddress = json.emailAddress;
     this.password = json.password;
+    this.imageUrl = json.imageUrl;
+    this.biography = json.biography;
   }
 }

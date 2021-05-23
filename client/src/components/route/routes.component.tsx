@@ -5,6 +5,7 @@ import Register from '../../pages/Auth/Register.page';
 import Dummy from '../../pages/Dummy.page';
 import Private from '../../pages/Private.page';
 import Splash from '../../pages/Splash.page';
+import UpdateAccount from '../../pages/UpdateAccount/UpdateAccount.page';
 import PrivateRoute from './privateRoute.component';
 
 export interface RoutesProps {}
@@ -22,6 +23,12 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
           exact
           path='/private'
           component={Private}
+        />
+        <PrivateRoute
+          redirectTo='/login'
+          exact
+          path='/account/update'
+          component={UpdateAccount}
         />
       </Switch>
     </Router>

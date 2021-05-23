@@ -31,6 +31,8 @@ export const login = (
       user: new User(
         userJson.firstName,
         userJson.lastName,
+        userJson.biography,
+        userJson.imageUrl,
         userJson.emailAddress,
         userJson.password
       ),
@@ -47,5 +49,5 @@ export const autoLogin = (user: User): AuthAction => ({
 
 export const logout = () => ({
   type: actionTypes.LOGOUT,
-  user: new User('', '', '', ''),
+  user: new User('', '', '', '', '', ''),
 });
