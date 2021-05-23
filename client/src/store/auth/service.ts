@@ -1,3 +1,4 @@
+import { UpdatePasswordType } from './../../types/updatePassword.type';
 import { UpdateProfileType } from './../../types/updateProfile.type';
 import { User } from '../../models/user.model';
 import { firebaseStorage } from '../../utils/firebase';
@@ -47,6 +48,26 @@ export const updateEmailAddress = async (
   data: UpdateEmailType
 ): Promise<void> => {
   const response = await fetch('/v1/api/user/update/email', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const responseJson = await response.json();
+    const message = responseJson.message;
+
+    throw new Error(message);
+  }
+};
+
+export const updatePassword = async (
+  data: UpdatePasswordType
+): Promise<void> => {
+  const response = await fetch('/v1/api/user/update/password', {
     method: 'POST',
     credentials: 'include',
     headers: {
