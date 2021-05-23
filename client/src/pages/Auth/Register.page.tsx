@@ -45,6 +45,8 @@ const Register: React.FunctionComponent<RegisterProps> = () => {
       const user = new User(
         values.firstName,
         values.lastName,
+        '',
+        '',
         values.emailAddress,
         values.password.toString()
       );

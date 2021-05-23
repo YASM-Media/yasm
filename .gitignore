@@ -1,3 +1,4 @@
 **/node_modules
 **/dist
 .vscode/
+client/src/keys/firebaseKeys.ts

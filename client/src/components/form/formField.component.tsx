@@ -10,7 +10,12 @@ import {
 import { FormikErrors } from 'formik';
 
 export type FormFieldProps = {
-  error?: string | FormikErrors<String>;
+  error?:
+    | string
+    | string[]
+    | FormikErrors<any>
+    | FormikErrors<any>[]
+    | undefined;
   label: string;
   type: string;
   placeholder: string;

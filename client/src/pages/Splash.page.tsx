@@ -31,6 +31,8 @@ const Splash: React.FunctionComponent<SplashProps> = () => {
           const user = new User(
             json.firstName,
             json.lastName,
+            json.biography,
+            json.imageUrl,
             json.emailAddress,
             json.password
           );
