@@ -1,10 +1,18 @@
-import { Button, Flex, Image, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Image,
+  Text,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { User } from '../../models/user.model';
 import CustomModal from '../modal/modal.component';
 import UserList from './UserList.component';
+import * as FollowService from './../../store/follow/service';
 
 export interface UserProfileProps {
   user: User;
@@ -19,12 +27,16 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   following,
   ownProfile,
 }) => {
-  const [displayMode, setDisplayMode] = useState('follower');
-  const history = useHistory();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const auth = useSelector((state: RootStateOrAny) => state.auth);
+  const [displayMode, setDisplayMode] = useState('follower');
+  const [isFollowing, setIsFollowing] = useState(
+    followers.find((user) => user.uid === auth.loggedInUser.uid) ? true : false
+  );
+  const [followersState, setFollowersState] = useState(followers);
 
-  const check = followers.find((user) => user.uid === auth.loggedInUser.uid);
+  const history = useHistory();
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const showFollowers = () => {
     setDisplayMode('follower');
@@ -34,6 +46,39 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   const showFollowing = () => {
     setDisplayMode('following');
     onOpen();
+  };
+
+  const followOrUnfollowUser = async () => {
+    try {
+      if (isFollowing) {
+        await FollowService.unfollowUser(user.uid);
+        setFollowersState(
+          followers.filter((follower) => follower.uid !== auth.loggedInUser.uid)
+        );
+      } else {
+        await FollowService.followUser(user.uid);
+        setFollowersState([...followersState, auth.loggedInUser]);
+      }
+
+      toast({
+        title: 'Success',
+        description: `Successfully ${
+          isFollowing ? 'unfollowed' : 'followed'
+        } the user!!🌟`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      toast({
+        title: 'Error Occured',
+        description: error.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -76,7 +121,7 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
               justify='space-between'
               onClick={showFollowers}
             >
-              <Text>{followers.length}</Text>
+              <Text>{followersState.length}</Text>
               <Text fontWeight='bold'>followers</Text>
             </Flex>
 
@@ -93,7 +138,9 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
           </Flex>
 
           {!ownProfile && (
-            <Button colorScheme='teal'>{check ? 'Unfollow' : 'Follow'}</Button>
+            <Button onClick={followOrUnfollowUser} colorScheme='teal'>
+              {isFollowing ? 'Unfollow' : 'Follow'}
+            </Button>
           )}
           {ownProfile && (
             <Button
@@ -107,7 +154,7 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
       </Flex>
       <CustomModal isOpen={isOpen} onClose={onClose}>
         <UserList
-          userList={displayMode === 'follower' ? followers : following}
+          userList={displayMode === 'follower' ? followersState : following}
           emptyMessage={
             displayMode === 'follower'
               ? 'The user does not have any followers!!🌟'
