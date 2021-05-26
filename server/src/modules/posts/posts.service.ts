@@ -4,7 +4,7 @@ import { CreatePostDto } from '../../DTOs/posts/createPost.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/models/post.model';
-import { In, Repository } from 'typeorm';
+import { In, MoreThanOrEqual, Repository } from 'typeorm';
 import { Image } from 'src/models/image.model';
 import { User } from 'src/models/user.model';
 import { UpdatePostDto } from 'src/DTOs/posts/updatePost.dto';
@@ -59,7 +59,7 @@ export class PostsService {
 
     // Returning all posts, newest first, by the users the logged in user follows
     return await this.postRepository.find({
-      relations: ['user', 'images'],
+      relations: ['user', 'images', 'likes'],
       where: {
         user: In(userFollowDetails.following.map((u) => u.id)),
       },
@@ -67,6 +67,35 @@ export class PostsService {
         createdAt: 'DESC',
       },
     });
+  }
+
+  /**
+   * Fetch the best posts by the user followed by the
+   * logged in user in the last 24 hours.
+   * @param user Logged In User Details
+   * @returns Posts by users followed by Logged In User
+   */
+  public async getBestPostsByDay(user: User): Promise<Post[]> {
+    // Getting all follow details for the logged in user.
+    const userFollowDetails =
+      await this.userService.findOneUserByIdWithRelations(user.id);
+
+    // Getting 24 hours earlier date.
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+
+    // Returning all posts, best first, by the users the logged in user follows
+    return (
+      await this.postRepository.find({
+        relations: ['user', 'images', 'likes'],
+        where: {
+          user: In(userFollowDetails.following.map((u) => u.id)),
+          createdAt: MoreThanOrEqual(date),
+        },
+      })
+    ).sort((firstPost, secondPost) =>
+      firstPost.likes.length > secondPost.likes.length ? -1 : 1,
+    );
   }
 
   /**

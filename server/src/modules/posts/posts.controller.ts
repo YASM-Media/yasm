@@ -28,6 +28,19 @@ export class PostsController {
   }
 
   /**
+   * API Endpoint for fetching best posts by followed users.
+   * @param user Logged In User
+   * @returns New posts by followed users
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('get/best')
+  public async getBestPostsByDay(
+    @LoggedInUser() user: User,
+  ): Promise<PostModel[]> {
+    return this.postsService.getBestPostsByDay(user);
+  }
+
+  /**
    * API Endpoint for Post Creation.
    * @param createPostDto DTO For Post Creation
    * @param user Logged In User
