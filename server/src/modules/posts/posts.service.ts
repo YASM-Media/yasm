@@ -1,3 +1,4 @@
+import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { CreatePostDto } from '../../DTOs/posts/createPost.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -96,6 +97,33 @@ export class PostsService {
       return await this.postRepository.save(postModel);
     } catch (error) {
       throw new HttpException('Post Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  /**
+   * Delete the post with the given ID
+   * @param deletePostDto DTO For Post Deletion
+   * @param user Logged In User Details
+   * @returns Deletion Confimation
+   */
+  public async deletePost(
+    deletePostDto: DeletePostDto,
+    user: User,
+  ): Promise<string> {
+    try {
+      // Get the post for the logged in user.
+      const postModel = await this.getPost(deletePostDto.id, user);
+
+      // Delete all the images related to the post.
+      await this.imageRepository.delete({ post: postModel });
+
+      // Delete the post itself.
+      await this.postRepository.delete(postModel);
+
+      // Return deletion confirmation.
+      return 'OK';
+    } catch (error) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
   }
 }

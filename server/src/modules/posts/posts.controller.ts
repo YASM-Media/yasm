@@ -1,3 +1,4 @@
+import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { UpdatePostDto } from './../../DTOs/posts/updatePost.dto';
 import { CreatePostDto } from './../../DTOs/posts/createPost.dto';
 import { JwtAuthGuard } from './../../guards/auth.guard';
@@ -43,5 +44,20 @@ export class PostsController {
     @LoggedInUser() user: User,
   ): Promise<PostModel> {
     return await this.postsService.updatePost(updatePostDto, user);
+  }
+
+  /**
+   * API Endpoint for Post Deletion.
+   * @param deletePostDto DTO For POst Deletion
+   * @param user Logged In User Details
+   * @returns Deletion Confirmation
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('delete')
+  public async deletePost(
+    @Body() deletePostDto: DeletePostDto,
+    @LoggedInUser() user: User,
+  ): Promise<string> {
+    return await this.postsService.deletePost(deletePostDto, user);
   }
 }
