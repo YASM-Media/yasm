@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './models/user.model';
 import { Post } from './models/post.model';
 import { Image } from './models/image.model';
+import { PostsModule } from './modules/posts/posts.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { Image } from './models/image.model';
     UserModule,
     AuthModule,
     FollowModule,
+    PostsModule,
     DummyModule,
   ],
   controllers: [],
