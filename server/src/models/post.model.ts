@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Image } from './image.model';
+import { Like } from './like.model';
 import { User } from './user.model';
 
 /**
@@ -26,6 +27,9 @@ export class Post {
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
+
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -4,7 +4,7 @@ import { CreatePostDto } from '../../DTOs/posts/createPost.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/models/post.model';
-import { EntityNotFoundError, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Image } from 'src/models/image.model';
 import { User } from 'src/models/user.model';
 import { UpdatePostDto } from 'src/DTOs/posts/updatePost.dto';
@@ -34,6 +34,17 @@ export class PostsService {
   private async getPost(postId: string, user: User): Promise<Post> {
     // Find one post for the given id.
     return await this.postRepository.findOneOrFail({ id: postId, user: user });
+  }
+
+  /**
+   * Fetch a post for thr given ID.
+   * @param postId Post ID
+   * @returns Post Model Object
+   */
+  public async getPostById(postId: string): Promise<Post> {
+    return await this.postRepository.findOne({
+      id: postId,
+    });
   }
 
   /**

@@ -1,3 +1,4 @@
+import { LikeModule } from './modules/like/like.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -8,6 +9,7 @@ import { User } from './models/user.model';
 import { Post } from './models/post.model';
 import { Image } from './models/image.model';
 import { PostsModule } from './modules/posts/posts.module';
+import { Like } from './models/like.model';
 
 @Module({
   imports: [
@@ -20,12 +22,13 @@ import { PostsModule } from './modules/posts/posts.module';
       database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
-      entities: [User, Image, Post],
+      entities: [User, Image, Post, Like],
     }),
     UserModule,
     AuthModule,
     FollowModule,
     PostsModule,
+    LikeModule,
     DummyModule,
   ],
   controllers: [],

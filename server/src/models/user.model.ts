@@ -6,6 +6,7 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
+import { Like } from './like.model';
 import { Post } from './post.model';
 
 /**
@@ -46,4 +47,7 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
