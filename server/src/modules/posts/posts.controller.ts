@@ -2,7 +2,7 @@ import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { UpdatePostDto } from './../../DTOs/posts/updatePost.dto';
 import { CreatePostDto } from './../../DTOs/posts/createPost.dto';
 import { JwtAuthGuard } from './../../guards/auth.guard';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostModel } from 'src/models/post.model';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
@@ -15,6 +15,17 @@ import { User } from 'src/models/user.model';
 export class PostsController {
   // Injecting Post Service from Nest Context.
   constructor(private readonly postsService: PostsService) {}
+
+  /**
+   * API Endpoint for fetching new posts by followed users.
+   * @param user Logged In User
+   * @returns New posts by followed users
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('get/new')
+  public async getNewPosts(@LoggedInUser() user: User): Promise<PostModel[]> {
+    return this.postsService.getNewPosts(user);
+  }
 
   /**
    * API Endpoint for Post Creation.

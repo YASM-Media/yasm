@@ -1,9 +1,10 @@
+import { UserService } from './../user/user.service';
 import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { CreatePostDto } from '../../DTOs/posts/createPost.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/models/post.model';
-import { EntityNotFoundError, Repository } from 'typeorm';
+import { EntityNotFoundError, In, Repository } from 'typeorm';
 import { Image } from 'src/models/image.model';
 import { User } from 'src/models/user.model';
 import { UpdatePostDto } from 'src/DTOs/posts/updatePost.dto';
@@ -14,12 +15,15 @@ import { UpdatePostDto } from 'src/DTOs/posts/updatePost.dto';
 @Injectable()
 export class PostsService {
   // Injecting Post and Image Repositories from Nest Context.
+  // Also injecting User Service.
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
 
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
+
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -27,9 +31,31 @@ export class PostsService {
    * @param postId ID for the post
    * @returns Post Database Object
    */
-  public async getPost(postId: string, user: User): Promise<Post> {
+  private async getPost(postId: string, user: User): Promise<Post> {
     // Find one post for the given id.
     return await this.postRepository.findOneOrFail({ id: postId, user: user });
+  }
+
+  /**
+   * Fetch the newest posts by the user followed by the logged in user.
+   * @param user Logged In User Details
+   * @returns Posts by users followed by Logged In User
+   */
+  public async getNewPosts(user: User): Promise<Post[]> {
+    // Getting all follow details for the logged in user.
+    const userFollowDetails =
+      await this.userService.findOneUserByIdWithRelations(user.id);
+
+    // Returning all posts, newest first, by the users the logged in user follows
+    return await this.postRepository.find({
+      relations: ['user', 'images'],
+      where: {
+        user: In(userFollowDetails.following.map((u) => u.id)),
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   /**
