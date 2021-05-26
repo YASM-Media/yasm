@@ -1,3 +1,4 @@
+import { UpdatePostDto } from './../../DTOs/posts/updatePost.dto';
 import { CreatePostDto } from './../../DTOs/posts/createPost.dto';
 import { JwtAuthGuard } from './../../guards/auth.guard';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
@@ -27,5 +28,20 @@ export class PostsController {
     @LoggedInUser() user: User,
   ): Promise<PostModel> {
     return await this.postsService.createPost(createPostDto, user);
+  }
+
+  /**
+   * API Endpoint for Post Updating.
+   * @param updatePostDto DTO For Post Updating
+   * @param user Logged In User
+   * @returns Updated Post Model Object
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('update')
+  public async updatePost(
+    @Body() updatePostDto: UpdatePostDto,
+    @LoggedInUser() user: User,
+  ): Promise<PostModel> {
+    return await this.postsService.updatePost(updatePostDto, user);
   }
 }
