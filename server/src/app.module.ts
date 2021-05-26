@@ -5,6 +5,8 @@ import { DummyModule } from './modules/dummy/dummy.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './models/user.model';
+import { Post } from './models/post.model';
+import { Image } from './models/image.model';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { User } from './models/user.model';
       database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
-      entities: [User],
+      entities: [User, Image, Post],
     }),
     UserModule,
     AuthModule,
