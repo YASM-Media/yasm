@@ -1,3 +1,4 @@
+import { LikeModule } from './modules/like/like.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -5,6 +6,10 @@ import { DummyModule } from './modules/dummy/dummy.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './models/user.model';
+import { Post } from './models/post.model';
+import { Image } from './models/image.model';
+import { PostsModule } from './modules/posts/posts.module';
+import { Like } from './models/like.model';
 
 @Module({
   imports: [
@@ -17,11 +22,13 @@ import { User } from './models/user.model';
       database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
-      entities: [User],
+      entities: [User, Image, Post, Like],
     }),
     UserModule,
     AuthModule,
     FollowModule,
+    PostsModule,
+    LikeModule,
     DummyModule,
   ],
   controllers: [],

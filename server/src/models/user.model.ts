@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
+import { Like } from './like.model';
+import { Post } from './post.model';
 
 /**
  * User Database model
@@ -41,4 +44,10 @@ export class User {
   @ManyToMany(() => User, (user) => user.following)
   @JoinTable()
   following: User[];
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
