@@ -30,7 +30,7 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   const auth = useSelector((state: RootStateOrAny) => state.auth);
   const [displayMode, setDisplayMode] = useState('follower');
   const [isFollowing, setIsFollowing] = useState(
-    followers.find((user) => user.uid === auth.loggedInUser.uid) ? true : false
+    followers.find((user) => user.id === auth.loggedInUser.uid) ? true : false
   );
   const [followersState, setFollowersState] = useState(followers);
 
@@ -51,12 +51,12 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   const followOrUnfollowUser = async () => {
     try {
       if (isFollowing) {
-        await FollowService.unfollowUser(user.uid);
+        await FollowService.unfollowUser(user.id);
         setFollowersState(
-          followers.filter((follower) => follower.uid !== auth.loggedInUser.uid)
+          followers.filter((follower) => follower.id !== auth.loggedInUser.uid)
         );
       } else {
-        await FollowService.followUser(user.uid);
+        await FollowService.followUser(user.id);
         setFollowersState([...followersState, auth.loggedInUser]);
       }
 

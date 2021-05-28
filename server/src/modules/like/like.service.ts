@@ -29,7 +29,7 @@ export class LikeService {
   public async likePost(likeDto: LikeDto, user: User): Promise<Like> {
     return await this.likeRepository.save({
       user: user,
-      post: await this.postsService.getPostById(likeDto.postId),
+      post: await this.postsService.getPostByIdNormal(likeDto.postId),
     });
   }
 

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../../pages/Auth/Login.page';
 import Register from '../../pages/Auth/Register.page';
 import Dummy from '../../pages/Dummy.page';
+import Posts from '../../pages/Post/Posts.page';
 import Private from '../../pages/Private.page';
 import CompleteUserProfile from '../../pages/Profile/CompleteUserProfile.page';
 import Splash from '../../pages/Splash.page';
@@ -48,6 +49,13 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
               uid={props.match.params.id}
             />
           )}
+        />
+
+        <PrivateRoute
+          redirectTo='/login'
+          exact
+          path='/posts'
+          render={(props) => <Posts />}
         />
       </Switch>
     </Router>

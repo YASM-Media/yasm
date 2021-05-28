@@ -15,7 +15,7 @@ const UserList: React.FunctionComponent<UserListProps> = ({
     <div>
       {userList.length > 0 ? (
         userList.map((user) => (
-          <Link key={user.uid} href={`/account/profile/${user.uid}`}>
+          <Link key={user.id} href={`/account/profile/${user.id}`}>
             <Flex
               w='100%'
               direction='row'
