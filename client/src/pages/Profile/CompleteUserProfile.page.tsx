@@ -82,7 +82,7 @@ const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
             user={user}
             followers={followers}
             following={following}
-            ownProfile={auth.loggedInUser.uid === user.uid}
+            ownProfile={auth.loggedInUser.uid === user.id}
           />
         </Flex>
       </React.Fragment>

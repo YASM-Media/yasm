@@ -33,7 +33,7 @@ const UpdateProfile: React.FunctionComponent<UpdateProfileProps> = ({
     try {
       if (image) {
         onOpen();
-        const url = await AuthService.uploadProfileImage(image, user.uid);
+        const url = await AuthService.uploadProfileImage(image, user.id);
 
         setImageUrl(url);
 
