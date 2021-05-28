@@ -59,7 +59,7 @@ export class PostsService {
 
     // Returning all posts, newest first, by the users the logged in user follows
     return await this.postRepository.find({
-      relations: ['user', 'images', 'likes'],
+      relations: ['user', 'images', 'likes', 'likes.user'],
       where: {
         user: In(userFollowDetails.following.map((u) => u.id)),
       },
@@ -87,7 +87,7 @@ export class PostsService {
     // Returning all posts, best first, by the users the logged in user follows
     return (
       await this.postRepository.find({
-        relations: ['user', 'images', 'likes'],
+        relations: ['user', 'images', 'likes', 'likes.user'],
         where: {
           user: In(userFollowDetails.following.map((u) => u.id)),
           createdAt: MoreThanOrEqual(date),
@@ -96,6 +96,21 @@ export class PostsService {
     ).sort((firstPost, secondPost) =>
       firstPost.likes.length > secondPost.likes.length ? -1 : 1,
     );
+  }
+
+  /**
+   * Fetch posts by the user.
+   * @param user Logged In User
+   * @param userId User ID to fetch posts for
+   * @returns Posts Array by the user
+   */
+  public async getPostsByUser(user: User, userId: string): Promise<Post[]> {
+    return await this.postRepository.find({
+      relations: ['user', 'likes', 'likes.user', 'images'],
+      where: {
+        user: await this.userService.findOneUserById(userId),
+      },
+    });
   }
 
   /**

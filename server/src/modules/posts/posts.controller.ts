@@ -2,7 +2,7 @@ import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { UpdatePostDto } from './../../DTOs/posts/updatePost.dto';
 import { CreatePostDto } from './../../DTOs/posts/createPost.dto';
 import { JwtAuthGuard } from './../../guards/auth.guard';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostModel } from 'src/models/post.model';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
@@ -38,6 +38,21 @@ export class PostsController {
     @LoggedInUser() user: User,
   ): Promise<PostModel[]> {
     return this.postsService.getBestPostsByDay(user);
+  }
+
+  /**
+   * API Endpoint for fetching posts by a user.
+   * @param userId User ID
+   * @param user Logged In User Details
+   * @returns Posts by the user
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('get/user/:userId')
+  public async getPostsByUser(
+    @Param('userId') userId: string,
+    @LoggedInUser() user: User,
+  ): Promise<PostModel[]> {
+    return await this.postsService.getPostsByUser(user, userId);
   }
 
   /**
