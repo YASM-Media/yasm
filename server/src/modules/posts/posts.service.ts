@@ -51,6 +51,17 @@ export class PostsService {
   }
 
   /**
+   * Fetch a post object without relations.
+   * @param postId Post ID
+   * @returns Post Model Object
+   */
+  public async getPostByIdNormal(postId: string): Promise<Post> {
+    return await this.postRepository.findOne({
+      id: postId,
+    });
+  }
+
+  /**
    * Fetch the newest posts by the user followed by the logged in user.
    * @param user Logged In User Details
    * @returns Posts by users followed by Logged In User
