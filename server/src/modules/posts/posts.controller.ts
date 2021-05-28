@@ -56,6 +56,19 @@ export class PostsController {
   }
 
   /**
+   * Fetch post by id.
+   * @param postId Post ID
+   * @returns Post Model Object
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('get/post/:postId')
+  public async getPostById(
+    @Param('postId') postId: string,
+  ): Promise<PostModel> {
+    return await this.postsService.getPostById(postId);
+  }
+
+  /**
    * API Endpoint for Post Creation.
    * @param createPostDto DTO For Post Creation
    * @param user Logged In User

@@ -43,7 +43,10 @@ export class PostsService {
    */
   public async getPostById(postId: string): Promise<Post> {
     return await this.postRepository.findOne({
-      id: postId,
+      where: {
+        id: postId,
+      },
+      relations: ['user', 'images', 'likes', 'likes.user'],
     });
   }
 
