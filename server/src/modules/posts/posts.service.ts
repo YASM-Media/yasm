@@ -213,7 +213,7 @@ export class PostsService {
       await this.imageRepository.delete({ post: postModel });
 
       // Delete the post itself.
-      await this.postRepository.delete(postModel);
+      await this.postRepository.delete({ id: postModel.id });
 
       // Return deletion confirmation.
       return 'OK';
