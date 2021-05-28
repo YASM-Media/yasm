@@ -1,4 +1,4 @@
-import { Box, Flex, IconButton, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, IconButton, Image } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Image as ImageModel } from '../../models/image.model';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
@@ -7,11 +7,19 @@ export type ImageCarouselProps = {
   images: ImageModel[];
 };
 
+/**
+ * Component to display images in a carousel mode.
+ * @param images Images array
+ */
 const ImageCarousel: React.FunctionComponent<ImageCarouselProps> = ({
   images,
 }) => {
+  // State to keep track of the image index.
   const [index, setIndex] = useState<number>(0);
 
+  /**
+   * Function to go to previous image.
+   */
   const onPreviousImage = () => {
     if (index === 0) {
       return;
@@ -20,6 +28,9 @@ const ImageCarousel: React.FunctionComponent<ImageCarouselProps> = ({
     }
   };
 
+  /**
+   * Function to go to the next image.
+   */
   const onNextImage = () => {
     if (index === images.length - 1) {
       return;

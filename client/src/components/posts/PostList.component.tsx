@@ -7,6 +7,10 @@ export interface PostListProps {
   posts: Post[];
 }
 
+/**
+ * Display the list of posts to the user.
+ * @param posts Posts Array
+ */
 const PostList: React.FunctionComponent<PostListProps> = ({ posts }) => {
   return (
     <Flex h='100vh' align='center' direction='column'>

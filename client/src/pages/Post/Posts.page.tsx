@@ -17,17 +17,30 @@ import * as PostService from './../../store/post/service';
 
 export interface PostsProps {}
 
+/**
+ * Page Component for displaying posts.
+ */
 const Posts: React.FunctionComponent<PostsProps> = () => {
+  // Loading and error states.
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  // Post Mode State.
   const [postsMode, setPostsMode] = useState<PostMode>(PostMode.NEW);
+
+  // Posts array state.
   const [posts, setPosts] = useState<Post[]>([]);
 
+  // Toast Hook.
   const toast = useToast();
 
+  // Fetching posts everytime the post mode state.
   useEffect(() => {
+    // Setting load state as true.
     setLoading(true);
+
+    // Fetch the new or best posts.
+    // Check for error and set error state.
     if (postsMode === PostMode.NEW) {
       PostService.fetchNewPosts()
         .then((posts) => {
@@ -42,9 +55,11 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
         .catch((error) => setErrorMessage(error));
     }
 
+    // Set loading state as false.
     setLoading(false);
   }, [postsMode]);
 
+  // Listening to error state to display errors.
   useEffect(() => {
     if (errorMessage !== '') {
       toast({
@@ -58,6 +73,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
     }
   }, [errorMessage, toast]);
 
+  // Post Display Switch functions.
   const switchToNew = () => setPostsMode(PostMode.NEW);
   const switchToBest = () => setPostsMode(PostMode.BEST);
 
