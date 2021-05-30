@@ -8,9 +8,12 @@ import {
   Button,
   MenuList,
   MenuItem,
+  Box,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import PostList from '../../components/posts/PostList.component';
+import FAB from '../../components/utility/FAB.component';
 import { Post } from '../../models/post.model';
 import { PostMode } from '../../types/posts/enums/PostMode.enum';
 import * as PostService from './../../store/post/service';
@@ -33,6 +36,9 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
 
   // Toast Hook.
   const toast = useToast();
+
+  // History Hook.
+  const history = useHistory();
 
   // Fetching posts everytime the post mode state.
   useEffect(() => {
@@ -77,6 +83,13 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
   const switchToNew = () => setPostsMode(PostMode.NEW);
   const switchToBest = () => setPostsMode(PostMode.BEST);
 
+  /**
+   * Remove post fro array for a given ID.
+   * @param postId Post ID
+   */
+  const deletePostFromArray = (postId: string) =>
+    setPosts(posts.filter((post) => post.id !== postId));
+
   return loading ? (
     <Heading>Loading</Heading>
   ) : (
@@ -93,7 +106,10 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
           </MenuList>
         </Menu>
       </Flex>
-      <PostList posts={posts} />
+      <Box marginX='50'>
+        <PostList posts={posts} removeFromArray={deletePostFromArray} />
+        <FAB onClick={() => history.push('/posts/create')} />
+      </Box>
     </React.Fragment>
   );
 };

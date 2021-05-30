@@ -1,23 +1,43 @@
-import { Avatar, Box, Flex, IconButton, Link, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Flex,
+  IconButton,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Post } from '../../models/post.model';
 import ImageCarousel from '../utility/ImageCarousel.component';
 import { FaHeart, FaRegHeart, FaRegComment } from 'react-icons/fa';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { AuthState } from '../../store/auth/types';
 import * as LikeService from './../../store/likes/service';
+import { useHistory } from 'react-router';
 
 export interface PostCardProps {
   post: Post;
+  onDelete: () => void;
 }
 
 /**
  * Post Card Component.
  * @param post Post object
  */
-const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
+const PostCard: React.FunctionComponent<PostCardProps> = ({
+  post,
+  onDelete,
+}) => {
   // Reading the auth state for logged in user details.
   const auth: AuthState = useSelector((state: RootStateOrAny) => state.auth);
+
+  // History Hook.
+  const history = useHistory();
 
   // Likes and Liked states.
   const [likes, setLikes] = useState(post.likes);
@@ -60,20 +80,38 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
         borderRadius='lg'
         borderColor='black'
         m={5}
-        w={{ base: '80%', sm: '60%', md: '40%' }}
-        h='100%'
+        w={{ base: '100%', sm: '70%', lg: '35%' }}
       >
-        <Link href={`/account/profile/${post.user.id}`}>
-          <Flex direction='row' align='center' margin={3}>
-            <Avatar
-              marginRight={5}
-              name={`${post.user.firstName} ${post.user.lastName}`}
-              src={post.user.imageUrl}
-              size='sm'
-            />
-            <Text fontSize='sm'>{`${post.user.firstName} ${post.user.lastName}`}</Text>
-          </Flex>
-        </Link>
+        <Flex margin={3} direction='row' justify='space-between'>
+          <Link href={`/account/profile/${post.user.id}`} w='fit-content'>
+            <Flex direction='row' align='center'>
+              <Avatar
+                marginRight={5}
+                name={`${post.user.firstName} ${post.user.lastName}`}
+                src={post.user.imageUrl}
+                size='sm'
+              />
+              <Text fontSize='sm'>{`${post.user.firstName} ${post.user.lastName}`}</Text>
+            </Flex>
+          </Link>
+          {post.user.id === auth.loggedInUser.id && (
+            <Menu>
+              <MenuButton
+                bgColor='transparent'
+                as={IconButton}
+                icon={<BsThreeDotsVertical />}
+              />
+              <MenuList>
+                <MenuItem
+                  onClick={() => history.push(`/posts/update/${post.id}`)}
+                >
+                  Update Post
+                </MenuItem>
+                <MenuItem onClick={onDelete}>Delete Post</MenuItem>
+              </MenuList>
+            </Menu>
+          )}
+        </Flex>
         <ImageCarousel images={post.images} />
         <Flex direction='row' align='center'>
           <IconButton

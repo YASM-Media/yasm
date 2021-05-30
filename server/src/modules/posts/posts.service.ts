@@ -1,3 +1,4 @@
+import { Like } from 'src/models/like.model';
 import { UserService } from './../user/user.service';
 import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { CreatePostDto } from '../../DTOs/posts/createPost.dto';
@@ -22,6 +23,9 @@ export class PostsService {
 
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
+
+    @InjectRepository(Like)
+    private readonly likeRepository: Repository<Like>,
 
     private readonly userService: UserService,
   ) {}
@@ -211,6 +215,9 @@ export class PostsService {
 
       // Delete all the images related to the post.
       await this.imageRepository.delete({ post: postModel });
+
+      // Delete all likes related to the post.
+      await this.likeRepository.delete({ post: postModel });
 
       // Delete the post itself.
       await this.postRepository.delete({ id: postModel.id });

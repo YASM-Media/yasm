@@ -1,5 +1,7 @@
+import { Image } from '../../models/image.model';
+
 export type UpdatePostType = {
   id: string;
-  images: File[] | Blob[] | ArrayBuffer[] | Uint8Array[] | undefined[];
+  images: Image[];
   text: string;
 };

@@ -1,4 +1,4 @@
-import { Box, Flex, IconButton, Image } from '@chakra-ui/react';
+import { Box, Flex, Image } from '@chakra-ui/react';
 import React from 'react';
 import { Post } from '../../models/post.model';
 import { BsFillGridFill } from 'react-icons/bs';
@@ -14,7 +14,13 @@ export type MinifiedPostProps = {
 const MinifiedPost: React.FunctionComponent<MinifiedPostProps> = ({ post }) => {
   return (
     <React.Fragment>
-      <Box w='100%' h='100%' position='relative' textAlign='center'>
+      <Box
+        w='100%'
+        h='100%'
+        position='relative'
+        justifyContent='center'
+        alignItems='center'
+      >
         <Image
           objectFit='cover'
           width='100%'

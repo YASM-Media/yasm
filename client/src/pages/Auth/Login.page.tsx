@@ -49,8 +49,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
         isClosable: true,
       });
 
-      // TODO: CHANGE IT TO HOME PAGE
-      history.push('/private');
+      history.push('/posts');
     } catch (error) {
       onClose();
       console.log(error);

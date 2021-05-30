@@ -1,8 +1,10 @@
 import { Flex } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import UserPosts from '../../components/profile/UserPosts.component';
 import UserProfile from '../../components/profile/UserProfile.component';
+import FAB from '../../components/utility/FAB.component';
 import { User } from '../../models/user.model';
 import { AuthState } from '../../store/auth/types';
 
@@ -28,6 +30,9 @@ const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
 
     // Redux state.
     const auth: AuthState = useSelector((state: RootStateOrAny) => state.auth);
+
+    // History Hook.
+    const history = useHistory();
 
     // Fetch the user details along with
     // their follow and following details.
@@ -84,6 +89,7 @@ const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
             ownProfile={auth.loggedInUser.id === user.id}
           />
           <UserPosts user={user} />
+          <FAB onClick={() => history.push('/posts/create')} />
         </Flex>
       </React.Fragment>
     );
