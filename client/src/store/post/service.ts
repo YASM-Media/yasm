@@ -3,6 +3,7 @@ import { CreatePostType } from './../../types/posts/createPost.type';
 import { Post } from '../../models/post.model';
 import { firebaseStorage } from '../../utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
+import { Image } from '../../models/image.model';
 
 const postsPictureStorage = firebaseStorage.child('/posts');
 
@@ -59,7 +60,7 @@ export const fetchBestPosts = async (): Promise<Post[]> => {
  * @param userId User ID to fetch posts for
  * @returns User posts array
  */
-export const fetchPostsByUser = async (userId: string): Promise<Post[]> => {
+export const fetchPostsByUser = async (userId?: string): Promise<Post[]> => {
   // Send a request to the server and fetch the posts by user.
   const response = await fetch(`/v1/api/posts/get/user/${userId}`, {
     method: 'GET',
@@ -84,21 +85,36 @@ export const fetchPostsByUser = async (userId: string): Promise<Post[]> => {
  * @param postId Post ID
  * @returns Post Details
  */
-export const fetchPostById = async (postId: string): Promise<Post> => {
-  const response = await fetch(`/v1/api/posts/get/post/${postId}`, {
-    method: 'GET',
-    credentials: 'include',
-  });
+export const fetchPostById = async (postId?: string): Promise<Post> => {
+  if (postId) {
+    const response = await fetch(`/v1/api/posts/get/post/${postId}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
 
-  if (!response.ok) {
-    const responseJson = await response.json();
-    const message = responseJson.message;
+    if (!response.ok) {
+      const responseJson = await response.json();
+      const message = responseJson.message;
 
-    throw new Error(message);
+      throw new Error(message);
+    }
+
+    const postData: Post = await response.json();
+    return postData;
+  } else {
+    throw new Error('Please Give a valid ID');
   }
+};
 
-  const postData: Post = await response.json();
-  return postData;
+/**
+ * Convert Blob URL to blob file.
+ * @param blobString Blob URL String
+ * @returns Blob/File Object
+ */
+const convertToBlob = async (blobString: string): Promise<Blob> => {
+  const response = await fetch(blobString);
+
+  return await response.blob();
 };
 
 /**
@@ -127,13 +143,8 @@ export const createPost = async (post: CreatePostType): Promise<void> => {
   // Upload all the image files to Firebase and generate a URL for the same.
   const firebaseImages = await Promise.all(
     post.images.map(
-      async (imageFile: File | Blob | ArrayBuffer | Uint8Array | undefined) => {
-        if (imageFile) {
-          return await uploadPostImage(imageFile);
-        } else {
-          throw new Error('Please upload some images for your post.');
-        }
-      }
+      async (imageFile: Image) =>
+        await uploadPostImage(await convertToBlob(imageFile.imageUrl))
     )
   );
 
@@ -166,15 +177,13 @@ export const createPost = async (post: CreatePostType): Promise<void> => {
 export const updatePost = async (post: UpdatePostType): Promise<void> => {
   // Upload all the image files to Firebase and generate a URL for the same.
   const firebaseImages = await Promise.all(
-    post.images.map(
-      async (imageFile: File | Blob | ArrayBuffer | Uint8Array | undefined) => {
-        if (imageFile) {
-          return await uploadPostImage(imageFile);
-        } else {
-          throw new Error('Please upload some images for your post.');
-        }
+    post.images.map(async (imageFile: Image) => {
+      if (imageFile.imageUrl.startsWith('blob')) {
+        return await uploadPostImage(await convertToBlob(imageFile.imageUrl));
+      } else if (imageFile.imageUrl.startsWith('http')) {
+        return imageFile.imageUrl;
       }
-    )
+    })
   );
 
   // Send the post request with updated post body.

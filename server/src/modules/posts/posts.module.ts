@@ -1,3 +1,4 @@
+import { Like } from 'src/models/like.model';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Image } from 'src/models/image.model';
@@ -6,7 +7,7 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Image])],
+  imports: [TypeOrmModule.forFeature([Post, Image, Like])],
   controllers: [PostsController],
   providers: [PostsService],
   exports: [PostsService],

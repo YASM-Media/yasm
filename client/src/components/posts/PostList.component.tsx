@@ -1,23 +1,86 @@
-import { Flex } from '@chakra-ui/react';
-import React from 'react';
+import { Flex, useDisclosure, useToast } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { Post } from '../../models/post.model';
+import ConfirmationModal from '../modal/confirmationModal.component';
 import PostCard from './PostCard.component';
+import * as PostService from './../../store/post/service';
 
 export interface PostListProps {
   posts: Post[];
+  removeFromArray: (postId: string) => void;
 }
 
 /**
  * Display the list of posts to the user.
  * @param posts Posts Array
  */
-const PostList: React.FunctionComponent<PostListProps> = ({ posts }) => {
+const PostList: React.FunctionComponent<PostListProps> = ({
+  posts,
+  removeFromArray,
+}) => {
+  // Toast Hook.
+  const toast = useToast();
+
+  // Disclosure Hook.
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [postId, setPostId] = useState('');
+
+  const deletePost = async () => {
+    try {
+      if (postId === '') {
+        return;
+      }
+
+      await PostService.deletePost(postId);
+
+      removeFromArray(postId);
+
+      onClose();
+
+      // Toast the user success.
+      toast({
+        title: 'Success',
+        description: 'Successfully deleted the post!!🌟',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      // Toast the user error.
+      toast({
+        title: 'Error Occured',
+        description: error.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const confirmDeletePost = (id: string) => {
+    setPostId(id);
+    onOpen();
+  };
+
   return (
-    <Flex h='100vh' align='center' direction='column'>
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
-    </Flex>
+    <React.Fragment>
+      <Flex h='100vh' align='center' direction='column'>
+        {posts.map((post) => (
+          <PostCard
+            onDelete={() => confirmDeletePost(post.id)}
+            key={post.id}
+            post={post}
+          />
+        ))}
+      </Flex>
+      <ConfirmationModal
+        onClose={onClose}
+        isOpen={isOpen}
+        onYes={deletePost}
+        message='Are you sure you want to delete this post?'
+      />
+    </React.Fragment>
   );
 };
 

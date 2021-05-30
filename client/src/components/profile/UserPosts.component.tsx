@@ -55,9 +55,12 @@ const UserPosts: React.FunctionComponent<UserPostsProps> = ({ user }) => {
     }
   }, [errorMessage, toast]);
 
+  const deletePostFromArray = (postId: string) =>
+    setPosts(posts.filter((post) => post.id !== postId));
+
   return !loading ? (
     <React.Fragment>
-      <Box w='100%' m={50}>
+      <Box w='100%' marginY={50}>
         <Tabs variant='soft-rounded' align='center'>
           <TabList>
             <Tab>
@@ -67,10 +70,10 @@ const UserPosts: React.FunctionComponent<UserPostsProps> = ({ user }) => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              {posts.length > 0 && <UserPostsMinified posts={posts} />}
+              <UserPostsMinified posts={posts} />
             </TabPanel>
             <TabPanel>
-              <PostList posts={posts} />
+              <PostList posts={posts} removeFromArray={deletePostFromArray} />
             </TabPanel>
           </TabPanels>
         </Tabs>
