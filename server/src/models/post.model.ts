@@ -11,6 +11,9 @@ import { Image } from './image.model';
 import { Like } from './like.model';
 import { User } from './user.model';
 
+/**
+ * Post Type Enum Definition
+ */
 export enum PostType {
   Post = 'Post',
   Comment = 'Comment',
