@@ -49,7 +49,7 @@ export class CommentsService {
     postModel.postType = PostType.Comment;
     postModel.user = user;
     postModel.text = createCommentDto.text;
-    postModel.post = await this.postService.getPostById(
+    postModel.post = await this.postService.getPostByIdNormal(
       createCommentDto.postId,
     );
     postModel.images = commentImages;

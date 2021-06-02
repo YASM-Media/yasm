@@ -4,7 +4,7 @@ import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { CreatePostDto } from '../../DTOs/posts/createPost.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from 'src/models/post.model';
+import { Post, PostType } from 'src/models/post.model';
 import { In, MoreThanOrEqual, Repository } from 'typeorm';
 import { Image } from 'src/models/image.model';
 import { User } from 'src/models/user.model';
@@ -50,7 +50,15 @@ export class PostsService {
       where: {
         id: postId,
       },
-      relations: ['user', 'images', 'likes', 'likes.user'],
+      relations: [
+        'user',
+        'images',
+        'likes',
+        'likes.user',
+        'comments',
+        'comments.likes',
+        'comments.images',
+      ],
     });
   }
 
@@ -77,9 +85,18 @@ export class PostsService {
 
     // Returning all posts, newest first, by the users the logged in user follows
     return await this.postRepository.find({
-      relations: ['user', 'images', 'likes', 'likes.user'],
+      relations: [
+        'user',
+        'images',
+        'likes',
+        'likes.user',
+        'comments',
+        'comments.likes',
+        'comments.images',
+      ],
       where: {
         user: In(userFollowDetails.following.map((u) => u.id)),
+        postType: PostType.Post,
       },
       order: {
         createdAt: 'DESC',
@@ -105,10 +122,19 @@ export class PostsService {
     // Returning all posts, best first, by the users the logged in user follows
     return (
       await this.postRepository.find({
-        relations: ['user', 'images', 'likes', 'likes.user'],
+        relations: [
+          'user',
+          'images',
+          'likes',
+          'likes.user',
+          'comments',
+          'comments.likes',
+          'comments.images',
+        ],
         where: {
           user: In(userFollowDetails.following.map((u) => u.id)),
           createdAt: MoreThanOrEqual(date),
+          postType: PostType.Post,
         },
       })
     ).sort((firstPost, secondPost) =>
@@ -124,9 +150,18 @@ export class PostsService {
    */
   public async getPostsByUser(user: User, userId: string): Promise<Post[]> {
     return await this.postRepository.find({
-      relations: ['user', 'likes', 'likes.user', 'images'],
+      relations: [
+        'user',
+        'likes',
+        'likes.user',
+        'images',
+        'comments',
+        'comments.likes',
+        'comments.images',
+      ],
       where: {
         user: await this.userService.findOneUserById(userId),
+        postType: PostType.Post,
       },
     });
   }
