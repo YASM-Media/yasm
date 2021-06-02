@@ -1,3 +1,4 @@
+import { CommentsModule } from './modules/comments/comments.module';
 import { LikeModule } from './modules/like/like.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -29,6 +30,7 @@ import { Like } from './models/like.model';
     FollowModule,
     PostsModule,
     LikeModule,
+    CommentsModule,
     DummyModule,
   ],
   controllers: [],

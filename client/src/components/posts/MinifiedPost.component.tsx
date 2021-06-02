@@ -27,7 +27,7 @@ const MinifiedPost: React.FunctionComponent<MinifiedPostProps> = ({ post }) => {
           height='100%'
           src={post.images[0].imageUrl}
         />
-        {post.images.length > 0 && (
+        {post.images.length > 1 && (
           <Flex position='absolute' top='0%' left='0%' w='100%' h='100%' p={1}>
             <BsFillGridFill color='white' />
           </Flex>
