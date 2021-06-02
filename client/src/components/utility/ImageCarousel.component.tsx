@@ -57,24 +57,29 @@ const ImageCarousel: React.FunctionComponent<ImageCarouselProps> = ({
           h='100%'
           p={1}
         >
-          <IconButton
-            aria-label='Previous Image'
-            icon={<MdKeyboardArrowLeft color='white' />}
-            borderRadius='full'
-            bgColor='black'
-            opacity='50%'
-            size='sm'
-            onClick={onPreviousImage}
-          />
-          <IconButton
-            aria-label='Next Image'
-            icon={<MdKeyboardArrowRight color='white' />}
-            borderRadius='full'
-            bgColor='black'
-            opacity='50%'
-            size='sm'
-            onClick={onNextImage}
-          />
+          {images.length > 1 && (
+            <React.Fragment>
+              {' '}
+              <IconButton
+                aria-label='Previous Image'
+                icon={<MdKeyboardArrowLeft color='white' />}
+                borderRadius='full'
+                bgColor='black'
+                opacity='50%'
+                size='sm'
+                onClick={onPreviousImage}
+              />
+              <IconButton
+                aria-label='Next Image'
+                icon={<MdKeyboardArrowRight color='white' />}
+                borderRadius='full'
+                bgColor='black'
+                opacity='50%'
+                size='sm'
+                onClick={onNextImage}
+              />
+            </React.Fragment>
+          )}
         </Flex>
       </Box>
     </React.Fragment>
