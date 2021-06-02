@@ -60,6 +60,11 @@ export class PostsService {
         'comments.images',
         'comments.user',
         'comments.likes.user',
+        'comments.comments',
+        'comments.comments.likes',
+        'comments.comments.images',
+        'comments.comments.user',
+        'comments.comments.likes.user',
       ],
     });
   }
@@ -97,6 +102,11 @@ export class PostsService {
         'comments.images',
         'comments.user',
         'comments.likes.user',
+        'comments.comments',
+        'comments.comments.likes',
+        'comments.comments.images',
+        'comments.comments.user',
+        'comments.comments.likes.user',
       ],
       where: {
         user: In(userFollowDetails.following.map((u) => u.id)),
@@ -136,6 +146,11 @@ export class PostsService {
           'comments.images',
           'comments.user',
           'comments.likes.user',
+          'comments.comments',
+          'comments.comments.likes',
+          'comments.comments.images',
+          'comments.comments.user',
+          'comments.comments.likes.user',
         ],
         where: {
           user: In(userFollowDetails.following.map((u) => u.id)),
@@ -166,6 +181,11 @@ export class PostsService {
         'comments.images',
         'comments.user',
         'comments.likes.user',
+        'comments.comments',
+        'comments.comments.likes',
+        'comments.comments.images',
+        'comments.comments.user',
+        'comments.comments.likes.user',
       ],
       where: {
         user: await this.userService.findOneUserById(userId),
