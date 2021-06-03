@@ -9,6 +9,7 @@ export class Post {
     public createdAt: Date,
     public user: User,
     public images: Image[],
-    public likes: Like[]
+    public likes: Like[],
+    public comments: Post[]
   ) {}
 }

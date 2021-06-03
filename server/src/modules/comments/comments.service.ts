@@ -1,3 +1,4 @@
+import { DeleteCommentDto } from './../../DTOs/comments/deleteComment.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCommentDto } from 'src/DTOs/comments/createComment.dto';
@@ -113,5 +114,16 @@ export class CommentsService {
         createdAt: 'DESC',
       },
     });
+  }
+
+  public async deleteComment(
+    deleteCommentDto: DeleteCommentDto,
+  ): Promise<Post> {
+    const post = await this.postService.getPostById(deleteCommentDto.postId);
+    post.comments = post.comments.filter(
+      (comment) => comment.id !== deleteCommentDto.commentId,
+    );
+
+    return await this.postRepository.save(post);
   }
 }

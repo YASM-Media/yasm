@@ -1,3 +1,4 @@
+import { DeleteCommentDto } from './../../DTOs/comments/deleteComment.dto';
 import { CreateCommentDto } from './../../DTOs/comments/createComment.dto';
 import { CommentsService } from './comments.service';
 import { JwtAuthGuard } from './../../guards/auth.guard';
@@ -52,5 +53,18 @@ export class CommentsController {
     @Param('id') postId: string,
   ): Promise<PostModel[]> {
     return await this.commentsService.fetchNewComments(postId);
+  }
+
+  /**
+   * API Endpoint for post deletion.
+   * @param createPostDto DTO for comments deletion.
+   * @returns Updated Post Object.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('delete')
+  public async deleteComment(
+    @Body() deleteCommentDto: DeleteCommentDto,
+  ): Promise<PostModel> {
+    return await this.commentsService.deleteComment(deleteCommentDto);
   }
 }
