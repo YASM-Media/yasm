@@ -35,7 +35,7 @@ export class PostsService {
    * @param postId ID for the post
    * @returns Post Database Object
    */
-  private async getPost(postId: string, user: User): Promise<Post> {
+  public async getPost(postId: string, user: User): Promise<Post> {
     // Find one post for the given id.
     return await this.postRepository.findOneOrFail({ id: postId, user: user });
   }

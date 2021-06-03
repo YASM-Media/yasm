@@ -6,6 +6,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { Post as PostModel } from 'src/models/post.model';
 import { User } from 'src/models/user.model';
+import { UpdateCommentDto } from 'src/DTOs/comments/updateComment.dto';
 
 /**
  * Controller implementation for Comments Module.
@@ -13,21 +14,6 @@ import { User } from 'src/models/user.model';
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
-
-  /**
-   * API Endpoint for post creation.
-   * @param createPostDto DTO for comments creation
-   * @param user Logged In User
-   * @returns Saved Post Object.
-   */
-  @UseGuards(JwtAuthGuard)
-  @Post('create')
-  public async createComment(
-    @Body() createCommentDto: CreateCommentDto,
-    @LoggedInUser() user: User,
-  ): Promise<PostModel> {
-    return await this.commentsService.createComment(createCommentDto, user);
-  }
 
   /**
    * API Endpoint for fetching best comments.
@@ -53,6 +39,36 @@ export class CommentsController {
     @Param('id') postId: string,
   ): Promise<PostModel[]> {
     return await this.commentsService.fetchNewComments(postId);
+  }
+
+  /**
+   * API Endpoint for post creation.
+   * @param createPostDto DTO for comments creation
+   * @param user Logged In User
+   * @returns Saved Post Object.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('create')
+  public async createComment(
+    @Body() createCommentDto: CreateCommentDto,
+    @LoggedInUser() user: User,
+  ): Promise<PostModel> {
+    return await this.commentsService.createComment(createCommentDto, user);
+  }
+
+  /**
+   * API Endpoint for updating comment.
+   * @param updateCommentDto Update Comment DTO
+   * @param user Logged In User
+   * @returns Updated Comment Model
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('update')
+  public async updateComment(
+    @Body() updateCommentDto: UpdateCommentDto,
+    @LoggedInUser() user: User,
+  ): Promise<PostModel> {
+    return await this.commentsService.updateComment(updateCommentDto, user);
   }
 
   /**
