@@ -12,12 +12,11 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaHeart, FaRegComment, FaRegHeart } from 'react-icons/fa';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Post } from '../../models/post.model';
 import { AuthState } from '../../store/auth/types';
-import ImageCarousel from '../utility/ImageCarousel.component';
 import * as LikeService from './../../store/likes/service';
 
 export interface CommentCardProps {
