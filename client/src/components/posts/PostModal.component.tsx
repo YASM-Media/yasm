@@ -18,7 +18,6 @@ import ImageCarousel from '../utility/ImageCarousel.component';
 import * as PostsService from './../../store/post/service';
 import PostDetails from './PostDetails.component';
 import PostLikeDetails from './PostLikeDetails.component';
-import PostText from './PostText.component';
 
 export interface PostModalProps {
   post: Post;
@@ -95,26 +94,11 @@ const PostModal: React.FunctionComponent<PostModalProps> = ({
                 <ImageCarousel images={post.images} />
               </Box>
               <Flex position='relative' w='100%' direction='column'>
-                <Flex
-                  p={5}
-                  w='100%'
-                  justify='center'
-                  borderBottomColor='blackAlpha.200'
-                  borderBottomWidth={1}
-                  h='fit-content'
-                >
+                <Box overflowY='scroll' overflowX='visible' h='24em'>
                   <PostDetails
                     post={post}
                     onDelete={deleteConfirmationDisclosure.onOpen}
                   />
-                </Flex>
-                <Box
-                  padding={2.5}
-                  overflowY='scroll'
-                  overflowX='visible'
-                  h='2xs'
-                >
-                  <PostText post={post} />
                   <Box paddingX={5}>
                     <CommentList
                       postId={post.id}
@@ -124,7 +108,7 @@ const PostModal: React.FunctionComponent<PostModalProps> = ({
                     />
                   </Box>
                 </Box>
-                <Box p={2.5}>
+                <Box paddingX={5}>
                   <PostLikeDetails post={post} />
                 </Box>
                 <CommentForm

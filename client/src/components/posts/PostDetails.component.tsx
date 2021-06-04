@@ -8,6 +8,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Box,
 } from '@chakra-ui/react';
 import React from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -33,32 +34,52 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
 
   return (
     <React.Fragment>
-      <Link href={`/account/profile/${post.user.id}`} w='100%'>
-        <Flex direction='row' align='center'>
-          <Avatar
-            marginRight={5}
-            name={`${post.user.firstName} ${post.user.lastName}`}
-            src={post.user.imageUrl}
-            size='md'
-          />
-          <Text fontSize='sm'>{`${post.user.firstName} ${post.user.lastName}`}</Text>
+      <Flex
+        direction='row'
+        justify='center'
+        borderBottomColor='blackAlpha.200'
+        borderBottomWidth={1.5}
+        h='fit-content'
+        padding={5}
+      >
+        <Box marginRight={5}>
+          <Link href={`/account/profile/${post.user.id}`} w='100%'>
+            <Avatar
+              name={`${post.user.firstName} ${post.user.lastName}`}
+              src={post.user.imageUrl}
+              size='md'
+            />
+          </Link>
+        </Box>
+        <Flex direction='column'>
+          <Link href={`/account/profile/${post.user.id}`}>
+            <Text
+              fontSize='lg'
+              fontWeight='semibold'
+            >{`${post.user.firstName} ${post.user.lastName}`}</Text>
+          </Link>
+          <Text>{post.text}</Text>
         </Flex>
-      </Link>
-      {post.user.id === auth.loggedInUser.id && (
-        <Menu>
-          <MenuButton
-            bgColor='transparent'
-            as={IconButton}
-            icon={<BsThreeDotsVertical />}
-          />
-          <MenuList>
-            <MenuItem onClick={() => history.push(`/posts/update/${post.id}`)}>
-              Update Post
-            </MenuItem>
-            <MenuItem onClick={onDelete}>Delete Post</MenuItem>
-          </MenuList>
-        </Menu>
-      )}
+        <Box>
+          {post.user.id === auth.loggedInUser.id && (
+            <Menu>
+              <MenuButton
+                bgColor='transparent'
+                as={IconButton}
+                icon={<BsThreeDotsVertical />}
+              />
+              <MenuList>
+                <MenuItem
+                  onClick={() => history.push(`/posts/update/${post.id}`)}
+                >
+                  Update Post
+                </MenuItem>
+                <MenuItem onClick={onDelete}>Delete Post</MenuItem>
+              </MenuList>
+            </Menu>
+          )}
+        </Box>
+      </Flex>
     </React.Fragment>
   );
 };

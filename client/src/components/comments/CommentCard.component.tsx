@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Flex,
   IconButton,
   Link,
@@ -70,56 +71,75 @@ const CommentCard: React.FunctionComponent<CommentCardProps> = ({
 
   return (
     <React.Fragment>
-      <Flex direction='row' justify='space-between' marginY={5}>
-        <Flex direction='column' justify='center'>
-          <Link href={`/account/profile/${comment.user.id}`} w='fit-content'>
-            <Flex direction='row'>
+      <Flex direction='row' justify='space-between' marginY={5} w='100%'>
+        <Flex direction='column' justify='center' w='100%'>
+          <Flex direction='row' w='100%'>
+            <Link href={`/account/profile/${comment.user.id}`} w='fit-content'>
               <Avatar
                 marginRight={5}
                 name={`${comment.user.firstName} ${comment.user.lastName}`}
                 src={comment.user.imageUrl}
-                size='sm'
+                size='md'
               />
-              <Text fontSize='sm'>{`${comment.user.firstName} ${comment.user.lastName}`}</Text>
+            </Link>
+            <Flex direction='column' w='100%'>
+              <Link
+                href={`/account/profile/${comment.user.id}`}
+                w='fit-content'
+              >
+                <Text
+                  fontSize='lg'
+                  fontWeight='semibold'
+                >{`${comment.user.firstName} ${comment.user.lastName}`}</Text>
+              </Link>
+              <Flex direction='row' justify='space-between' w='100%'>
+                <Text paddingTop={1}>{comment.text}</Text>
+                <Box>
+                  <IconButton
+                    bgColor='transparent'
+                    aria-label='like'
+                    icon={
+                      liked ? (
+                        <FaHeart color='red' />
+                      ) : (
+                        <FaRegHeart color='black' />
+                      )
+                    }
+                    onClick={async () =>
+                      !liked ? await likePost() : await unlikePost()
+                    }
+                  />
+                  {comment.user.id === auth.loggedInUser.id && (
+                    <Menu>
+                      <MenuButton
+                        bgColor='transparent'
+                        as={IconButton}
+                        icon={<BsThreeDotsVertical />}
+                      />
+                      <MenuList>
+                        <MenuItem onClick={updateComment}>
+                          Update Comment
+                        </MenuItem>
+                        <MenuItem
+                          onClick={async () =>
+                            await deleteComment({
+                              postId,
+                              commentId: comment.id,
+                            })
+                          }
+                        >
+                          Delete Comment
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  )}
+                </Box>
+              </Flex>
             </Flex>
-          </Link>
-          <Text>{comment.text}</Text>
+          </Flex>
         </Flex>
 
-        <Flex>
-          <IconButton
-            bgColor='transparent'
-            aria-label='like'
-            icon={
-              liked ? <FaHeart color='red' /> : <FaRegHeart color='black' />
-            }
-            onClick={async () =>
-              !liked ? await likePost() : await unlikePost()
-            }
-          />
-          {comment.user.id === auth.loggedInUser.id && (
-            <Menu>
-              <MenuButton
-                bgColor='transparent'
-                as={IconButton}
-                icon={<BsThreeDotsVertical />}
-              />
-              <MenuList>
-                <MenuItem onClick={updateComment}>Update Comment</MenuItem>
-                <MenuItem
-                  onClick={async () =>
-                    await deleteComment({
-                      postId,
-                      commentId: comment.id,
-                    })
-                  }
-                >
-                  Delete Comment
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          )}
-        </Flex>
+        <Flex></Flex>
       </Flex>
     </React.Fragment>
   );
