@@ -1,7 +1,8 @@
-import { Box, Flex, Image } from '@chakra-ui/react';
+import { Box, Flex, Image, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { Post } from '../../models/post.model';
 import { BsFillGridFill } from 'react-icons/bs';
+import PostModal from './PostModal.component';
 
 export type MinifiedPostProps = {
   post: Post;
@@ -12,6 +13,8 @@ export type MinifiedPostProps = {
  * @param post Post Object
  */
 const MinifiedPost: React.FunctionComponent<MinifiedPostProps> = ({ post }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <React.Fragment>
       <Box
@@ -20,6 +23,8 @@ const MinifiedPost: React.FunctionComponent<MinifiedPostProps> = ({ post }) => {
         position='relative'
         justifyContent='center'
         alignItems='center'
+        cursor='pointer'
+        onClick={onOpen}
       >
         <Image
           objectFit='cover'
@@ -33,6 +38,7 @@ const MinifiedPost: React.FunctionComponent<MinifiedPostProps> = ({ post }) => {
           </Flex>
         )}
       </Box>
+      <PostModal visible={isOpen} onClose={onClose} post={post} />
     </React.Fragment>
   );
 };

@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { DeleteCommentDto } from './../../DTOs/comments/deleteComment.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCommentDto } from 'src/DTOs/comments/createComment.dto';
 import { Image } from 'src/models/image.model';
@@ -6,6 +7,7 @@ import { Post, PostType } from 'src/models/post.model';
 import { User } from 'src/models/user.model';
 import { Repository } from 'typeorm';
 import { PostsService } from '../posts/posts.service';
+import { UpdateCommentDto } from 'src/DTOs/comments/updateComment.dto';
 
 /**
  * Service implementation for Comments module.
@@ -23,40 +25,6 @@ export class CommentsService {
 
     private readonly postService: PostsService,
   ) {}
-
-  /**
-   * Create and save model to database.
-   * @param createPostDto DTO for creating post.
-   * @param user Logged In User.
-   * @returns Saved post model object.
-   */
-  public async createComment(
-    createCommentDto: CreateCommentDto,
-    user: User,
-  ): Promise<Post> {
-    // Saving all images in database first.
-    const commentImages: Image[] = await Promise.all(
-      createCommentDto.images.map(async (imageLink) => {
-        const imageModel = new Image();
-        imageModel.imageUrl = imageLink;
-
-        return await this.imageRepository.save(imageModel);
-      }),
-    );
-
-    // Create the post model and assign values to it.
-    const postModel = new Post();
-    postModel.postType = PostType.Comment;
-    postModel.user = user;
-    postModel.text = createCommentDto.text;
-    postModel.post = await this.postService.getPostByIdNormal(
-      createCommentDto.postId,
-    );
-    postModel.images = commentImages;
-
-    // Save the post model to database.
-    return await this.postRepository.save(postModel);
-  }
 
   /**
    * Fetch best comments for the given post.
@@ -113,5 +81,81 @@ export class CommentsService {
         createdAt: 'DESC',
       },
     });
+  }
+
+  /**
+   * Create and save model to database.
+   * @param createPostDto DTO for creating post.
+   * @param user Logged In User.
+   * @returns Saved post model object.
+   */
+  public async createComment(
+    createCommentDto: CreateCommentDto,
+    user: User,
+  ): Promise<Post> {
+    // Create the post model and assign values to it.
+    const postModel = new Post();
+    postModel.postType = PostType.Comment;
+    postModel.user = user;
+    postModel.text = createCommentDto.text;
+    postModel.post = await this.postService.getPostByIdNormal(
+      createCommentDto.postId,
+    );
+
+    // Save the post model to database.
+    const savedComment = await this.postRepository.save(postModel);
+
+    // Return the comment.
+    return await this.postService.getPostById(savedComment.id);
+  }
+
+  /**
+   * Update a given comment.
+   * @param updateCommentDto DTO For Comment Updating
+   * @param user Logged In User Details
+   */
+  public async updateComment(
+    updateCommentDto: UpdateCommentDto,
+    user: User,
+  ): Promise<Post> {
+    try {
+      // Fetch the model for the given post ID.
+      const postModel = await this.postService.getPost(
+        updateCommentDto.id,
+        user,
+      );
+
+      // Update the post model object.
+      postModel.text = updateCommentDto.text;
+
+      // Save the updated model.
+      const updated = await this.postRepository.save(postModel);
+
+      return await this.postService.getPostById(updated.id);
+    } catch (error) {
+      throw new HttpException('Comment Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  /**
+   * Delete comment from post.
+   * @param deleteCommentDto DTO For comment deletion
+   * @returns Confirmation
+   */
+  public async deleteComment(
+    deleteCommentDto: DeleteCommentDto,
+  ): Promise<string> {
+    const post = await this.postService.getPostById(deleteCommentDto.postId);
+    post.comments = post.comments.filter(
+      (comment) => comment.id !== deleteCommentDto.commentId,
+    );
+
+    await this.postRepository.save(post);
+
+    await this.postRepository.delete(
+      await this.postService.getPostByIdNormal(deleteCommentDto.commentId),
+    );
+
+    return 'OK';
   }
 }
