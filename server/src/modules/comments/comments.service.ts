@@ -103,7 +103,10 @@ export class CommentsService {
     );
 
     // Save the post model to database.
-    return await this.postRepository.save(postModel);
+    const savedComment = await this.postRepository.save(postModel);
+
+    // Return the comment.
+    return await this.postService.getPostById(savedComment.id);
   }
 
   /**
@@ -126,7 +129,9 @@ export class CommentsService {
       postModel.text = updateCommentDto.text;
 
       // Save the updated model.
-      return await this.postRepository.save(postModel);
+      const updated = await this.postRepository.save(postModel);
+
+      return await this.postService.getPostById(updated.id);
     } catch (error) {
       throw new HttpException('Comment Not Found', HttpStatus.NOT_FOUND);
     }
@@ -139,12 +144,18 @@ export class CommentsService {
    */
   public async deleteComment(
     deleteCommentDto: DeleteCommentDto,
-  ): Promise<Post> {
+  ): Promise<string> {
     const post = await this.postService.getPostById(deleteCommentDto.postId);
     post.comments = post.comments.filter(
       (comment) => comment.id !== deleteCommentDto.commentId,
     );
 
-    return await this.postRepository.save(post);
+    await this.postRepository.save(post);
+
+    await this.postRepository.delete(
+      await this.postService.getPostByIdNormal(deleteCommentDto.commentId),
+    );
+
+    return 'OK';
   }
 }

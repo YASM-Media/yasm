@@ -35,9 +35,9 @@ export const createComment = async (
  * Send a POST request to the server and save the updated comment.
  * @param post Update Post Details
  */
-export const updatePost = async (
+export const updateComment = async (
   updateCommentType: UpdateCommentType
-): Promise<void> => {
+): Promise<Post> => {
   // Send the post request with updated comment body.
   const response = await fetch('/v1/api/comments/update', {
     method: 'POST',
@@ -55,13 +55,15 @@ export const updatePost = async (
 
     throw new Error(message);
   }
+
+  return await response.json();
 };
 
 /**
  * Delete the comment with given ID.
  * @param id Post ID
  */
-export const deletePost = async (
+export const deleteComment = async (
   deleteCommentType: DeleteCommentType
 ): Promise<void> => {
   // Send the post request to delete the comment.

@@ -80,7 +80,7 @@ export class CommentsController {
   @Post('delete')
   public async deleteComment(
     @Body() deleteCommentDto: DeleteCommentDto,
-  ): Promise<PostModel> {
+  ): Promise<string> {
     return await this.commentsService.deleteComment(deleteCommentDto);
   }
 }

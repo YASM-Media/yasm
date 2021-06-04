@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Post } from '../../models/post.model';
@@ -19,6 +20,7 @@ import { RootStateOrAny, useSelector } from 'react-redux';
 import { AuthState } from '../../store/auth/types';
 import * as LikeService from './../../store/likes/service';
 import { useHistory } from 'react-router';
+import PostModal from './PostModal.component';
 
 export interface PostCardProps {
   post: Post;
@@ -44,6 +46,8 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
   const [liked, setLiked] = useState(
     likes.find((like) => like.user.id === auth.loggedInUser.id) ? true : false
   );
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   /**
    * Function for liking the post.
@@ -128,6 +132,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
             bgColor='transparent'
             aria-label='comment'
             icon={<FaRegComment />}
+            onClick={onOpen}
           />
         </Flex>
         <Box marginX={3}>
@@ -139,6 +144,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
           <Text fontSize='sm'>{post.text}</Text>
         </Box>
       </Box>
+      <PostModal post={post} visible={isOpen} onClose={onClose} />
     </React.Fragment>
   );
 };

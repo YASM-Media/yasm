@@ -1,31 +1,24 @@
 import {
-  Avatar,
   Box,
-  Button,
   Flex,
-  IconButton,
-  Input,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalContent,
   ModalOverlay,
-  Text,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Post } from '../../models/post.model';
-import { AuthState } from '../../store/auth/types';
+import CommentForm from '../comments/CommentForm.component';
 import CommentList from '../comments/CommentList.component';
+import ConfirmationModal from '../modal/confirmationModal.component';
 import ImageCarousel from '../utility/ImageCarousel.component';
-import * as LikeService from './../../store/likes/service';
+import * as PostsService from './../../store/post/service';
+import PostDetails from './PostDetails.component';
+import PostLikeDetails from './PostLikeDetails.component';
+import PostText from './PostText.component';
 
 export interface PostModalProps {
   post: Post;
@@ -38,61 +31,70 @@ const PostModal: React.FunctionComponent<PostModalProps> = ({
   visible,
   onClose,
 }) => {
-  // Reading the auth state for logged in user details.
-  const auth: AuthState = useSelector((state: RootStateOrAny) => state.auth);
-
-  // Likes and Liked states.
-  const [likes, setLikes] = useState(post.likes);
-  const [liked, setLiked] = useState(
-    likes.find((like) => like.user.id === auth.loggedInUser.id) ? true : false
-  );
+  // Post State.
+  const [comments, setComments] = useState<Post[]>(post.comments);
 
   // History Hook.
   const history = useHistory();
-  /**
-   * Function for liking the post.
-   */
-  const likePost = async () => {
-    // Get the like object after submitting like data to server
-    const like = await LikeService.likePost(post.id);
 
-    // Push the like object in likes state.
-    setLikes([...likes, like]);
+  // Delete Confirmation Disclosure Hook.
+  const deleteConfirmationDisclosure = useDisclosure();
 
-    // Set liked state as the opposite.
-    setLiked(!liked);
+  // Toast Hook.
+  const toast = useToast();
+
+  const addCommentToState = (comment: Post) => {
+    setComments([...comments, comment]);
   };
 
-  /**
-   * Function for unliking the post
-   */
-  const unlikePost = async () => {
-    // Delete the like object from server.
-    await LikeService.unlikePost(post.id);
+  const updateCommentInState = (comment: Post) => {
+    let commentPost = comments.find((c) => c.id === comment.id);
+    if (commentPost) {
+      commentPost.text = comment.text;
+    }
+    setComments(comments);
+  };
 
-    // Filter out the user like.
-    setLikes(likes.filter((like) => like.user.id !== auth.loggedInUser.id));
+  const deleteCommentFromState = (commentId: string) =>
+    setComments(comments.filter((comment) => comment.id !== commentId));
 
-    // Set liked state as the opposite.
-    setLiked(!liked);
+  const deletePost = async () => {
+    try {
+      onClose();
+      await PostsService.deletePost(post.id);
+      deleteConfirmationDisclosure.onClose();
+
+      toast({
+        title: 'Success!',
+        description: 'Post Successfully Deleted!!🌟',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+
+      history.go(0);
+    } catch (error) {
+      toast({
+        title: 'An Error Occured!',
+        description: error.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
     <React.Fragment>
-      <Modal onClose={onClose} size='6xl' isOpen={visible}>
+      <Modal onClose={onClose} size='5xl' isOpen={visible}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody p={0}>
-            <Flex direction={{ base: 'column', md: 'row' }} justify='center'>
+            <Flex direction={{ base: 'column', lg: 'row' }} justify='center'>
               <Box w='100%'>
                 <ImageCarousel images={post.images} />
               </Box>
-              <Flex
-                position='relative'
-                w='100%'
-                direction='column'
-                margin={2.4}
-              >
+              <Flex position='relative' w='100%' direction='column'>
                 <Flex
                   p={5}
                   w='100%'
@@ -101,96 +103,45 @@ const PostModal: React.FunctionComponent<PostModalProps> = ({
                   borderBottomWidth={1}
                   h='fit-content'
                 >
-                  <Link href={`/account/profile/${post.user.id}`} w='100%'>
-                    <Flex direction='row' align='center'>
-                      <Avatar
-                        marginRight={5}
-                        name={`${post.user.firstName} ${post.user.lastName}`}
-                        src={post.user.imageUrl}
-                        size='md'
-                      />
-                      <Text fontSize='sm'>{`${post.user.firstName} ${post.user.lastName}`}</Text>
-                    </Flex>
-                  </Link>
-                  {post.user.id === auth.loggedInUser.id && (
-                    <Menu>
-                      <MenuButton
-                        bgColor='transparent'
-                        as={IconButton}
-                        icon={<BsThreeDotsVertical />}
-                      />
-                      <MenuList>
-                        <MenuItem
-                          onClick={() =>
-                            history.push(`/posts/update/${post.id}`)
-                          }
-                        >
-                          Update Post
-                        </MenuItem>
-                        <MenuItem>Delete Post</MenuItem>
-                      </MenuList>
-                    </Menu>
-                  )}
+                  <PostDetails
+                    post={post}
+                    onDelete={deleteConfirmationDisclosure.onOpen}
+                  />
                 </Flex>
                 <Box
                   padding={2.5}
                   overflowY='scroll'
                   overflowX='visible'
-                  h='xs'
+                  h='2xs'
                 >
-                  <Box padding={5}>
-                    <Flex direction='column' justify='center'>
-                      <Link
-                        href={`/account/profile/${post.user.id}`}
-                        w='fit-content'
-                      >
-                        <Flex direction='row'>
-                          <Avatar
-                            marginRight={5}
-                            name={`${post.user.firstName} ${post.user.lastName}`}
-                            src={post.user.imageUrl}
-                            size='sm'
-                          />
-                          <Text fontSize='sm'>{`${post.user.firstName} ${post.user.lastName}`}</Text>
-                        </Flex>
-                      </Link>
-                      <Text>{post.text}</Text>
-                    </Flex>
-                  </Box>
+                  <PostText post={post} />
                   <Box paddingX={5}>
-                    <CommentList comments={post.comments} />
+                    <CommentList
+                      postId={post.id}
+                      comments={comments}
+                      deleteCommentFromState={deleteCommentFromState}
+                      updateCommentInState={updateCommentInState}
+                    />
                   </Box>
                 </Box>
                 <Box p={2.5}>
-                  <Flex direction='row' align='center'>
-                    <IconButton
-                      bgColor='transparent'
-                      aria-label='like'
-                      icon={
-                        liked ? (
-                          <FaHeart color='red' />
-                        ) : (
-                          <FaRegHeart color='black' />
-                        )
-                      }
-                      onClick={async () =>
-                        !liked ? await likePost() : await unlikePost()
-                      }
-                    />
-                    <Text fontWeight='600' fontSize='sm'>
-                      Liked by {likes.length} others
-                    </Text>
-                  </Flex>
+                  <PostLikeDetails post={post} />
                 </Box>
-                <Flex p={5}>
-                  <Input placeholder='Your Comment...' />
-                  <Button bgColor='transparent'>Post</Button>
-                </Flex>
+                <CommentForm
+                  postId={post.id}
+                  addCommentToState={addCommentToState}
+                />
               </Flex>
             </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>
+      <ConfirmationModal
+        isOpen={deleteConfirmationDisclosure.isOpen}
+        onClose={deleteConfirmationDisclosure.onClose}
+        message='Are you you want to delete this post?'
+        onYes={deletePost}
+      />
     </React.Fragment>
   );
 };

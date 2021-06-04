@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Box,
   Flex,
   IconButton,
   Link,
@@ -14,23 +13,26 @@ import React, { useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { RootStateOrAny, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import { Post } from '../../models/post.model';
 import { AuthState } from '../../store/auth/types';
+import { DeleteCommentType } from '../../types/comments/deleteComment.type';
 import * as LikeService from './../../store/likes/service';
 
 export interface CommentCardProps {
+  postId: string;
   comment: Post;
+  deleteComment: (deleteCommentType: DeleteCommentType) => Promise<void>;
+  updateComment: () => void;
 }
 
 const CommentCard: React.FunctionComponent<CommentCardProps> = ({
+  postId,
   comment,
+  deleteComment,
+  updateComment,
 }) => {
   // Reading the auth state for logged in user details.
   const auth: AuthState = useSelector((state: RootStateOrAny) => state.auth);
-
-  // History Hook.
-  const history = useHistory();
 
   // Likes and Liked states.
   const [likes, setLikes] = useState(comment.likes);
@@ -103,12 +105,17 @@ const CommentCard: React.FunctionComponent<CommentCardProps> = ({
                 icon={<BsThreeDotsVertical />}
               />
               <MenuList>
+                <MenuItem onClick={updateComment}>Update Comment</MenuItem>
                 <MenuItem
-                  onClick={() => history.push(`/posts/update/${comment.id}`)}
+                  onClick={async () =>
+                    await deleteComment({
+                      postId,
+                      commentId: comment.id,
+                    })
+                  }
                 >
-                  Update Post
+                  Delete Comment
                 </MenuItem>
-                <MenuItem>Delete Post</MenuItem>
               </MenuList>
             </Menu>
           )}
