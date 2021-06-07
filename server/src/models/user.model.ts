@@ -1,3 +1,4 @@
+import { userIndex } from './../utils/algolia';
 import {
   Column,
   Entity,
@@ -5,6 +6,9 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  AfterInsert,
+  AfterUpdate,
+  BeforeRemove,
 } from 'typeorm';
 import { Like } from './like.model';
 import { Post } from './post.model';
@@ -50,4 +54,27 @@ export class User {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @AfterInsert()
+  @AfterUpdate()
+  private createOrUpdateAlgoliaRecord() {
+    const userRecord = {
+      objectID: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
+    };
+
+    userIndex
+      .saveObject(userRecord)
+      .then((data) => console.log(`Syncing User ${data.objectID} To Algolia`))
+      .catch((error) => console.log(error));
+  }
+
+  @BeforeRemove()
+  private removeAlgoliaRecord() {
+    userIndex
+      .deleteObject(this.id)
+      .then(() => `Removing User ${this.id} From Algolia`)
+      .catch((error) => console.log(error));
+  }
 }
