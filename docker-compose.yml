@@ -23,6 +23,7 @@ services:
     container_name: yasm_server
     env_file:
       - server.env
+      - algolia.env
     ports:
       - '5000:5000'
     volumes:
