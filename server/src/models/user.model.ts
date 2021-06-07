@@ -62,6 +62,7 @@ export class User {
       objectID: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
+      biography: this.biography,
     };
 
     userIndex
