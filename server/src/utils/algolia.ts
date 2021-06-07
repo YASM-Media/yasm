@@ -6,3 +6,4 @@ const client = algoliasearch(
 );
 
 export const userIndex = client.initIndex('users');
+export const postIndex = client.initIndex('posts');
