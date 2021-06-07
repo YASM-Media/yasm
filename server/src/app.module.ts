@@ -1,3 +1,4 @@
+import { SearchModule } from './modules/search/search.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { LikeModule } from './modules/like/like.module';
 import { FollowModule } from './modules/follow/follow.module';
@@ -31,6 +32,7 @@ import { Like } from './models/like.model';
     PostsModule,
     LikeModule,
     CommentsModule,
+    SearchModule,
     DummyModule,
   ],
   controllers: [],

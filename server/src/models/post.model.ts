@@ -1,4 +1,8 @@
+import { postIndex } from 'src/utils/algolia';
 import {
+  AfterInsert,
+  AfterUpdate,
+  BeforeRemove,
   Column,
   CreateDateColumn,
   Entity,
@@ -53,4 +57,30 @@ export class Post {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @AfterInsert()
+  @AfterUpdate()
+  private createOrUpdateAlgoliaRecord() {
+    if (this.postType === PostType.Comment) {
+      return;
+    }
+
+    const postRecord = {
+      objectID: this.id,
+      text: this.text,
+    };
+
+    postIndex
+      .saveObject(postRecord)
+      .then((data) => console.log(`Syncing Post ${data.objectID} To Algolia`))
+      .catch((error) => console.log(error));
+  }
+
+  @BeforeRemove()
+  private removeAlgoliaRecord() {
+    postIndex
+      .deleteObject(this.id)
+      .then(() => `Removing Post ${this.id} From Algolia`)
+      .catch((error) => console.log(error));
+  }
 }

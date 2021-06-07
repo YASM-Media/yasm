@@ -36,29 +36,33 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
     <React.Fragment>
       <Flex
         direction='row'
-        justify='center'
+        justify='space-between'
         borderBottomColor='blackAlpha.200'
         borderBottomWidth={1.5}
         h='fit-content'
         padding={5}
       >
-        <Box marginRight={5}>
-          <Link href={`/account/profile/${post.user.id}`} w='100%'>
-            <Avatar
-              name={`${post.user.firstName} ${post.user.lastName}`}
-              src={post.user.imageUrl}
-              size='md'
-            />
-          </Link>
-        </Box>
-        <Flex direction='column'>
-          <Link href={`/account/profile/${post.user.id}`}>
-            <Text
-              fontSize='lg'
-              fontWeight='semibold'
-            >{`${post.user.firstName} ${post.user.lastName}`}</Text>
-          </Link>
-          <Text>{post.text}</Text>
+        <Flex direction='row'>
+          <Box marginRight={5}>
+            <Link href={`/account/profile/${post.user.id}`} w='100%'>
+              <Avatar
+                name={`${post.user.firstName} ${post.user.lastName}`}
+                src={post.user.imageUrl}
+                size='md'
+              />
+            </Link>
+          </Box>
+          <Flex direction='column'>
+            <Link href={`/account/profile/${post.user.id}`}>
+              <Text
+                fontSize='lg'
+                fontWeight='semibold'
+              >{`${post.user.firstName} ${post.user.lastName}`}</Text>
+            </Link>
+            <Box wordBreak='break-word' overflowWrap='break-word' maxW='xs'>
+              <Text>{post.text}</Text>
+            </Box>
+          </Flex>
         </Flex>
         <Box>
           {post.user.id === auth.loggedInUser.id && (

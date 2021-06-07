@@ -57,14 +57,8 @@ export class PostsService {
         'likes.user',
         'comments',
         'comments.likes',
-        'comments.images',
         'comments.user',
         'comments.likes.user',
-        'comments.comments',
-        'comments.comments.likes',
-        'comments.comments.images',
-        'comments.comments.user',
-        'comments.comments.likes.user',
       ],
     });
   }
@@ -99,14 +93,8 @@ export class PostsService {
         'likes.user',
         'comments',
         'comments.likes',
-        'comments.images',
         'comments.user',
         'comments.likes.user',
-        'comments.comments',
-        'comments.comments.likes',
-        'comments.comments.images',
-        'comments.comments.user',
-        'comments.comments.likes.user',
       ],
       where: {
         user: In(userFollowDetails.following.map((u) => u.id)),
@@ -143,14 +131,8 @@ export class PostsService {
           'likes.user',
           'comments',
           'comments.likes',
-          'comments.images',
           'comments.user',
           'comments.likes.user',
-          'comments.comments',
-          'comments.comments.likes',
-          'comments.comments.images',
-          'comments.comments.user',
-          'comments.comments.likes.user',
         ],
         where: {
           user: In(userFollowDetails.following.map((u) => u.id)),
@@ -173,19 +155,13 @@ export class PostsService {
     return await this.postRepository.find({
       relations: [
         'user',
+        'images',
         'likes',
         'likes.user',
-        'images',
         'comments',
         'comments.likes',
-        'comments.images',
         'comments.user',
         'comments.likes.user',
-        'comments.comments',
-        'comments.comments.likes',
-        'comments.comments.images',
-        'comments.comments.user',
-        'comments.comments.likes.user',
       ],
       where: {
         user: await this.userService.findOneUserById(userId),
@@ -283,7 +259,7 @@ export class PostsService {
       await this.likeRepository.delete({ post: postModel });
 
       // Delete the post itself.
-      await this.postRepository.delete({ id: postModel.id });
+      await this.postRepository.remove(postModel);
 
       // Return deletion confirmation.
       return 'OK';
