@@ -94,10 +94,10 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
     <Heading>Loading</Heading>
   ) : (
     <React.Fragment>
-      <Flex justify='center' align='center'>
+      <Flex justify='space-evenly' align='center'>
         <Text>Show Posts By</Text>
         <Menu>
-          <MenuButton bgColor='transparent' as={Button}>
+          <MenuButton as={Button} variant='ghost'>
             {postsMode === PostMode.BEST ? 'Best of the last 24h' : 'New'}
           </MenuButton>
           <MenuList>

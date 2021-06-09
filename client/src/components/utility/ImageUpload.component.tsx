@@ -38,11 +38,7 @@ const ImageUpload: React.FunctionComponent<ImageUploadProps> = ({
         onChange={onImageSelect}
         style={{ display: 'none' }}
       ></input>
-      <Button
-        m={3}
-        onClick={() => inputFile.current?.click()}
-        colorScheme='teal'
-      >
+      <Button m={3} onClick={() => inputFile.current?.click()}>
         Select Image
       </Button>
       <Button
@@ -54,7 +50,6 @@ const ImageUpload: React.FunctionComponent<ImageUploadProps> = ({
             console.log(error);
           }
         }}
-        colorScheme='teal'
       >
         Upload Image
       </Button>

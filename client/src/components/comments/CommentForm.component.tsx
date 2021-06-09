@@ -128,7 +128,7 @@ const CommentForm: React.FunctionComponent<CommentFormProps> = ({
             />
             <FormErrorMessage>{formik.errors.text}</FormErrorMessage>
           </FormControl>
-          <Button type='submit' bgColor='transparent'>
+          <Button type='submit' variant='ghost' color='pink.500'>
             Post
           </Button>
         </Flex>

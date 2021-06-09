@@ -101,7 +101,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
           {post.user.id === auth.loggedInUser.id && (
             <Menu>
               <MenuButton
-                bgColor='transparent'
+                variant='ghost'
                 as={IconButton}
                 icon={<BsThreeDotsVertical />}
               />
@@ -121,9 +121,9 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
           <IconButton
             bgColor='transparent'
             aria-label='like'
-            icon={
-              liked ? <FaHeart color='red' /> : <FaRegHeart color='black' />
-            }
+            color='pink.500'
+            variant='ghost'
+            icon={liked ? <FaHeart /> : <FaRegHeart />}
             onClick={async () =>
               !liked ? await likePost() : await unlikePost()
             }
@@ -131,6 +131,8 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
           <IconButton
             bgColor='transparent'
             aria-label='comment'
+            color='pink.500'
+            variant='ghost'
             icon={<FaRegComment />}
             onClick={onOpen}
           />

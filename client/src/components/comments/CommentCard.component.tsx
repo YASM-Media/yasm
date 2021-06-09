@@ -98,13 +98,9 @@ const CommentCard: React.FunctionComponent<CommentCardProps> = ({
                   <IconButton
                     bgColor='transparent'
                     aria-label='like'
-                    icon={
-                      liked ? (
-                        <FaHeart color='red' />
-                      ) : (
-                        <FaRegHeart color='black' />
-                      )
-                    }
+                    variant='ghost'
+                    color='pink.500'
+                    icon={liked ? <FaHeart /> : <FaRegHeart />}
                     onClick={async () =>
                       !liked ? await likePost() : await unlikePost()
                     }
@@ -112,7 +108,8 @@ const CommentCard: React.FunctionComponent<CommentCardProps> = ({
                   {comment.user.id === auth.loggedInUser.id && (
                     <Menu>
                       <MenuButton
-                        bgColor='transparent'
+                        variant='ghost'
+                        color='pink.500'
                         as={IconButton}
                         icon={<BsThreeDotsVertical />}
                       />
