@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import Navbar from '../../components/nav/Navbar.component';
 import PostList from '../../components/posts/PostList.component';
 import FAB from '../../components/utility/FAB.component';
 import { Post } from '../../models/post.model';
@@ -94,6 +95,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
     <Heading>Loading</Heading>
   ) : (
     <React.Fragment>
+      <Navbar />
       <Flex justify='space-evenly' align='center'>
         <Text>Show Posts By</Text>
         <Menu>
