@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { ChakraProvider } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  extendTheme,
+  withDefaultColorScheme,
+} from '@chakra-ui/react';
 import thunk from 'redux-thunk';
 import {
   createStore,
@@ -18,10 +22,14 @@ const reducer = combineReducers({
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
+const customTheme = extendTheme(
+  withDefaultColorScheme({ colorScheme: 'pink' })
+);
+
 ReactDOM.render(
   <React.StrictMode>
     <ReduxStoreProvider store={store}>
-      <ChakraProvider>
+      <ChakraProvider theme={customTheme}>
         <App />
       </ChakraProvider>
     </ReduxStoreProvider>

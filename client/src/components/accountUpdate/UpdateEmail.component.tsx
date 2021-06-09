@@ -67,7 +67,7 @@ const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
   return (
     <React.Fragment>
       <Flex mx={25} direction='column'>
-        <Heading color='teal'>Update your email address</Heading>
+        <Heading color='pink.500'>Update your email address</Heading>
 
         <form onSubmit={formik.handleSubmit}>
           <FormField
@@ -90,7 +90,7 @@ const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
 
           <Button
             m={5}
-            colorScheme='teal'
+            variant='outline'
             type='submit'
             isDisabled={!formik.isValid}
           >

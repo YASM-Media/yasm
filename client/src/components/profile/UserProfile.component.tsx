@@ -168,13 +168,13 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
           </Flex>
 
           {!ownProfile && (
-            <Button onClick={followOrUnfollowUser} colorScheme='teal'>
+            <Button onClick={followOrUnfollowUser} variant='ghost'>
               {isFollowing ? 'Unfollow' : 'Follow'}
             </Button>
           )}
           {ownProfile && (
             <Button
-              colorScheme='teal'
+              variant='ghost'
               onClick={() => history.push('/account/update')}
             >
               Edit your profile

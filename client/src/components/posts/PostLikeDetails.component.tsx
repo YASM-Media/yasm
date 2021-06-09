@@ -52,9 +52,10 @@ const PostLikeDetails: React.SFC<PostLikeDetailsProps> = ({ post }) => {
     <React.Fragment>
       <Flex direction='row' align='center'>
         <IconButton
-          bgColor='transparent'
+          variant='ghost'
+          color='pink.500'
           aria-label='like'
-          icon={liked ? <FaHeart color='red' /> : <FaRegHeart color='black' />}
+          icon={liked ? <FaHeart /> : <FaRegHeart />}
           onClick={async () => (!liked ? await likePost() : await unlikePost())}
         />
         <Text fontWeight='600' fontSize='sm'>

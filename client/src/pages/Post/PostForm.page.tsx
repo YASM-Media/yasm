@@ -158,7 +158,8 @@ const PostForm: React.FunctionComponent<PostFormProps> = ({
           <Flex direction='row' align='center'>
             <IconButton
               onClick={() => history.goBack()}
-              bgColor='transparent'
+              variant='ghost'
+              color='pink.500'
               aria-label='back'
               icon={<MdArrowBack />}
             />

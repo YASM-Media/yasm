@@ -13,7 +13,6 @@ const FAB: React.FunctionComponent<FABProps> = ({ onClick }) => {
         aria-label='FAB'
         size='lg'
         isRound={true}
-        colorScheme='teal'
         icon={<IoAdd />}
         onClick={onClick}
       />
