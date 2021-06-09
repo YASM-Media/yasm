@@ -4,12 +4,14 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { MdSearch } from 'react-icons/md';
 import { User } from '../../models/user.model';
 import SearchResults from './SearchResults.component';
 import * as SearchService from './../../store/search/service';
+import { FaAlgolia } from 'react-icons/fa';
 
 export interface SearchbarProps {}
 
@@ -36,20 +38,16 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
   return (
     <React.Fragment>
       <Box ref={containerRef}>
-        <InputGroup w={{ base: '13em', md: 'sm' }}>
+        <InputGroup w={{ base: '11em', md: 'sm' }}>
           <InputLeftElement
             pointerEvents='none'
             color='pink.500'
-            children={
-              <Center>
-                <MdSearch />
-              </Center>
-            }
+            children={<MdSearch />}
           />
           <Input
             placeholder='Search...'
             variant='outline'
-            size='sm'
+            size='md'
             value={searchText}
             onChange={fetchResults}
           />

@@ -1,5 +1,6 @@
-import { Box, Portal } from '@chakra-ui/react';
+import { Box, Flex, Portal, Text } from '@chakra-ui/react';
 import React from 'react';
+import { FaAlgolia } from 'react-icons/fa';
 import { User } from '../../models/user.model';
 import SearchResult from './SearchResult.component';
 
@@ -26,6 +27,14 @@ const SearchResults: React.FunctionComponent<SearchResultsProps> = ({
           height='2xs'
           overflowY='scroll'
         >
+          <Flex justify='center' align='center' marginTop={2}>
+            <Text fontSize='xs' color='grey'>
+              Search Results Brought To You By Algolia
+            </Text>
+            <Box marginLeft={1}>
+              <FaAlgolia color='#5468FF' />
+            </Box>
+          </Flex>
           {results.map((user) => (
             <SearchResult key={user.id} user={user} />
           ))}
