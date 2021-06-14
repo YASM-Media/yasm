@@ -41,7 +41,7 @@ const ImageCarousel: React.FunctionComponent<ImageCarouselProps> = ({
 
   return (
     <React.Fragment>
-      <Box position='relative' textAlign='center'>
+      <Box position='relative' textAlign='center' width='100%' height='100%'>
         <Image
           objectFit='cover'
           width='100%'

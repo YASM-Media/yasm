@@ -9,13 +9,14 @@ import { In, MoreThanOrEqual, Repository } from 'typeorm';
 import { Image } from 'src/models/image.model';
 import { User } from 'src/models/user.model';
 import { UpdatePostDto } from 'src/DTOs/posts/updatePost.dto';
+import * as _ from 'lodash';
 
 /**
  * Service Implementation for Posts.
  */
 @Injectable()
 export class PostsService {
-  // Injecting Post and Image Repositories from Nest Context.
+  // Injecting Post, Image and User Repositories from Nest Context.
   // Also injecting User Service.
   constructor(
     @InjectRepository(Post)
@@ -26,6 +27,9 @@ export class PostsService {
 
     @InjectRepository(Like)
     private readonly likeRepository: Repository<Like>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
 
     private readonly userService: UserService,
   ) {}
@@ -167,6 +171,48 @@ export class PostsService {
         user: await this.userService.findOneUserById(userId),
         postType: PostType.Post,
       },
+    });
+  }
+
+  /**
+   * Fetch suggested posts from users not
+   * followed by the logged in user but followed by
+   * thier following.
+   * @param user Logged In User Details
+   * @returns Suggested Posts Array
+   */
+  public async fetchSuggestedPosts(user: User): Promise<Post[]> {
+    // Fetch user followers and following.
+    const loggedInUserRelation =
+      await this.userService.findOneUserByIdWithRelations(user.id);
+
+    // Fetch user details for the following users.
+    const followingUsers = await this.userRepository.find({
+      where: {
+        id: In(loggedInUserRelation.following.map((u) => u.id)),
+      },
+      relations: ['following'],
+    });
+
+    // Map and flatten to get following of users followed by the logged in user.
+    const fof = _.flatten(followingUsers.map((u) => u.following));
+
+    // Return the suggested posts.
+    return await this.postRepository.find({
+      where: {
+        user: In(fof.filter((u) => u.id !== user.id).map((u) => u.id)),
+        postType: PostType.Post,
+      },
+      relations: [
+        'user',
+        'images',
+        'likes',
+        'likes.user',
+        'comments',
+        'comments.likes',
+        'comments.user',
+        'comments.likes.user',
+      ],
     });
   }
 

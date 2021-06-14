@@ -69,6 +69,19 @@ export class PostsController {
   }
 
   /**
+   * API Endpoint for suggested posts.
+   * @param user Logged In User
+   * @returns Suggested Post array
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('get/suggested')
+  public async getSuggestedPosts(
+    @LoggedInUser() user: User,
+  ): Promise<PostModel[]> {
+    return await this.postsService.fetchSuggestedPosts(user);
+  }
+
+  /**
    * API Endpoint for Post Creation.
    * @param createPostDto DTO For Post Creation
    * @param user Logged In User
