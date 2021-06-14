@@ -35,7 +35,7 @@ const CommentForm: React.FunctionComponent<CommentFormProps> = ({
     '',
     '',
     new Date(),
-    new User('', '', '', '', '', ''),
+    new User('', '', '', '', '', '', [], []),
     [],
     [],
     []

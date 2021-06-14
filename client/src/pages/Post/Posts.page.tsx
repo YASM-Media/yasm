@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Navbar from '../../components/nav/Navbar.component';
 import PostList from '../../components/posts/PostList.component';
+import SuggestedUsers from '../../components/user/SuggestedUsers.component';
 import FAB from '../../components/utility/FAB.component';
 import { Post } from '../../models/post.model';
 import { PostMode } from '../../types/posts/enums/PostMode.enum';
@@ -103,27 +104,42 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
   ) : (
     <React.Fragment>
       <Navbar />
-      <Flex justify='space-evenly' align='center'>
-        <Text>Show Posts By</Text>
-        <Menu>
-          <MenuButton as={Button} variant='ghost'>
-            {postsMode === PostMode.BEST
-              ? 'Best of the last 24h'
-              : postsMode === PostMode.SUGGESTED
-              ? 'Suggested'
-              : 'New'}
-          </MenuButton>
-          <MenuList>
-            <MenuItem onClick={switchToBest}>Best of the last 24h</MenuItem>
-            <MenuItem onClick={switchToNew}>New</MenuItem>
-            <MenuItem onClick={switchToSuggested}>Suggested</MenuItem>
-          </MenuList>
-        </Menu>
+      <Flex direction='row'>
+        <Box
+          minW={{ base: '100%', lg: '75%' }}
+          maxW={{ base: '100%', lg: '75%' }}
+          paddingX={30}
+        >
+          <Flex
+            justify='space-between'
+            align='center'
+            paddingX={{ base: 30, sm: 50, lg: 300 }}
+          >
+            <Text>Show Posts By</Text>
+            <Menu>
+              <MenuButton as={Button} variant='ghost'>
+                {postsMode === PostMode.BEST
+                  ? 'Best of the last 24h'
+                  : postsMode === PostMode.SUGGESTED
+                  ? 'Suggested'
+                  : 'New'}
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={switchToBest}>Best of the last 24h</MenuItem>
+                <MenuItem onClick={switchToNew}>New</MenuItem>
+                <MenuItem onClick={switchToSuggested}>Suggested</MenuItem>
+              </MenuList>
+            </Menu>
+          </Flex>
+          <Box>
+            <PostList posts={posts} removeFromArray={deletePostFromArray} />
+          </Box>
+        </Box>
+        <Box w='100%' display={{ base: 'none', lg: 'block' }}>
+          <SuggestedUsers />
+        </Box>
       </Flex>
-      <Box marginX='50'>
-        <PostList posts={posts} removeFromArray={deletePostFromArray} />
-        <FAB onClick={() => history.push('/posts/create')} />
-      </Box>
+      <FAB onClick={() => history.push('/posts/create')} />
     </React.Fragment>
   );
 };

@@ -65,7 +65,7 @@ const PostList: React.FunctionComponent<PostListProps> = ({
 
   return (
     <React.Fragment>
-      <Flex h='100vh' align='center' direction='column'>
+      <Flex align='center' direction='column'>
         {posts.map((post) => (
           <PostCard
             onDelete={() => confirmDeletePost(post.id)}

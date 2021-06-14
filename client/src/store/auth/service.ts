@@ -3,6 +3,7 @@ import { UpdatePasswordType } from './../../types/updatePassword.type';
 import { UpdateProfileType } from './../../types/updateProfile.type';
 import { firebaseStorage } from '../../utils/firebase';
 import { UpdateEmailType } from '../../types/updateEmail.type';
+import { User } from '../../models/user.model';
 
 const profilePictureStorage = firebaseStorage.child('/profile-pictures');
 
@@ -22,6 +23,30 @@ export const register = async (user: UserType): Promise<void> => {
 
     throw new Error(message);
   }
+};
+
+/**
+ * Fetch suggested users for the user.
+ * @returns Suggested Users Array
+ */
+export const fetchSuggestedPosts = async (): Promise<User[]> => {
+  // Send a request to the server to fetch the suggested users.
+  const response = await fetch('/v1/api/user/suggested', {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  // Check for errors and return error to the client.
+  if (!response.ok) {
+    const responseJson = await response.json();
+    const message = responseJson.message;
+
+    throw new Error(message);
+  }
+
+  // Return suggested users array.
+  const suggestedUsers: User[] = await response.json();
+  return suggestedUsers;
 };
 
 export const updateUserProfile = async (

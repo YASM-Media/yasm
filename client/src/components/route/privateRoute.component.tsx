@@ -40,7 +40,9 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
               json.lastName,
               json.biography,
               json.imageUrl,
-              json.emailAddress
+              json.emailAddress,
+              [],
+              []
             );
 
             dispatch(AuthActions.autoLogin(user));

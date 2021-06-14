@@ -34,7 +34,9 @@ const Splash: React.FunctionComponent<SplashProps> = () => {
             json.lastName,
             json.biography,
             json.imageUrl,
-            json.emailAddress
+            json.emailAddress,
+            [],
+            []
           );
 
           dispatch(AuthActions.autoLogin(user));

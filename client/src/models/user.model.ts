@@ -5,6 +5,8 @@ export class User {
     public lastName: string,
     public biography: string,
     public imageUrl: string,
-    public emailAddress: string
+    public emailAddress: string,
+    public followers: User[],
+    public following: User[]
   ) {}
 }
