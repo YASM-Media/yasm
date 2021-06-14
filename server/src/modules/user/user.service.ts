@@ -86,7 +86,12 @@ export class UserService {
       where: {
         id: In(loggedInUserRelation.following.map((u) => u.id)),
       },
-      relations: ['followers', 'following'],
+      relations: [
+        'followers',
+        'following',
+        'following.followers',
+        'following.following',
+      ],
     });
 
     // Following of following users.

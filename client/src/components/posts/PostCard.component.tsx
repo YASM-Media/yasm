@@ -84,7 +84,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
         borderRadius='lg'
         borderColor='black'
         m={5}
-        w={{ base: '100%', sm: '70%', lg: '35%' }}
+        w={{ base: '100%', sm: '70%', lg: '45%' }}
       >
         <Flex margin={3} direction='row' justify='space-between'>
           <Link href={`/account/profile/${post.user.id}`} w='fit-content'>

@@ -56,6 +56,30 @@ export const fetchBestPosts = async (): Promise<Post[]> => {
 };
 
 /**
+ * Fetch suggested posts for the user.
+ * @returns Suggested Posts Array
+ */
+export const fetchSuggestedPosts = async (): Promise<Post[]> => {
+  // Send a request to the server to fetch the suggested posts.
+  const response = await fetch('/v1/api/posts/get/suggested', {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  // Check for errors and return error to the client.
+  if (!response.ok) {
+    const responseJson = await response.json();
+    const message = responseJson.message;
+
+    throw new Error(message);
+  }
+
+  // Return best posts array.
+  const postData: Post[] = await response.json();
+  return postData;
+};
+
+/**
  * Fetch posts by user.
  * @param userId User ID to fetch posts for
  * @returns User posts array
