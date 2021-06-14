@@ -6,9 +6,10 @@ import { User } from 'src/models/user.model';
 import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PasswordUpdateDto } from 'src/DTOs/passwordUpdate.dto';
+import * as _ from 'lodash';
 
 /**
  * Implementation for the user service.
@@ -68,6 +69,33 @@ export class UserService {
         where: { id },
       })
     )[0];
+  }
+
+  /**
+   * Fetch Suggested Users
+   * @param user Logged In Users.
+   */
+  public async fetchSuggestedUsers(user: User): Promise<User[]> {
+    // Fetch the followers and following details for logged in users.
+    const loggedInUserRelation = await this.findOneUserByIdWithRelations(
+      user.id,
+    );
+
+    // Fetch details of following users.
+    const followingUser = await this.userRepository.find({
+      where: {
+        id: In(loggedInUserRelation.following.map((u) => u.id)),
+      },
+      relations: ['followers', 'following'],
+    });
+
+    // Following of following users.
+    const fof = _.flatten(followingUser.map((u) => u.following)).filter(
+      (u) => u.id !== user.id,
+    );
+
+    // Return a small sample of the fof.
+    return _.sampleSize(fof, fof.length >= 5 ? 5 : fof.length);
   }
 
   /**

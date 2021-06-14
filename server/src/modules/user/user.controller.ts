@@ -28,6 +28,19 @@ export class UserController {
   }
 
   /**
+   * API Endpoint for suggested users.
+   * @param user Logged In User
+   * @returns Suggested User Details
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('suggested')
+  public async fetchSuggestedUsers(
+    @LoggedInUser() user: User,
+  ): Promise<User[]> {
+    return await this.userService.fetchSuggestedUsers(user);
+  }
+
+  /**
    * API Endpoint for updating User Profile.
    * @param profileDto User Profile Update DTO
    * @param user Logged In User

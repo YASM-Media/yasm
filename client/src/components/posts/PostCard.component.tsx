@@ -116,7 +116,9 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
             </Menu>
           )}
         </Flex>
-        <ImageCarousel images={post.images} />
+        <Box>
+          <ImageCarousel images={post.images} />
+        </Box>
         <Flex direction='row' align='center'>
           <IconButton
             bgColor='transparent'
