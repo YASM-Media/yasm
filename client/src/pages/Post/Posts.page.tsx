@@ -54,8 +54,14 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
           setPosts(posts);
         })
         .catch((error) => setErrorMessage(error));
-    } else {
+    } else if (postsMode === PostMode.BEST) {
       PostService.fetchBestPosts()
+        .then((posts) => {
+          setPosts(posts);
+        })
+        .catch((error) => setErrorMessage(error));
+    } else if (postsMode === PostMode.SUGGESTED) {
+      PostService.fetchSuggestedPosts()
         .then((posts) => {
           setPosts(posts);
         })
@@ -83,6 +89,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
   // Post Display Switch functions.
   const switchToNew = () => setPostsMode(PostMode.NEW);
   const switchToBest = () => setPostsMode(PostMode.BEST);
+  const switchToSuggested = () => setPostsMode(PostMode.SUGGESTED);
 
   /**
    * Remove post fro array for a given ID.
@@ -100,11 +107,16 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
         <Text>Show Posts By</Text>
         <Menu>
           <MenuButton as={Button} variant='ghost'>
-            {postsMode === PostMode.BEST ? 'Best of the last 24h' : 'New'}
+            {postsMode === PostMode.BEST
+              ? 'Best of the last 24h'
+              : postsMode === PostMode.SUGGESTED
+              ? 'Suggested'
+              : 'New'}
           </MenuButton>
           <MenuList>
             <MenuItem onClick={switchToBest}>Best of the last 24h</MenuItem>
             <MenuItem onClick={switchToNew}>New</MenuItem>
+            <MenuItem onClick={switchToSuggested}>Suggested</MenuItem>
           </MenuList>
         </Menu>
       </Flex>
