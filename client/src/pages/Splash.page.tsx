@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
+import Loading from '../components/lottie/Loading.animation';
 import { User } from '../models/user.model';
 import * as AuthActions from './../store/auth/actionCreators';
 
@@ -48,9 +49,9 @@ const Splash: React.FunctionComponent<SplashProps> = () => {
   }, [dispatch]);
 
   return loading ? (
-    <h1>Loading</h1>
+    <Loading message='Welcome To YASM!!🌟' />
   ) : authenticated ? (
-    <Redirect to='/private' />
+    <Redirect to='/posts' />
   ) : (
     <Redirect to='/login' />
   );

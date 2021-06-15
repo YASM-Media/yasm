@@ -116,16 +116,15 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
       <Flex
         direction={{ base: 'column', lg: 'row' }}
         justify={{ base: 'center', lg: 'space-evenly' }}
-        align='center'
+        align={{ base: 'center', lg: 'flex-start' }}
         w={{ base: '100%', lg: '60%' }}
-        border='1px'
-        borderColor='grey'
-        borderRadius='2xl'
+        boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
+        borderRadius='lg'
         py={5}
       >
         <Image src={user.imageUrl} borderRadius='full' boxSize='150px' />
 
-        <Flex direction='column' align='center' justify='center' minW='210px'>
+        <Flex direction='column' align='center' justify='center' w='210px'>
           <Flex
             direction='column'
             align={{ base: 'center', lg: 'flex-start' }}

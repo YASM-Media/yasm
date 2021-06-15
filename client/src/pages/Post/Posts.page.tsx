@@ -1,6 +1,5 @@
 import {
   useToast,
-  Heading,
   Text,
   Flex,
   Menu,
@@ -12,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import Loading from '../../components/lottie/Loading.animation';
 import Navbar from '../../components/nav/Navbar.component';
 import PostList from '../../components/posts/PostList.component';
 import SuggestedUsers from '../../components/user/SuggestedUsers.component';
@@ -93,27 +93,27 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
   const switchToSuggested = () => setPostsMode(PostMode.SUGGESTED);
 
   /**
-   * Remove post fro array for a given ID.
+   * Remove post from array for a given ID.
    * @param postId Post ID
    */
   const deletePostFromArray = (postId: string) =>
     setPosts(posts.filter((post) => post.id !== postId));
 
   return loading ? (
-    <Heading>Loading</Heading>
+    <Loading message='Loading Posts For You!!🌟' />
   ) : (
     <React.Fragment>
       <Navbar />
-      <Flex direction='row'>
+      <Flex direction='row' justify='center' align='flex-start'>
         <Box
-          minW={{ base: '100%', lg: '75%' }}
-          maxW={{ base: '100%', lg: '75%' }}
+          minW={{ base: '100%', xl: '70%' }}
+          maxW={{ base: '100%', xl: '70%' }}
           paddingX={30}
         >
           <Flex
             justify='space-between'
             align='center'
-            paddingX={{ base: 30, sm: 50, lg: 300 }}
+            paddingX={{ base: 1, sm: 0, md: 110, lg: 180 }}
           >
             <Text>Show Posts By</Text>
             <Menu>
@@ -131,11 +131,11 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
               </MenuList>
             </Menu>
           </Flex>
-          <Box>
+          <Box paddingX={{ md: 100, lg: 200, xl: 0 }}>
             <PostList posts={posts} removeFromArray={deletePostFromArray} />
           </Box>
         </Box>
-        <Box w='100%' display={{ base: 'none', lg: 'block' }}>
+        <Box w='100%' display={{ base: 'none', xl: 'block' }}>
           <SuggestedUsers />
         </Box>
       </Flex>

@@ -49,7 +49,16 @@ export const autoLogin = (user: User): AuthAction => ({
   user,
 });
 
-export const logout = () => ({
-  type: actionTypes.LOGOUT,
-  user: new User('', '', '', '', '', '', [], []),
-});
+export const logout = () => {
+  return async (dispatch: ThunkDispatch<{}, {}, AuthAction>) => {
+    await fetch('/v1/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    return dispatch({
+      type: actionTypes.LOGOUT,
+      user: new User('', '', '', '', '', '', [], []),
+    });
+  };
+};

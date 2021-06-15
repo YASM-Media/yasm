@@ -14,7 +14,6 @@ const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
   return (
     <React.Fragment>
       <Flex
-        h='100vh'
         align='flex-start'
         justify='flex-start'
         direction='column'

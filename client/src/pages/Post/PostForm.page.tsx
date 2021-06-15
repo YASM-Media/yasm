@@ -18,6 +18,7 @@ import { CreatePostType } from '../../types/posts/createPost.type';
 import CustomModal from '../../components/modal/modal.component';
 import { MdArrowBack } from 'react-icons/md';
 import { useHistory } from 'react-router';
+import Loading from '../../components/lottie/Loading.animation';
 
 export interface PostFormProps {
   isEdit: boolean;
@@ -48,6 +49,9 @@ const PostForm: React.FunctionComponent<PostFormProps> = ({
 
   // Toast Hook
   const toast = useToast();
+
+  // History Hook
+  const history = useHistory();
 
   // If in editing mode, fetch the post details.
   useEffect(() => {
@@ -93,6 +97,8 @@ const PostForm: React.FunctionComponent<PostFormProps> = ({
       // Set loading state as false
       setLoading(false);
 
+      history.goBack();
+
       // Toast the user success.
       toast({
         title: 'Success',
@@ -130,9 +136,6 @@ const PostForm: React.FunctionComponent<PostFormProps> = ({
 
   // Disclosure Hook
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // History Hook
-  const history = useHistory();
 
   /**
    * Remove image from state
@@ -192,11 +195,11 @@ const PostForm: React.FunctionComponent<PostFormProps> = ({
         onAddImage={addImage}
       />
       <CustomModal isOpen={loading} onClose={() => {}}>
-        <Flex align='center' justify='center' direction='column' m={30}>
-          <Heading>
-            {isEdit ? 'Updating Your Post!' : 'Creating A New Post!'}
-          </Heading>
-        </Flex>
+        <Loading
+          message={
+            isEdit ? 'Updating Your Post!!🌟' : 'Saving The Post For You!!🌟'
+          }
+        />
       </CustomModal>
     </React.Fragment>
   );

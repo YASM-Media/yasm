@@ -80,11 +80,10 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
   return (
     <React.Fragment>
       <Box
-        borderWidth='1px'
+        boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
         borderRadius='lg'
-        borderColor='black'
         m={5}
-        w={{ base: '100%', sm: '70%', lg: '45%' }}
+        w={{ base: '100%', lg: '100%', xl: '60%' }}
       >
         <Flex margin={3} direction='row' justify='space-between'>
           <Link href={`/account/profile/${post.user.id}`} w='fit-content'>
@@ -145,7 +144,10 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
           </Text>
         </Box>
         <Box marginX={3} marginBottom={5}>
-          <Text fontSize='sm'>{post.text}</Text>
+          <Text fontSize='sm'>
+            {post.text.substring(0, 100)}
+            {post.text.length > 100 && '...'}
+          </Text>
         </Box>
       </Box>
       <PostModal post={post} visible={isOpen} onClose={onClose} />

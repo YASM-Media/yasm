@@ -3,7 +3,6 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
-  Heading,
   Input,
   useToast,
 } from '@chakra-ui/react';
@@ -16,6 +15,7 @@ import { useFormik } from 'formik';
 import { UpdateCommentType } from '../../types/comments/updateComment.type';
 import { CreateCommentType } from '../../types/comments/createComment.type';
 import * as CommentService from './../../store/comments/service';
+import Loading from '../lottie/Loading.animation';
 
 export interface CommentFormProps {
   isEdit?: boolean;
@@ -134,11 +134,7 @@ const CommentForm: React.FunctionComponent<CommentFormProps> = ({
         </Flex>
       </form>
       <CustomModal isOpen={loading} onClose={() => {}}>
-        <Flex align='center' justify='center' direction='column' m={30}>
-          <Heading>
-            {isEdit ? 'Updating Your Comment!' : 'Creating A New Comment!'}
-          </Heading>
-        </Flex>
+        <Loading message='Creating A New Comment For You!!🌟' />
       </CustomModal>
     </React.Fragment>
   );

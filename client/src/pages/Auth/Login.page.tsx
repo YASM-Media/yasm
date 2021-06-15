@@ -16,6 +16,7 @@ import CustomModal from '../../components/modal/modal.component';
 import { LoginUser } from '../../types/loginUser.type';
 import * as AuthActions from './../../store/auth/actionCreators';
 import { useDispatch } from 'react-redux';
+import Loading from '../../components/lottie/Loading.animation';
 
 export interface LoginProps {}
 
@@ -72,13 +73,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Flex
-          h='100vh'
-          align='center'
-          justify='center'
-          direction='column'
-          m={30}
-        >
+        <Flex h='100vh' align='center' justify='center' direction='column'>
           <Heading>Log in to your YASM account!!🌟</Heading>
 
           <Box mt={30} w={{ base: '40vh', sm: '50vh', md: '70vh', lg: '80vh' }}>
@@ -111,10 +106,8 @@ const Login: React.FunctionComponent<LoginProps> = () => {
           <Link href='/register'>Don't have an account? Register here!</Link>
         </Flex>
       </form>
-      <CustomModal isOpen={isOpen} onClose={onClose}>
-        <Flex align='center' justify='center' direction='column' m={30}>
-          <Heading>Logging you in!</Heading>
-        </Flex>
+      <CustomModal isOpen={isOpen} onClose={() => {}}>
+        <Loading message='Logging You In!!🌟' />
       </CustomModal>
     </React.Fragment>
   );

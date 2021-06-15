@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { Image as ImageModel } from '../../models/image.model';
+import NoData from '../lottie/NoData.animation';
 import ImageDisplay from './ImageDisplay.component';
 
 export interface ImageModalProps {
@@ -52,15 +53,16 @@ const ImageModal: React.FunctionComponent<ImageModalProps> = ({
         <ModalContent>
           <ModalHeader>Upload Your Images Here!!🌟</ModalHeader>
           <ModalCloseButton />
-
           <ModalBody>
-            {images.map((image) => (
-              <ImageDisplay
-                onDelete={onDelete}
-                key={image.imageUrl}
-                image={image}
-              />
-            ))}
+            {images.length > 0 &&
+              images.map((image) => (
+                <ImageDisplay
+                  onDelete={onDelete}
+                  key={image.imageUrl}
+                  image={image}
+                />
+              ))}
+            {images.length === 0 && <NoData message='No Posts To Show!!🌟' />}
           </ModalBody>
 
           <ModalFooter>

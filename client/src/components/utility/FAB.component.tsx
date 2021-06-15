@@ -11,6 +11,8 @@ const FAB: React.FunctionComponent<FABProps> = ({ onClick }) => {
     <Box position='fixed' right={10} bottom={10}>
       <IconButton
         aria-label='FAB'
+        bgColor={{ sm: 'white' }}
+        color={{ base: 'white', sm: 'pink.500' }}
         size='lg'
         isRound={true}
         icon={<IoAdd />}

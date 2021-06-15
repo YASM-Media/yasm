@@ -4,6 +4,7 @@ import { Post } from '../../models/post.model';
 import ConfirmationModal from '../modal/confirmationModal.component';
 import PostCard from './PostCard.component';
 import * as PostService from './../../store/post/service';
+import NoData from '../lottie/NoData.animation';
 
 export interface PostListProps {
   posts: Post[];
@@ -66,13 +67,15 @@ const PostList: React.FunctionComponent<PostListProps> = ({
   return (
     <React.Fragment>
       <Flex align='center' direction='column'>
-        {posts.map((post) => (
-          <PostCard
-            onDelete={() => confirmDeletePost(post.id)}
-            key={post.id}
-            post={post}
-          />
-        ))}
+        {posts.length > 0 &&
+          posts.map((post) => (
+            <PostCard
+              onDelete={() => confirmDeletePost(post.id)}
+              key={post.id}
+              post={post}
+            />
+          ))}
+        {posts.length === 0 && <NoData message='No Posts To Show!!🌟' />}
       </Flex>
       <ConfirmationModal
         onClose={onClose}

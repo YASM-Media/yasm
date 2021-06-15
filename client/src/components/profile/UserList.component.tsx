@@ -1,6 +1,7 @@
-import { Center, Flex, Image, Link, Text } from '@chakra-ui/react';
+import { Avatar, Flex, Link, Text } from '@chakra-ui/react';
 import React from 'react';
 import { User } from '../../models/user.model';
+import NoData from '../lottie/NoData.animation';
 
 export interface UserListProps {
   userList: User[];
@@ -19,23 +20,24 @@ const UserList: React.FunctionComponent<UserListProps> = ({
             <Flex
               w='100%'
               direction='row'
-              justify='space-evenly'
+              justify='space-between'
               align='center'
+              padding={5}
             >
-              <Image src={user.imageUrl} borderRadius='full' boxSize='100px' />
+              <Avatar
+                name={`${user.firstName} ${user.lastName}`}
+                src={user.imageUrl}
+              />
               <Flex direction='column'>
                 <Text>
                   {user.firstName} {user.lastName}
                 </Text>
-                <Text>{user.biography}</Text>
               </Flex>
             </Flex>
           </Link>
         ))
       ) : (
-        <Center m={10}>
-          <h1>{emptyMessage}</h1>
-        </Center>
+        <NoData message='User Data Not Available!!🌟' />
       )}
     </div>
   );
