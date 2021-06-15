@@ -2,6 +2,8 @@ import { Flex } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import Loading from '../../components/lottie/Loading.animation';
+import Navbar from '../../components/nav/Navbar.component';
 import UserPosts from '../../components/profile/UserPosts.component';
 import UserProfile from '../../components/profile/UserProfile.component';
 import FAB from '../../components/utility/FAB.component';
@@ -80,9 +82,10 @@ const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
     }, [ownProfile, uid]);
 
     return loading ? (
-      <h1>Loading</h1>
+      <Loading message='Loading The User Profile For You!!🌟' />
     ) : (
       <React.Fragment>
+        <Navbar />
         <Flex align='center' direction='column' p={30}>
           <UserProfile
             user={user}

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Link, Text } from '@chakra-ui/react';
+import { Avatar, Button, Flex, Link, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { User } from '../../models/user.model';
@@ -32,7 +32,7 @@ const SuggestedUser: React.FunctionComponent<SuggestedUserProps> = ({
       direction='row'
       justify='space-between'
       align='center'
-      boxShadow='0 4px 8px 0 rgba(0,0,0,0.2)'
+      boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
       borderRadius='lg'
       marginRight={5}
       marginY={5}

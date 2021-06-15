@@ -1,17 +1,9 @@
-import {
-  Box,
-  Center,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-} from '@chakra-ui/react';
+import { Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { MdSearch } from 'react-icons/md';
 import { User } from '../../models/user.model';
 import SearchResults from './SearchResults.component';
 import * as SearchService from './../../store/search/service';
-import { FaAlgolia } from 'react-icons/fa';
 
 export interface SearchbarProps {}
 

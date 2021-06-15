@@ -80,7 +80,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
   return (
     <React.Fragment>
       <Box
-        boxShadow='0 4px 8px 0 rgba(0,0,0,0.2)'
+        boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
         borderRadius='lg'
         m={5}
         w={{ base: '100%', lg: '100%', xl: '60%' }}

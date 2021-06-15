@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Post } from '../../models/post.model';
 import { User } from '../../models/user.model';
+import Loading from '../lottie/Loading.animation';
 import PostList from '../posts/PostList.component';
 import * as PostService from './../../store/post/service';
 import UserPostsMinified from './UserPostsMinified.component';
@@ -36,9 +37,8 @@ const UserPosts: React.FunctionComponent<UserPostsProps> = ({ user }) => {
 
     PostService.fetchPostsByUser(user.id)
       .then((data) => setPosts(data))
-      .catch((error) => setErrorMessage(error));
-
-    setLoading(false);
+      .catch((error) => setErrorMessage(error))
+      .finally(() => setLoading(false));
   }, [user.id]);
 
   // Listening to error state to display errors.
@@ -73,14 +73,16 @@ const UserPosts: React.FunctionComponent<UserPostsProps> = ({ user }) => {
               <UserPostsMinified posts={posts} />
             </TabPanel>
             <TabPanel>
-              <PostList posts={posts} removeFromArray={deletePostFromArray} />
+              <Box paddingX={{ base: 0, md: 50, lg: 200 }}>
+                <PostList posts={posts} removeFromArray={deletePostFromArray} />
+              </Box>
             </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
     </React.Fragment>
   ) : (
-    <h1>Loading</h1>
+    <Loading message='Loading User Posts For You!!🌟' />
   );
 };
 

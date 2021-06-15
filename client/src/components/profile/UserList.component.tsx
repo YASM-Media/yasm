@@ -1,4 +1,4 @@
-import { Avatar, Center, Flex, Image, Link, Text } from '@chakra-ui/react';
+import { Avatar, Center, Flex, Link, Text } from '@chakra-ui/react';
 import React from 'react';
 import { User } from '../../models/user.model';
 

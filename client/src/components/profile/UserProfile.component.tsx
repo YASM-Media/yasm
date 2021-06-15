@@ -118,7 +118,7 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
         justify={{ base: 'center', lg: 'space-evenly' }}
         align={{ base: 'center', lg: 'flex-start' }}
         w={{ base: '100%', lg: '60%' }}
-        boxShadow='0 4px 8px 0 rgba(0,0,0,0.2)'
+        boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
         borderRadius='lg'
         py={5}
       >

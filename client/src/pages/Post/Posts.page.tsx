@@ -1,6 +1,5 @@
 import {
   useToast,
-  Heading,
   Text,
   Flex,
   Menu,
@@ -12,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import Loading from '../../components/lottie/Loading.animation';
 import Navbar from '../../components/nav/Navbar.component';
 import PostList from '../../components/posts/PostList.component';
 import SuggestedUsers from '../../components/user/SuggestedUsers.component';
@@ -100,7 +100,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
     setPosts(posts.filter((post) => post.id !== postId));
 
   return loading ? (
-    <Heading>Loading</Heading>
+    <Loading message='Loading Posts For You!!🌟' />
   ) : (
     <React.Fragment>
       <Navbar />
@@ -113,7 +113,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
           <Flex
             justify='space-between'
             align='center'
-            paddingX={{ base: 30, sm: 50, lg: 100 }}
+            paddingX={{ base: 1, sm: 0, md: 110, lg: 180 }}
           >
             <Text>Show Posts By</Text>
             <Menu>
@@ -131,7 +131,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
               </MenuList>
             </Menu>
           </Flex>
-          <Box>
+          <Box paddingX={{ md: 100, lg: 200, xl: 0 }}>
             <PostList posts={posts} removeFromArray={deletePostFromArray} />
           </Box>
         </Box>

@@ -14,11 +14,13 @@ const Navbar: React.FunctionComponent<NavbarProps> = () => {
         justify='space-evenly'
         padding={5}
         marginBottom={10}
+        marginX={{ base: 1, lg: 10 }}
         position='sticky'
-        top={0}
+        top={2}
         zIndex={99}
         backgroundColor='white'
-        boxShadow='md'
+        boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
+        borderRadius='lg'
       >
         <Branding />
         <Searchbar />

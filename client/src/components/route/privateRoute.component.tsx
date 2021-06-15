@@ -3,6 +3,7 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { Redirect, RouteProps, Route } from 'react-router-dom';
 import { User } from '../../models/user.model';
 import { AuthState } from '../../store/auth/types';
+import Loading from '../lottie/Loading.animation';
 import * as AuthActions from './../../store/auth/actionCreators';
 
 export type PrivateRouteProps = RouteProps & {
@@ -57,7 +58,7 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
   }, [auth.isLoggedIn, dispatch]);
 
   return loading ? (
-    <h1>Loading</h1>
+    <Loading message='Welcome To YASM!!🌟' />
   ) : authenticated ? (
     <Route {...props} />
   ) : (
