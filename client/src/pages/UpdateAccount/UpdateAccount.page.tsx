@@ -18,7 +18,6 @@ const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
         justify='flex-start'
         direction='column'
         p={{ base: 0, lg: 25 }}
-        minH='100vh'
       >
         <Heading marginY={25}>Update Your Profile Here!!🌟</Heading>
         <Tabs variant='soft-rounded' isLazy>
