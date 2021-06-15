@@ -144,7 +144,10 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
           </Text>
         </Box>
         <Box marginX={3} marginBottom={5}>
-          <Text fontSize='sm'>{post.text}</Text>
+          <Text fontSize='sm'>
+            {post.text.substring(0, 100)}
+            {post.text.length > 100 && '...'}
+          </Text>
         </Box>
       </Box>
       <PostModal post={post} visible={isOpen} onClose={onClose} />
