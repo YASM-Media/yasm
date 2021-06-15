@@ -83,7 +83,7 @@ const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
       <h1>Loading</h1>
     ) : (
       <React.Fragment>
-        <Flex h='100vh' align='center' direction='column' p={30}>
+        <Flex align='center' direction='column' p={30}>
           <UserProfile
             user={user}
             followers={followers}

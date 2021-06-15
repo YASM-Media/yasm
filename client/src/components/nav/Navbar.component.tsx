@@ -9,7 +9,17 @@ export interface NavbarProps {}
 const Navbar: React.FunctionComponent<NavbarProps> = () => {
   return (
     <React.Fragment>
-      <Flex align='center' justify='space-evenly' marginY={5}>
+      <Flex
+        align='center'
+        justify='space-evenly'
+        padding={5}
+        marginBottom={10}
+        position='sticky'
+        top={0}
+        zIndex={99}
+        backgroundColor='white'
+        boxShadow='md'
+      >
         <Branding />
         <Searchbar />
         <NavMenu />

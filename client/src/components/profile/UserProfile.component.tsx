@@ -118,9 +118,8 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
         justify={{ base: 'center', lg: 'space-evenly' }}
         align='center'
         w={{ base: '100%', lg: '60%' }}
-        border='1px'
-        borderColor='grey'
-        borderRadius='2xl'
+        boxShadow='0 4px 8px 0 rgba(0,0,0,0.2)'
+        borderRadius='lg'
         py={5}
       >
         <Image src={user.imageUrl} borderRadius='full' boxSize='150px' />

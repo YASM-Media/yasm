@@ -93,7 +93,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
   const switchToSuggested = () => setPostsMode(PostMode.SUGGESTED);
 
   /**
-   * Remove post fro array for a given ID.
+   * Remove post from array for a given ID.
    * @param postId Post ID
    */
   const deletePostFromArray = (postId: string) =>
@@ -104,16 +104,16 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
   ) : (
     <React.Fragment>
       <Navbar />
-      <Flex direction='row'>
+      <Flex direction='row' justify='center' align='flex-start'>
         <Box
-          minW={{ base: '100%', lg: '75%' }}
-          maxW={{ base: '100%', lg: '75%' }}
+          minW={{ base: '100%', xl: '70%' }}
+          maxW={{ base: '100%', xl: '70%' }}
           paddingX={30}
         >
           <Flex
             justify='space-between'
             align='center'
-            paddingX={{ base: 30, sm: 50, lg: 300 }}
+            paddingX={{ base: 30, sm: 50, lg: 100 }}
           >
             <Text>Show Posts By</Text>
             <Menu>
@@ -135,7 +135,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
             <PostList posts={posts} removeFromArray={deletePostFromArray} />
           </Box>
         </Box>
-        <Box w='100%' display={{ base: 'none', lg: 'block' }}>
+        <Box w='100%' display={{ base: 'none', xl: 'block' }}>
           <SuggestedUsers />
         </Box>
       </Flex>

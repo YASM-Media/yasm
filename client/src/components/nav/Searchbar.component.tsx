@@ -38,7 +38,7 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
   return (
     <React.Fragment>
       <Box ref={containerRef}>
-        <InputGroup w={{ base: '11em', md: 'sm' }}>
+        <InputGroup w={{ base: '10em', md: 'sm' }} size='sm'>
           <InputLeftElement
             pointerEvents='none'
             color='pink.500'
@@ -47,7 +47,7 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
           <Input
             placeholder='Search...'
             variant='outline'
-            size='md'
+            size='sm'
             value={searchText}
             onChange={fetchResults}
           />

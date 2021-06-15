@@ -16,7 +16,7 @@ const NavMenu: React.FunctionComponent<NavMenuProps> = () => {
           name={`${auth.loggedInUser.firstName} ${auth.loggedInUser.lastName}`}
           src={auth.loggedInUser.imageUrl}
           cursor='pointer'
-          size='md'
+          size='sm'
         />
         <MenuList>
           <MenuItem>Profile</MenuItem>
