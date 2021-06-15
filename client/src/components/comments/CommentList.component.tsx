@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { User } from '../../models/user.model';
 import CommentForm from './CommentForm.component';
+import NoData from '../lottie/NoData.animation';
 
 export interface CommentListProps {
   postId: string;
@@ -65,18 +66,20 @@ const CommentList: React.FunctionComponent<CommentListProps> = ({
 
   return (
     <React.Fragment>
-      {comments.map((comment) => (
-        <CommentCard
-          key={comment.id}
-          postId={postId}
-          comment={comment}
-          deleteComment={deleteComment}
-          updateComment={() => {
-            setCommentState(comment);
-            onOpen();
-          }}
-        />
-      ))}
+      {comments.length > 0 &&
+        comments.map((comment) => (
+          <CommentCard
+            key={comment.id}
+            postId={postId}
+            comment={comment}
+            deleteComment={deleteComment}
+            updateComment={() => {
+              setCommentState(comment);
+              onOpen();
+            }}
+          />
+        ))}
+      {comments.length === 0 && <NoData message='No Comments!!🌟' />}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

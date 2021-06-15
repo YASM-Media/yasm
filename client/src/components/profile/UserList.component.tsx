@@ -1,6 +1,7 @@
 import { Avatar, Center, Flex, Link, Text } from '@chakra-ui/react';
 import React from 'react';
 import { User } from '../../models/user.model';
+import NoData from '../lottie/NoData.animation';
 
 export interface UserListProps {
   userList: User[];
@@ -36,9 +37,7 @@ const UserList: React.FunctionComponent<UserListProps> = ({
           </Link>
         ))
       ) : (
-        <Center m={10}>
-          <h1>{emptyMessage}</h1>
-        </Center>
+        <NoData message='User Data Not Available!!🌟' />
       )}
     </div>
   );

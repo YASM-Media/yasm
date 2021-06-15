@@ -45,7 +45,11 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
           />
         </InputGroup>
       </Box>
-      <SearchResults containerRef={containerRef} results={searchResults} />
+      <SearchResults
+        containerRef={containerRef}
+        results={searchResults}
+        displayResults={searchText !== '' && searchResults.length >= 0}
+      />
     </React.Fragment>
   );
 };
