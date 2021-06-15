@@ -27,7 +27,7 @@ const MinifiedPost: React.FunctionComponent<MinifiedPostProps> = ({ post }) => {
         onClick={onOpen}
       >
         <Image
-          objectFit='cover'
+          objectFit='fill'
           width='100%'
           height='100%'
           src={post.images[0].imageUrl}
