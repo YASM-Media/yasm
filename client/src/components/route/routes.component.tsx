@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../../pages/Auth/Login.page';
 import Register from '../../pages/Auth/Register.page';
 import Dummy from '../../pages/Dummy.page';
+import _404 from '../../pages/Error/_404.page';
 import PostForm from '../../pages/Post/PostForm.page';
 import Posts from '../../pages/Post/Posts.page';
 import Private from '../../pages/Private.page';
@@ -86,6 +87,7 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
                 <PostForm isEdit={true} postId={props.match.params.id} />
               )}
             />
+            <Route path='*' component={_404} />
           </Switch>
         </Router>
       </Box>
