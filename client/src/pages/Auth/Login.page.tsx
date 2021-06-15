@@ -72,13 +72,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Flex
-          h='100vh'
-          align='center'
-          justify='center'
-          direction='column'
-          m={30}
-        >
+        <Flex h='100vh' align='center' justify='center' direction='column'>
           <Heading>Log in to your YASM account!!🌟</Heading>
 
           <Box mt={30} w={{ base: '40vh', sm: '50vh', md: '70vh', lg: '80vh' }}>
