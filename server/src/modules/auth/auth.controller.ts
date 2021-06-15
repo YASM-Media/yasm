@@ -48,4 +48,18 @@ export class AuthController {
 
     return response.json(token.user);
   }
+
+  /**
+   * API Endpoint for User Logout.
+   * @param loginUserDto Body for Login API Endpoint.
+   * @param response Express Response Object.
+   * @returns Response with User details.
+   */
+  @Post('/logout')
+  public async logoutUser(@Res() response: Response): Promise<Response> {
+    // Unset cookie.
+    response.clearCookie('accessToken');
+
+    return response.send('OK');
+  }
 }
