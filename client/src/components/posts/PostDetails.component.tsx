@@ -68,7 +68,7 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
           {post.user.id === auth.loggedInUser.id && (
             <Menu>
               <MenuButton
-                bgColor='transparent'
+                variant='ghost'
                 as={IconButton}
                 icon={<BsThreeDotsVertical />}
               />
