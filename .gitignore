@@ -3,3 +3,4 @@
 .vscode/
 client/src/keys/firebaseKeys.ts
 algolia.env
+firebase.env
