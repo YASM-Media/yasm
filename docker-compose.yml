@@ -6,6 +6,8 @@ services:
       context: client
       dockerfile: Dockerfile
     container_name: yasm_client
+    env_file:
+      - firebase.env
     ports:
       - '3000:3000'
     volumes:
