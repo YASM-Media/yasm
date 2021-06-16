@@ -18,7 +18,7 @@ export interface RoutesProps {}
 const Routes: React.FunctionComponent<RoutesProps> = () => {
   return (
     <Box
-      bgImage="url('https://firebasestorage.googleapis.com/v0/b/yasm-react.appspot.com/o/assets%2Fpng%2Fbg.png?alt=media&token=07f82f94-b870-4d6f-9799-0d7b66420990')"
+      bgImage="url('https://firebasestorage.googleapis.com/v0/b/yasm-react.appspot.com/o/assets%2Fpng%2Fbg.png?alt=media')"
       bgSize='cover'
       bgAttachment='fixed'
       bgRepeat='no-repeat'
