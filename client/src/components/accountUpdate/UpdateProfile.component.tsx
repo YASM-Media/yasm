@@ -15,6 +15,7 @@ import { useFormik } from 'formik';
 import FormField from '../form/formField.component';
 import * as AuthService from './../../store/auth/service';
 import CustomModal from '../../components/modal/modal.component';
+import Loading from '../lottie/Loading.animation';
 
 export interface UpdateProfileProps {
   user: User;
@@ -114,7 +115,12 @@ const UpdateProfile: React.FunctionComponent<UpdateProfileProps> = ({
       <Flex mx={25} direction='column'>
         <Heading color='pink.500'>Update your details</Heading>
         <Box mx={25}>
-          <ImageUpload defaultImage={imageUrl} onUpload={imageUpload} />
+          <ImageUpload
+            defaultImage={imageUrl}
+            firstName={user.firstName}
+            lastName={user.lastName}
+            onUpload={imageUpload}
+          />
         </Box>
 
         <form onSubmit={formik.handleSubmit}>
@@ -155,10 +161,8 @@ const UpdateProfile: React.FunctionComponent<UpdateProfileProps> = ({
           </Button>
         </form>
       </Flex>
-      <CustomModal isOpen={isOpen} onClose={onClose}>
-        <Flex align='center' justify='center' direction='column' m={30}>
-          <Heading>Updating Your Profile!</Heading>
-        </Flex>
+      <CustomModal isOpen={isOpen} onClose={() => {}}>
+        <Loading message='Updating Your Profile!!🌟' />
       </CustomModal>
     </React.Fragment>
   );

@@ -182,25 +182,12 @@ export class PostsService {
    * @returns Suggested Posts Array
    */
   public async fetchSuggestedPosts(user: User): Promise<Post[]> {
-    // Fetch user followers and following.
-    const loggedInUserRelation =
-      await this.userService.findOneUserByIdWithRelations(user.id);
-
-    // Fetch user details for the following users.
-    const followingUsers = await this.userRepository.find({
-      where: {
-        id: In(loggedInUserRelation.following.map((u) => u.id)),
-      },
-      relations: ['following'],
-    });
-
-    // Map and flatten to get following of users followed by the logged in user.
-    const fof = _.flatten(followingUsers.map((u) => u.following));
-
     // Return the suggested posts.
     return await this.postRepository.find({
       where: {
-        user: In(fof.filter((u) => u.id !== user.id).map((u) => u.id)),
+        user: In(
+          (await this.userService.fetchSuggestedUsers(user)).map((u) => u.id),
+        ),
         postType: PostType.Post,
       },
       relations: [
@@ -298,19 +285,13 @@ export class PostsService {
       // Get the post for the logged in user.
       const postModel = await this.getPost(deletePostDto.id, user);
 
-      // Delete all the images related to the post.
-      await this.imageRepository.delete({ post: postModel });
-
-      // Delete all likes related to the post.
-      await this.likeRepository.delete({ post: postModel });
-
       // Delete the post itself.
       await this.postRepository.remove(postModel);
 
       // Return deletion confirmation.
       return 'OK';
     } catch (error) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('An Error Occured', HttpStatus.NOT_FOUND);
     }
   }
 }

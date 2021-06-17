@@ -164,6 +164,9 @@ const uploadPostImage = async (
  * @param post Create Post Details
  */
 export const createPost = async (post: CreatePostType): Promise<void> => {
+  // Throw an error if there's no images.
+  if (post.images.length === 0) throw new Error('Please upload some images');
+
   // Upload all the image files to Firebase and generate a URL for the same.
   const firebaseImages = await Promise.all(
     post.images.map(

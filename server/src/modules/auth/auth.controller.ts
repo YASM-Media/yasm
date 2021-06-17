@@ -1,10 +1,12 @@
 import { LoginUserDto } from './../../DTOs/loginUser.dto';
 import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import { Response } from 'express';
 import { Token } from 'src/types/token.type';
+import { JwtAuthGuard } from 'src/guards/auth.guard';
+import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 
 /**
  * Authentication Controller implementation
@@ -44,7 +46,7 @@ export class AuthController {
     response.cookie('accessToken', token.accessToken, {
       sameSite: 'strict',
       httpOnly: true,
-      maxAge: 604800000,
+      expires: this.authService.getSevenDaysLater(),
     });
 
     return response.json(token.user);
@@ -56,11 +58,35 @@ export class AuthController {
    * @param response Express Response Object.
    * @returns Response with User details.
    */
+  @UseGuards(JwtAuthGuard)
   @Post('/logout')
   public async logoutUser(@Res() response: Response): Promise<Response> {
     // Unset cookie.
     response.clearCookie('accessToken');
 
     return response.send('OK');
+  }
+
+  /**
+   * API Endpoint for User Delete.
+   * @param user User details
+   * @param password User password
+   * @param response Express Response Object.
+   * @returns Response with User details.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('/delete')
+  public async deleteUser(
+    @LoggedInUser() user: User,
+    @Body('password') password: string,
+    @Res() response: Response,
+  ): Promise<Response> {
+    // Delete the user
+    const confirmation = await this.authService.deleteUser(user, password);
+
+    // Unset cookie.
+    response.clearCookie('accessToken');
+
+    return response.send(confirmation);
   }
 }

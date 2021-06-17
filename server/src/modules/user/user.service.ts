@@ -84,23 +84,32 @@ export class UserService {
     // Fetch details of following users.
     const followingUser = await this.userRepository.find({
       where: {
-        id: In(loggedInUserRelation.following.map((u) => u.id)),
+        id: In([
+          ...loggedInUserRelation.following.map((u) => u.id),
+          ...loggedInUserRelation.followers.map((u) => u.id),
+        ]),
       },
       relations: [
         'followers',
         'following',
         'following.followers',
         'following.following',
+        'followers.followers',
+        'followers.following',
       ],
     });
 
     // Following of following users.
-    const fof = _.flatten(followingUser.map((u) => u.following)).filter(
+    const fof1 = _.flatten(followingUser.map((u) => u.following)).filter(
       (u) => u.id !== user.id,
     );
+    const fof2 = _.flatten(followingUser.map((u) => u.followers)).filter(
+      (u) => u.id !== user.id,
+    );
+    const fof = [...fof1, ...fof2];
 
     // Return a small sample of the fof.
-    return _.sampleSize(fof, fof.length >= 5 ? 5 : fof.length);
+    return _.uniqBy(_.sampleSize(fof, fof.length >= 5 ? 5 : fof.length), 'id');
   }
 
   /**
@@ -244,6 +253,14 @@ export class UserService {
         HttpStatus.FORBIDDEN,
       );
     }
+  }
+
+  /**
+   * Delete corresponding user.
+   * @param user User Model
+   */
+  public async deleteUser(user: User): Promise<void> {
+    await this.userRepository.remove(user);
   }
 
   /**

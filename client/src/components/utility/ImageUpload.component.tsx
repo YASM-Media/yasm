@@ -1,13 +1,17 @@
 import React, { useRef, useState } from 'react';
-import { Flex, Button, Image } from '@chakra-ui/react';
+import { Flex, Button, Avatar } from '@chakra-ui/react';
 
 export type ImageUploadProps = {
   defaultImage: string;
+  firstName: string;
+  lastName: string;
   onUpload: (image: File | Blob | ArrayBuffer | Uint8Array | undefined) => void;
 };
 
 const ImageUpload: React.FunctionComponent<ImageUploadProps> = ({
   defaultImage,
+  firstName,
+  lastName,
   onUpload,
 }) => {
   const [image, setImage] = useState<File | Blob | ArrayBuffer | Uint8Array>();
@@ -27,11 +31,7 @@ const ImageUpload: React.FunctionComponent<ImageUploadProps> = ({
       justify={{ base: 'center', lg: 'flex-start' }}
       direction={{ base: 'column', lg: 'row' }}
     >
-      <Image
-        src={imageUrl ? imageUrl : 'https://via.placeholder.com/150'}
-        borderRadius='full'
-        boxSize='150px'
-      />
+      <Avatar name={`${firstName} ${lastName}`} src={imageUrl} size='2xl' />
       <input
         type='file'
         ref={inputFile}

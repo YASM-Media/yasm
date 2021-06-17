@@ -9,9 +9,9 @@ export class Image {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Post, (post) => post.images)
+  @ManyToOne(() => Post, (post) => post.images, { onDelete: 'CASCADE' })
   post: Post;
 
-  @Column()
+  @Column({ type: 'character varying', nullable: false })
   imageUrl: string;
 }

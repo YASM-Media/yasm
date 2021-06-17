@@ -135,12 +135,7 @@ const Register: React.FunctionComponent<RegisterProps> = () => {
               handleChange={formik.handleChange('passwordAgain')}
               error={formik.errors.passwordAgain}
             />
-            <Button
-              m={5}
-              colorScheme='teal'
-              type='submit'
-              isDisabled={!formik.isValid}
-            >
+            <Button m={5} type='submit' isDisabled={!formik.isValid}>
               Create an account!
             </Button>
           </Box>
