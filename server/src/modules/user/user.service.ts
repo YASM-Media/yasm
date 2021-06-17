@@ -109,7 +109,7 @@ export class UserService {
     const fof = [...fof1, ...fof2];
 
     // Return a small sample of the fof.
-    return _.sampleSize(fof, fof.length >= 5 ? 5 : fof.length);
+    return _.uniqBy(_.sampleSize(fof, fof.length >= 5 ? 5 : fof.length), 'id');
   }
 
   /**
