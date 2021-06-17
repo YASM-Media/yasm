@@ -256,6 +256,14 @@ export class UserService {
   }
 
   /**
+   * Delete corresponding user.
+   * @param user User Model
+   */
+  public async deleteUser(user: User): Promise<void> {
+    await this.userRepository.remove(user);
+  }
+
+  /**
    * Returns date object of seven days later.
    * @returns Date seven days later
    */

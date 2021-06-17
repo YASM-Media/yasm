@@ -75,6 +75,26 @@ export class AuthService {
   }
 
   /**
+   * Delete the user from database.
+   * @param user User details
+   * @param password User password
+   * @returns Delete Confirmation
+   */
+  public async deleteUser(user: User, password: string): Promise<string> {
+    // Validate the user details.
+    const checkUser = await this.validateUser(user.emailAddress, password);
+
+    // Delete the user if password is correct else throw an error.
+    if (checkUser) {
+      await this.userService.deleteUser(user);
+    } else {
+      throw new HttpException('Password is incorrect', HttpStatus.FORBIDDEN);
+    }
+
+    return 'OK';
+  }
+
+  /**
    * Checks the validity of the given email address and password.
    * @param emailAddress Email Address from the request.
    * @param password Password from the request.
