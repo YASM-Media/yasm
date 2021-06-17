@@ -189,18 +189,25 @@ export class PostsService {
     // Fetch user details for the following users.
     const followingUsers = await this.userRepository.find({
       where: {
-        id: In(loggedInUserRelation.following.map((u) => u.id)),
+        id: In([
+          ...loggedInUserRelation.following.map((u) => u.id),
+          ...loggedInUserRelation.followers.map((u) => u.id),
+        ]),
       },
       relations: ['following'],
     });
 
     // Map and flatten to get following of users followed by the logged in user.
-    const fof = _.flatten(followingUsers.map((u) => u.following));
+    const fof1 = _.flatten(followingUsers.map((u) => u.following));
+    const fof2 = _.flatten(followingUsers.map((u) => u.followers));
 
     // Return the suggested posts.
     return await this.postRepository.find({
       where: {
-        user: In(fof.filter((u) => u.id !== user.id).map((u) => u.id)),
+        user: In([
+          ...fof1.filter((u) => u.id !== user.id).map((u) => u.id),
+          ...fof2.filter((u) => u.id !== user.id).map((u) => u.id),
+        ]),
         postType: PostType.Post,
       },
       relations: [
