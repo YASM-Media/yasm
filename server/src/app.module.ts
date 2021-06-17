@@ -4,7 +4,6 @@ import { LikeModule } from './modules/like/like.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { DummyModule } from './modules/dummy/dummy.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './models/user.model';
@@ -41,7 +40,6 @@ import { Like } from './models/like.model';
     LikeModule,
     CommentsModule,
     SearchModule,
-    DummyModule,
   ],
   controllers: [],
   providers: [],
