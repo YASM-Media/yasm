@@ -94,12 +94,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
               handleChange={formik.handleChange('password')}
               error={formik.errors.password}
             />
-            <Button
-              m={5}
-              colorScheme='teal'
-              type='submit'
-              isDisabled={!formik.isValid}
-            >
+            <Button m={5} type='submit' isDisabled={!formik.isValid}>
               Log in to your account!
             </Button>
           </Box>
