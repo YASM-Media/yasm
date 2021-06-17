@@ -62,3 +62,29 @@ export const logout = () => {
     });
   };
 };
+
+export const deleteAccount = (password: string) => {
+  return async (dispatch: ThunkDispatch<{}, {}, AuthAction>) => {
+    const response = await fetch('/v1/api/auth/delete', {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({ password }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Check for any errors and send error message to the client.
+    if (!response.ok) {
+      const responseJson = await response.json();
+      const message = responseJson.message;
+
+      throw new Error(message);
+    }
+
+    return dispatch({
+      type: actionTypes.LOGOUT,
+      user: new User('', '', '', '', '', '', [], []),
+    });
+  };
+};

@@ -1,48 +1,46 @@
 import {
+  Box,
   Button,
   Flex,
   Heading,
+  Text,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import React from 'react';
-import { User } from '../../models/user.model';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import FormField from '../form/formField.component';
-import * as AuthService from './../../store/auth/service';
+import * as AuthActions from './../../store/auth/actionCreators';
 import CustomModal from '../../components/modal/modal.component';
-import { UpdateEmailType } from '../../types/updateEmail.type';
+import { useDispatch } from 'react-redux';
 import Loading from '../lottie/Loading.animation';
 
-export interface UpdateEmailProps {
-  user: User;
-}
+export interface DeleteAccountProps {}
 
-const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
+const DeleteAccount: React.FunctionComponent<DeleteAccountProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const dispatch = useDispatch();
 
-  const initialValues: UpdateEmailType = {
-    emailAddress: user.emailAddress,
+  const initialValues: any = {
     password: '',
   };
 
   const validationSchema = yup.object().shape({
-    emailAddress: yup.string().email().required(),
     password: yup.string().min(5).required(),
   });
 
-  const onSubmit = async (values: UpdateEmailType) => {
+  const onSubmit = async (values: any) => {
     try {
       onOpen();
 
-      await AuthService.updateEmailAddress(values);
+      await dispatch(AuthActions.deleteAccount(values.password));
 
       onClose();
       toast({
         title: 'Success',
-        description: 'All changes have been saved!!🌟',
+        description: 'Account has been deleted!!🌟',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -68,18 +66,22 @@ const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
   return (
     <React.Fragment>
       <Flex mx={25} direction='column'>
-        <Heading color='pink.500'>Update your email address</Heading>
+        <Heading color='pink.500'>Delete Your Account</Heading>
+        <Box padding={5}>
+          <Text>
+            Please note that deleting your account{' '}
+            <Text fontWeight='700' display='inline'>
+              deletes all of your data from YASM.
+            </Text>{' '}
+          </Text>
+
+          <p>
+            This action is irreversible and no data is recoverable after
+            deleting your account.
+          </p>
+        </Box>
 
         <form onSubmit={formik.handleSubmit}>
-          <FormField
-            label='Email Address'
-            type='email'
-            placeholder='Your Email Address'
-            value={formik.values.emailAddress}
-            handleChange={formik.handleChange('emailAddress')}
-            error={formik.errors.emailAddress}
-          />
-
           <FormField
             label='Password'
             type='password'
@@ -95,15 +97,15 @@ const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
             type='submit'
             isDisabled={!formik.isValid}
           >
-            Update your email address!
+            Delete Your Account!
           </Button>
         </form>
       </Flex>
       <CustomModal isOpen={isOpen} onClose={() => {}}>
-        <Loading message='Updating Your Email Address!!🌟' />
+        <Loading message='Deleting Your Account!!🌟' />
       </CustomModal>
     </React.Fragment>
   );
 };
 
-export default UpdateEmail;
+export default DeleteAccount;
