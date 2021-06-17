@@ -3,11 +3,9 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../../pages/Auth/Login.page';
 import Register from '../../pages/Auth/Register.page';
-import Dummy from '../../pages/Dummy.page';
 import _404 from '../../pages/Error/_404.page';
 import PostForm from '../../pages/Post/PostForm.page';
 import Posts from '../../pages/Post/Posts.page';
-import Private from '../../pages/Private.page';
 import CompleteUserProfile from '../../pages/Profile/CompleteUserProfile.page';
 import Splash from '../../pages/Splash.page';
 import UpdateAccount from '../../pages/UpdateAccount/UpdateAccount.page';
@@ -21,15 +19,8 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
       <Router>
         <Switch>
           <Route exact path='/' component={Splash} />
-          <Route exact path='/dummy' component={Dummy} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/private'
-            component={Private}
-          />
           <PrivateRoute
             redirectTo='/login'
             exact
