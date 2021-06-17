@@ -31,25 +31,25 @@ export class Post {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('text', { default: PostType.Post })
+  @Column('character varying', { default: PostType.Post })
   postType: PostType;
 
-  @OneToMany(() => Image, (image) => image.post)
+  @OneToMany(() => Image, (image) => image.post, { cascade: true })
   images: Image[];
 
-  @Column()
+  @Column('text', { nullable: false })
   text: string;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   user: User;
 
-  @OneToMany(() => Like, (like) => like.post)
+  @OneToMany(() => Like, (like) => like.post, { cascade: true })
   likes: Like[];
 
-  @OneToMany(() => Post, (post) => post.post)
+  @OneToMany(() => Post, (post) => post.post, { cascade: true })
   comments: Post[];
 
-  @ManyToOne(() => Post, (post) => post.comments)
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
   post: Post;
 
   @CreateDateColumn()

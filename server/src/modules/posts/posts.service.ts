@@ -298,19 +298,13 @@ export class PostsService {
       // Get the post for the logged in user.
       const postModel = await this.getPost(deletePostDto.id, user);
 
-      // Delete all the images related to the post.
-      await this.imageRepository.delete({ post: postModel });
-
-      // Delete all likes related to the post.
-      await this.likeRepository.delete({ post: postModel });
-
       // Delete the post itself.
       await this.postRepository.remove(postModel);
 
       // Return deletion confirmation.
       return 'OK';
     } catch (error) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('An Error Occured', HttpStatus.NOT_FOUND);
     }
   }
 }

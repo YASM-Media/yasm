@@ -9,7 +9,7 @@ import UpdateProfile from '../../components/accountUpdate/UpdateProfile.componen
 export interface UpdateAccountProps {}
 
 const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
-  const user = useSelector((state: RootStateOrAny) => state.auth);
+  const auth = useSelector((state: RootStateOrAny) => state.auth);
 
   return (
     <React.Fragment>
@@ -31,10 +31,10 @@ const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <UpdateProfile user={user.loggedInUser} />
+              <UpdateProfile user={auth.loggedInUser} />
             </TabPanel>
             <TabPanel>
-              <UpdateEmail user={user.loggedInUser} />
+              <UpdateEmail user={auth.loggedInUser} />
             </TabPanel>
             <TabPanel>
               <UpdatePassword />

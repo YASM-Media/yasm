@@ -1,7 +1,7 @@
 import {
+  Avatar,
   Button,
   Flex,
-  Image,
   Text,
   useDisclosure,
   useToast,
@@ -122,7 +122,11 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
         borderRadius='lg'
         py={5}
       >
-        <Image src={user.imageUrl} borderRadius='full' boxSize='150px' />
+        <Avatar
+          name={`${user.firstName} ${user.lastName}`}
+          src={user.imageUrl}
+          size='2xl'
+        />
 
         <Flex direction='column' align='center' justify='center' w='210px'>
           <Flex

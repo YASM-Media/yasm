@@ -83,6 +83,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
         boxShadow='0 4px 8px 0 rgba(0,0,0,0.5)'
         borderRadius='lg'
         m={5}
+        padding={3}
         w={{ base: '100%', lg: '100%', xl: '60%' }}
       >
         <Flex margin={3} direction='row' justify='space-between'>

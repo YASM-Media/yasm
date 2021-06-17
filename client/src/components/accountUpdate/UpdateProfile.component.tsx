@@ -114,7 +114,12 @@ const UpdateProfile: React.FunctionComponent<UpdateProfileProps> = ({
       <Flex mx={25} direction='column'>
         <Heading color='pink.500'>Update your details</Heading>
         <Box mx={25}>
-          <ImageUpload defaultImage={imageUrl} onUpload={imageUpload} />
+          <ImageUpload
+            defaultImage={imageUrl}
+            firstName={user.firstName}
+            lastName={user.lastName}
+            onUpload={imageUpload}
+          />
         </Box>
 
         <form onSubmit={formik.handleSubmit}>

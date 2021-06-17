@@ -47,6 +47,7 @@ const ImageCarousel: React.FunctionComponent<ImageCarouselProps> = ({
           width='100%'
           height='100%'
           src={images[index].imageUrl}
+          borderRadius='lg'
         />
         <Flex
           align='center'

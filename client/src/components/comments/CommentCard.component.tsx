@@ -93,7 +93,9 @@ const CommentCard: React.FunctionComponent<CommentCardProps> = ({
                 >{`${comment.user.firstName} ${comment.user.lastName}`}</Text>
               </Link>
               <Flex direction='row' justify='space-between' w='100%'>
-                <Text paddingTop={1}>{comment.text}</Text>
+                <Box w='60%'>
+                  <Text paddingTop={1}>{comment.text}</Text>
+                </Box>
                 <Box>
                   <IconButton
                     bgColor='transparent'

@@ -89,7 +89,11 @@ const PostModal: React.FunctionComponent<PostModalProps> = ({
         <ModalOverlay />
         <ModalContent>
           <ModalBody p={0}>
-            <Flex direction={{ base: 'column', lg: 'row' }} justify='center'>
+            <Flex
+              direction={{ base: 'column', lg: 'row' }}
+              justify='center'
+              borderRadius='lg'
+            >
               <Box w='100%'>
                 <ImageCarousel images={post.images} />
               </Box>

@@ -16,43 +16,50 @@ import { Post } from './post.model';
 /**
  * User Database model
  */
-@Entity()
+@Entity({ name: 'yasm_user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'character varying', nullable: false })
   firstName: string;
 
-  @Column()
+  @Column({ type: 'character varying', nullable: false })
   lastName: string;
 
-  @Column({ default: '' })
+  @Column({ type: 'text', default: '', nullable: false })
   biography: string;
 
   @Column({
-    default: 'https://dummyimage.com/600x600/000/fff.jpg&text=Your+Image+Here',
+    type: 'text',
+    nullable: true,
   })
   imageUrl: string;
 
-  @Column()
+  @Column({
+    type: 'character varying',
+    nullable: false,
+  })
   emailAddress: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+    nullable: false,
+  })
   password: string;
 
-  @ManyToMany(() => User, (user) => user.followers)
+  @ManyToMany(() => User, (user) => user.followers, { onDelete: 'CASCADE' })
   @JoinTable()
   followers: User[];
 
-  @ManyToMany(() => User, (user) => user.following)
+  @ManyToMany(() => User, (user) => user.following, { onDelete: 'CASCADE' })
   @JoinTable()
   following: User[];
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.user, { cascade: true })
   posts: Post[];
 
-  @OneToMany(() => Like, (like) => like.user)
+  @OneToMany(() => Like, (like) => like.user, { cascade: true })
   likes: Like[];
 
   @AfterInsert()
