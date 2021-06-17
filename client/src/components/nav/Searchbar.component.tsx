@@ -37,11 +37,13 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
             children={<MdSearch />}
           />
           <Input
+            color='white'
             placeholder='Search...'
-            variant='outline'
+            variant='filled'
             size='sm'
             value={searchText}
             onChange={fetchResults}
+            borderRadius='xl'
           />
         </InputGroup>
       </Box>
