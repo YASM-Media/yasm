@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../../pages/Auth/Login.page';
 import Register from '../../pages/Auth/Register.page';
 import _404 from '../../pages/Error/_404.page';
+import Landing from '../../pages/Landing/Landing.page';
 import PostForm from '../../pages/Post/PostForm.page';
 import Posts from '../../pages/Post/Posts.page';
 import CompleteUserProfile from '../../pages/Profile/CompleteUserProfile.page';
@@ -19,6 +20,7 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
       <Router>
         <Switch>
           <Route exact path='/' component={Splash} />
+          <Route exact path='/landing' component={Landing} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
           <PrivateRoute
