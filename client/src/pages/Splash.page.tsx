@@ -53,7 +53,7 @@ const Splash: React.FunctionComponent<SplashProps> = () => {
   ) : authenticated ? (
     <Redirect to='/posts' />
   ) : (
-    <Redirect to='/login' />
+    <Redirect to='/landing' />
   );
 };
 
