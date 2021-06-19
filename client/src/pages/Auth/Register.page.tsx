@@ -82,12 +82,14 @@ const Register: React.FunctionComponent<RegisterProps> = () => {
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Flex h='100vh' align='center' justify='center' direction='column'>
-          <Heading>Register yourself an account in YASM!!🌟</Heading>
+        <Flex minH='100vh' align='center' justify='center' direction='column'>
+          <Heading textAlign='center'>
+            Register yourself an account in YASM!!🌟
+          </Heading>
 
-          <Box mt={30} w={{ base: '40vh', sm: '50vh', md: '70vh', lg: '80vh' }}>
+          <Box mt={30} w={{ base: '100%', sm: '70%', md: '60%', lg: '40%' }}>
             <Flex
-              direction={{ base: 'column', lg: 'row' }}
+              direction={{ base: 'column', md: 'row' }}
               justify='space-between'
             >
               <FormField

@@ -15,10 +15,32 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(
-      process.env.NODE_ENV === 'development'
-        ? {
+  imports:
+    process.env.NODE_ENV === 'production'
+      ? [
+          TypeOrmModule.forRoot({
+            type: 'postgres',
+            url: process.env.DATABASE_URL,
+            entities: [User, Image, Post, Like],
+            synchronize: true,
+            logging: true,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          }),
+          UserModule,
+          AuthModule,
+          FollowModule,
+          PostsModule,
+          LikeModule,
+          CommentsModule,
+          SearchModule,
+          ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'react'),
+          }),
+        ]
+      : [
+          TypeOrmModule.forRoot({
             type: 'postgres',
             host: process.env.DATABASE_HOST,
             port: Number(process.env.DATABASE_PORT),
@@ -28,29 +50,15 @@ import { join } from 'path';
             synchronize: true,
             logging: true,
             entities: [User, Image, Post, Like],
-          }
-        : {
-            type: 'postgres',
-            url: process.env.DATABASE_URL,
-            entities: [User, Image, Post, Like],
-            synchronize: true,
-            logging: true,
-            ssl: {
-              rejectUnauthorized: false,
-            },
-          },
-    ),
-    UserModule,
-    AuthModule,
-    FollowModule,
-    PostsModule,
-    LikeModule,
-    CommentsModule,
-    SearchModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'react'),
-    }),
-  ],
+          }),
+          UserModule,
+          AuthModule,
+          FollowModule,
+          PostsModule,
+          LikeModule,
+          CommentsModule,
+          SearchModule,
+        ],
   controllers: [],
   providers: [],
 })

@@ -8,6 +8,7 @@ import Landing from '../../pages/Landing/Landing.page';
 import PostForm from '../../pages/Post/PostForm.page';
 import Posts from '../../pages/Post/Posts.page';
 import CompleteUserProfile from '../../pages/Profile/CompleteUserProfile.page';
+import Search from '../../pages/Search/Search.page';
 import Splash from '../../pages/Splash.page';
 import UpdateAccount from '../../pages/UpdateAccount/UpdateAccount.page';
 import PrivateRoute from './privateRoute.component';
@@ -69,6 +70,12 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
             render={(props) => (
               <PostForm isEdit={true} postId={props.match.params.id} />
             )}
+          />
+          <PrivateRoute
+            redirectTo='/login'
+            exact
+            path='/search'
+            component={Search}
           />
           <Route path='*' component={_404} />
         </Switch>
