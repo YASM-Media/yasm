@@ -5,11 +5,11 @@ export interface SocialProps {}
 
 const Social: React.FunctionComponent<SocialProps> = () => {
   return (
-    <Flex align='center' justify='center' boxSize={{ base: 'sm', lg: 'xl' }}>
+    <Flex align='center' justify='center' boxSize={{ base: 'sm', lg: '2xl' }}>
       <Player
         autoplay
         loop
-        src='https://assets9.lottiefiles.com/private_files/lf30_sle66urp.json'
+        src='https://assets2.lottiefiles.com/packages/lf20_6aYlBl.json'
         style={{ height: '100%', width: '100%' }}
       />
     </Flex>
