@@ -1,7 +1,10 @@
+import { IconButton } from '@chakra-ui/button';
 import { Flex, Heading } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 import React from 'react';
+import { MdArrowBack } from 'react-icons/md';
 import { RootStateOrAny, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import DeleteAccount from '../../components/accountUpdate/DeleteAccount.component';
 import UpdateEmail from '../../components/accountUpdate/UpdateEmail.component';
 import UpdatePassword from '../../components/accountUpdate/updatePassword.component';
@@ -11,6 +14,7 @@ export interface UpdateAccountProps {}
 
 const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
   const auth = useSelector((state: RootStateOrAny) => state.auth);
+  const history = useHistory();
 
   return (
     <React.Fragment>
@@ -20,9 +24,16 @@ const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
         direction='column'
         p={{ base: 0, sm: 25 }}
       >
-        <Heading marginY={25} textAlign='center'>
-          Update Your Profile Here!!🌟
-        </Heading>
+        <Flex align='center' justify='center' marginY={25}>
+          <IconButton
+            size='lg'
+            variant='ghost'
+            aria-label='go-back'
+            icon={<MdArrowBack />}
+            onClick={() => history.goBack()}
+          />
+          <Heading textAlign='center'>Update Your Profile Here!!🌟</Heading>
+        </Flex>
         <Tabs variant='soft-rounded' isLazy>
           <TabList>
             <Tab>User Details</Tab>
