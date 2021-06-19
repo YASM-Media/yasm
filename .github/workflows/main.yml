@@ -20,4 +20,6 @@ jobs:
       - name: Pushing The Image To Heroku Container Registry
         run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
       - name: Releasing The New Version In Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release --app ${{ secrets.HEROKU_APP_NAME }} web
