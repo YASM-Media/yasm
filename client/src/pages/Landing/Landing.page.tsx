@@ -7,8 +7,10 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import Docker from '../../components/lottie/Docker.animation';
-import GitHub from '../../components/lottie/GitHub.animation';
+import Algolia from '../../components/lottie/Algolia.animation';
+import Firebase from '../../components/lottie/Firebase.animation';
+import NodeJS from '../../components/lottie/NodeJS.animation';
+import React from '../../components/lottie/React.animation';
 import Social from '../../components/lottie/Social.animation';
 import Branding from '../../components/nav/Branding.component';
 
@@ -75,29 +77,40 @@ const Landing: React.FunctionComponent<LandingProps> = () => {
           color='pink.500'
           textAlign='center'
         >
-          We are completely open source! Find us on!
+          We are completely open source!{' '}
+          <Link href='https://github.com/khatrivarun/yasm'>Find us here!</Link>
+        </Text>
+        <Text
+          fontSize={{ base: '3xl', lg: '4xl' }}
+          fontWeight='extrabold'
+          color='pink.500'
+          textAlign='center'
+        >
+          Built Using,
         </Text>
         <Wrap justify='center'>
           <WrapItem>
-            <Flex
-              direction='column'
-              justify='center'
-              align='center'
-              boxSize={{ base: '4xs', lg: 'xl' }}
-            >
-              <GitHub />
-              <Link>Link For GitHub Repository</Link>
+            <Flex direction='column' justify='center' align='center'>
+              <React />
+              <Link>React</Link>
             </Flex>
           </WrapItem>
           <WrapItem>
-            <Flex
-              direction='column'
-              justify='center'
-              align='center'
-              boxSize={{ base: '4xs', lg: 'lg' }}
-            >
-              <Docker />
-              <Link>Link For Docker Image</Link>
+            <Flex direction='column' justify='center' align='center'>
+              <NodeJS />
+              <Link>NodeJS</Link>
+            </Flex>
+          </WrapItem>
+          <WrapItem>
+            <Flex direction='column' justify='center' align='center'>
+              <Firebase />
+              <Link>Firebase</Link>
+            </Flex>
+          </WrapItem>
+          <WrapItem>
+            <Flex direction='column' justify='center' align='center'>
+              <Algolia />
+              <Link>Algolia</Link>
             </Flex>
           </WrapItem>
         </Wrap>
