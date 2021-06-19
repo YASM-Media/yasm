@@ -1,17 +1,16 @@
 name: Heroku Docker Deploy
 on:
   push:
-    branches: [ deploy ]
+    branches: [dev]
   pull_request:
-    branches: [ deploy ]
+    branches: [dev]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - name: Log In To Heroku Container Registry
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
