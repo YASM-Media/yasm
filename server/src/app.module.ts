@@ -11,6 +11,8 @@ import { Post } from './models/post.model';
 import { Image } from './models/image.model';
 import { PostsModule } from './modules/posts/posts.module';
 import { Like } from './models/like.model';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -31,6 +33,11 @@ import { Like } from './models/like.model';
             type: 'postgres',
             url: process.env.DATABASE_URL,
             entities: [User, Image, Post, Like],
+            synchronize: true,
+            logging: true,
+            ssl: {
+              rejectUnauthorized: false,
+            },
           },
     ),
     UserModule,
@@ -40,6 +47,9 @@ import { Like } from './models/like.model';
     LikeModule,
     CommentsModule,
     SearchModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'react'),
+    }),
   ],
   controllers: [],
   providers: [],

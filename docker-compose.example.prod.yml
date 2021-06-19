@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  yasm_full_stack:
+    build:
+      context: .
+      dockerfile: prod.Dockerfile
+      args:
+        - REACT_APP_FIREBASE_API_KEY=EXAMPLE
+        - REACT_APP_FIREBASE_APP_ID=EXAMPLE
+        - REACT_APP_FIREBASE_AUTH_DOMAIN=EXAMPLE
+        - REACT_APP_FIREBASE_MESSAGING_SENDER_ID=EXAMPLE
+        - REACT_APP_FIREBASE_PROJECT_ID=EXAMPLE
+        - REACT_APP_FIREBASE_STORAGE_BUCKET=EXAMPLE
+    container_name: prod_full_stack
+    env_file:
+      - prod.env
+    ports:
+      - '5000:5000'
+    networks:
+      - yasm_prod_net
+    depends_on:
+      - yasm_postgres
+
+  yasm_postgres:
+    image: postgres
+    container_name: yasm_postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    env_file:
+      - prod_database.env
+    volumes:
+      - yasm_prod_postgres:/var/lib/postgresql/data
+    networks:
+      - yasm_prod_net
+
+networks:
+  yasm_prod_net:
+    name: yasm_prod_net
+
+volumes:
+  yasm_prod_postgres:
+    driver: local
