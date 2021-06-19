@@ -1,9 +1,17 @@
-import { Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+} from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { MdSearch } from 'react-icons/md';
 import { User } from '../../models/user.model';
 import SearchResults from './SearchResults.component';
 import * as SearchService from './../../store/search/service';
+import { useHistory } from 'react-router';
 
 export interface SearchbarProps {}
 
@@ -12,6 +20,7 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
   const [searchResults, setSearchResults] = useState<User[]>([]);
 
   const containerRef = useRef(null);
+  const history = useHistory();
 
   const fetchResults = async (event: any): Promise<void> => {
     try {
@@ -29,7 +38,7 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
 
   return (
     <React.Fragment>
-      <Box ref={containerRef}>
+      <Box ref={containerRef} display={{ base: 'none', md: 'block' }}>
         <InputGroup w={{ base: '10em', md: 'sm' }} size='sm'>
           <InputLeftElement
             pointerEvents='none'
@@ -46,6 +55,22 @@ const Searchbar: React.FunctionComponent<SearchbarProps> = () => {
             borderRadius='xl'
           />
         </InputGroup>
+      </Box>
+      <Box
+        display={{ base: 'block', md: 'none' }}
+        w={{ base: '10em', sm: 'sm' }}
+        bgColor='white'
+        borderRadius='xl'
+        onClick={() => history.push('/search')}
+      >
+        <Flex align='center' justify='flex-start'>
+          <Box marginX={2} color='pink.500'>
+            <MdSearch />
+          </Box>
+          <Box>
+            <Text color='grey'>Search...</Text>
+          </Box>
+        </Flex>
       </Box>
       <SearchResults
         containerRef={containerRef}
