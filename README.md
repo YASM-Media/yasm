@@ -1,6 +1,6 @@
 # YASM!! 🌟
 
-Yet another social media!!
+Yet another social media!!🌟
 
 ## Configurations:
  - Client side: ReactJS
