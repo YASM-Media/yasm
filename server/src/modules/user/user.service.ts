@@ -99,6 +99,27 @@ export class UserService {
       ],
     });
 
+    // Get top users.
+    const results: User[] = await this.userRepository.find({
+      where: {
+        id: In(
+          (
+            await this.userRepository
+              .createQueryBuilder('user1')
+              .select('user1.id AS id')
+              .addSelect('COUNT(user2.id) AS followers')
+              .leftJoin('user1.followers', 'user2')
+              .groupBy('user1.id')
+              .orderBy('followers', 'DESC')
+              .getRawMany()
+          )
+            .map((user) => user.id)
+            .filter((id) => user.id !== id),
+        ),
+      },
+      relations: ['followers', 'following'],
+    });
+
     // Following of following users.
     const fof1 = _.flatten(followingUser.map((u) => u.following)).filter(
       (u) => u.id !== user.id,
@@ -106,10 +127,10 @@ export class UserService {
     const fof2 = _.flatten(followingUser.map((u) => u.followers)).filter(
       (u) => u.id !== user.id,
     );
-    const fof = [...fof1, ...fof2];
+    const fof = [...fof1, ...fof2, ...results];
 
     // Return a small sample of the fof.
-    return _.uniqBy(_.sampleSize(fof, fof.length >= 5 ? 5 : fof.length), 'id');
+    return _.sampleSize(_.uniqBy(fof, 'id'), fof.length >= 5 ? 5 : fof.length);
   }
 
   /**
