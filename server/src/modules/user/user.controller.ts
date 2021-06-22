@@ -1,3 +1,4 @@
+import { FirebaseAuthGuard } from './../../guards/firebase-auth.guard';
 import { PasswordUpdateDto } from './../../DTOs/passwordUpdate.dto';
 import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
 import { UserService } from 'src/modules/user/user.service';
@@ -21,7 +22,7 @@ export class UserController {
    * @param user Logged In User Details
    * @returns User Details
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('me')
   public getLoggedInUser(@LoggedInUser() user: User): User {
     return user;
@@ -32,7 +33,7 @@ export class UserController {
    * @param user Logged In User
    * @returns Suggested User Details
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('suggested')
   public async fetchSuggestedUsers(
     @LoggedInUser() user: User,
@@ -46,7 +47,7 @@ export class UserController {
    * @param user Logged In User
    * @returns Updated User Profile
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('update/profile')
   public async updateUserProfile(
     @Body() profileDto: ProfileDto,
@@ -62,7 +63,7 @@ export class UserController {
    * @param response Express Response Object
    * @returns Cookie with token and User details.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('update/email')
   public async updateEmailAddress(
     @Body() emailUpdateDto: EmailUpdateDto,
@@ -88,7 +89,7 @@ export class UserController {
    * @param user Logged In User
    * @returns User Details with updated details.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('update/password')
   public async updatePassword(
     @Body() passwordUpdateDto: PasswordUpdateDto,

@@ -5,6 +5,7 @@ import { LikeDto } from 'src/DTOs/like/like.dto';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { User } from 'src/models/user.model';
 import { Like } from 'src/models/like.model';
+import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
 
 /**
  * Controller Implementation for Likes
@@ -20,7 +21,7 @@ export class LikeController {
    * @param user Logged In User
    * @returns Like Model Object
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('like')
   public async likePost(
     @Body() likeDto: LikeDto,
@@ -35,7 +36,7 @@ export class LikeController {
    * @param user Logged In User
    * @returns Unlike Confirmation
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('unlike')
   public async unlikePost(
     @Body() likeDto: LikeDto,

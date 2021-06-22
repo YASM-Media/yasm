@@ -7,6 +7,7 @@ import { PostsService } from './posts.service';
 import { Post as PostModel } from 'src/models/post.model';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { User } from 'src/models/user.model';
+import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
 
 /**
  * Controller Implementation for posts data.
@@ -21,7 +22,7 @@ export class PostsController {
    * @param user Logged In User
    * @returns New posts by followed users
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/new')
   public async getNewPosts(@LoggedInUser() user: User): Promise<PostModel[]> {
     return this.postsService.getNewPosts(user);
@@ -32,7 +33,7 @@ export class PostsController {
    * @param user Logged In User
    * @returns New posts by followed users
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/best')
   public async getBestPostsByDay(
     @LoggedInUser() user: User,
@@ -46,7 +47,7 @@ export class PostsController {
    * @param user Logged In User Details
    * @returns Posts by the user
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/user/:userId')
   public async getPostsByUser(
     @Param('userId') userId: string,
@@ -60,7 +61,7 @@ export class PostsController {
    * @param postId Post ID
    * @returns Post Model Object
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/post/:postId')
   public async getPostById(
     @Param('postId') postId: string,
@@ -73,7 +74,7 @@ export class PostsController {
    * @param user Logged In User
    * @returns Suggested Post array
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/suggested')
   public async getSuggestedPosts(
     @LoggedInUser() user: User,
@@ -87,7 +88,7 @@ export class PostsController {
    * @param user Logged In User
    * @returns Post Model Object
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('create')
   public async createPost(
     @Body() createPostDto: CreatePostDto,
@@ -102,7 +103,7 @@ export class PostsController {
    * @param user Logged In User
    * @returns Updated Post Model Object
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('update')
   public async updatePost(
     @Body() updatePostDto: UpdatePostDto,
@@ -117,7 +118,7 @@ export class PostsController {
    * @param user Logged In User Details
    * @returns Deletion Confirmation
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('delete')
   public async deletePost(
     @Body() deletePostDto: DeletePostDto,

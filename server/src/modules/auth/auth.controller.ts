@@ -7,6 +7,7 @@ import { Response } from 'express';
 import { Token } from 'src/types/token.type';
 import { JwtAuthGuard } from 'src/guards/auth.guard';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
+import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
 
 /**
  * Authentication Controller implementation
@@ -58,7 +59,7 @@ export class AuthController {
    * @param response Express Response Object.
    * @returns Response with User details.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('/logout')
   public async logoutUser(@Res() response: Response): Promise<Response> {
     // Unset cookie.
@@ -74,7 +75,7 @@ export class AuthController {
    * @param response Express Response Object.
    * @returns Response with User details.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('/delete')
   public async deleteUser(
     @LoggedInUser() user: User,
