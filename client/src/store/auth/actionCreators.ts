@@ -14,7 +14,7 @@ export const login = (
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${firebaseAuth.currentUser?.getIdToken()}`,
+        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
       },
       body: JSON.stringify(user),
     });
@@ -57,7 +57,7 @@ export const logout = () => {
       method: 'POST',
       credentials: 'include',
       headers: {
-        Authorization: `Bearer ${firebaseAuth.currentUser?.getIdToken()}`,
+        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
       },
     });
 
@@ -76,7 +76,7 @@ export const deleteAccount = (password: string) => {
       body: JSON.stringify({ password }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${firebaseAuth.currentUser?.getIdToken()}`,
+        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
       },
     });
 

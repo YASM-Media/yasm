@@ -27,6 +27,8 @@ export class AuthService {
   public async registerUser(registerUserDto: RegisterUserDto): Promise<User> {
     const saltOrRounds = 10;
 
+    const userPassword = registerUserDto.password;
+
     // Hash the password before saving it to the database.
     registerUserDto.password = await bcrypt.hash(
       registerUserDto.password,
@@ -40,7 +42,7 @@ export class AuthService {
     await admin.auth().createUser({
       uid: registeredUser.id,
       email: registerUserDto.emailAddress,
-      password: registerUserDto.password,
+      password: userPassword,
       displayName: `${registerUserDto.firstName} ${registerUserDto.lastName}`,
     });
 

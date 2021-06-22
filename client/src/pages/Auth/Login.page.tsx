@@ -14,8 +14,7 @@ import { useFormik } from 'formik';
 import FormField from '../../components/form/formField.component';
 import CustomModal from '../../components/modal/modal.component';
 import { LoginUser } from '../../types/loginUser.type';
-import * as AuthActions from './../../store/auth/actionCreators';
-import { useDispatch } from 'react-redux';
+import * as AuthService from './../../store/auth/service';
 import Loading from '../../components/lottie/Loading.animation';
 
 export interface LoginProps {}
@@ -23,7 +22,6 @@ export interface LoginProps {}
 const Login: React.FunctionComponent<LoginProps> = () => {
   const toast = useToast();
   const history = useHistory();
-  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues: LoginUser = {
@@ -39,7 +37,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
   const onSubmit = async (user: LoginUser) => {
     try {
       onOpen();
-      await dispatch(AuthActions.login(user));
+      await AuthService.login(user);
       onClose();
 
       toast({

@@ -54,6 +54,9 @@ export const fetchSuggestedPosts = async (): Promise<User[]> => {
   const response = await fetch('/v1/api/user/suggested', {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+    },
   });
 
   // Check for errors and return error to the client.
@@ -77,6 +80,7 @@ export const updateUserProfile = async (
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify(user),
   });
@@ -97,6 +101,7 @@ export const updateEmailAddress = async (
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify(data),
   });
@@ -117,6 +122,7 @@ export const updatePassword = async (
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify(data),
   });
