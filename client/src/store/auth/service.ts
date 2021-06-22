@@ -26,6 +26,27 @@ export const register = async (user: UserType): Promise<void> => {
   }
 };
 
+export const getLoggedInUser = async (): Promise<User> => {
+  const response = await fetch('/v1/api/user/me', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+    },
+  });
+
+  if (!response.ok) {
+    const responseJson = await response.json();
+    const message = responseJson.message;
+
+    throw new Error(message);
+  }
+
+  const user: User = await response.json();
+  return user;
+};
+
 export const login = async (user: LoginUser) => {
   try {
     await firebaseAuth.signInWithEmailAndPassword(

@@ -53,13 +53,7 @@ export const autoLogin = (user: User): AuthAction => ({
 
 export const logout = () => {
   return async (dispatch: ThunkDispatch<{}, {}, AuthAction>) => {
-    await fetch('/v1/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
-      },
-    });
+    await firebaseAuth.signOut();
 
     return dispatch({
       type: actionTypes.LOGOUT,
