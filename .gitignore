@@ -5,3 +5,4 @@ client/src/keys/firebaseKeys.ts
 algolia.env
 firebase.env
 docker-compose.prod.yml
+firebase-admin.env

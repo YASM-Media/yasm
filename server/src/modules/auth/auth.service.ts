@@ -6,6 +6,7 @@ import { User } from 'src/models/user.model';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from 'src/DTOs/loginUser.dto';
 import { JwtService } from '@nestjs/jwt';
+import admin from 'src/utils/firebase-admin';
 
 /**
  * Service Implementation for Authentication Module.
@@ -32,7 +33,18 @@ export class AuthService {
       saltOrRounds,
     );
 
-    return await this.userService.registerNewUser(registerUserDto);
+    const registeredUser = await this.userService.registerNewUser(
+      registerUserDto,
+    );
+
+    await admin.auth().createUser({
+      uid: registeredUser.id,
+      email: registerUserDto.emailAddress,
+      password: registerUserDto.password,
+      displayName: `${registerUserDto.firstName} ${registerUserDto.lastName}`,
+    });
+
+    return registeredUser;
   }
 
   /**
