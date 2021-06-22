@@ -82,6 +82,8 @@ export const deleteAccount = (password: string) => {
       throw new Error(message);
     }
 
+    await firebaseAuth.signOut();
+
     return dispatch({
       type: actionTypes.LOGOUT,
       user: new User('', '', '', '', '', '', [], []),

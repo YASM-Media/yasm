@@ -2,7 +2,11 @@ import { LoginUser } from './../../types/loginUser.type';
 import { UserType } from './../../types/user.type';
 import { UpdatePasswordType } from './../../types/updatePassword.type';
 import { UpdateProfileType } from './../../types/updateProfile.type';
-import { firebaseAuth, firebaseStorage } from '../../utils/firebase';
+import {
+  emailAuthProvider,
+  firebaseAuth,
+  firebaseStorage,
+} from '../../utils/firebase';
 import { UpdateEmailType } from '../../types/updateEmail.type';
 import { User } from '../../models/user.model';
 
@@ -133,6 +137,29 @@ export const updateEmailAddress = async (
 
     throw new Error(message);
   }
+
+  try {
+    const currentUserEmail = firebaseAuth.currentUser?.email;
+    if (currentUserEmail) {
+      const userCredentials = emailAuthProvider.credential(
+        currentUserEmail,
+        data.password
+      );
+
+      await firebaseAuth.currentUser?.reauthenticateWithCredential(
+        userCredentials
+      );
+      await firebaseAuth.currentUser?.updateEmail(data.emailAddress);
+    }
+  } catch (error) {
+    if (error.code === 'auth/invalid-email') {
+      throw new Error('Email provided is in an invalid format');
+    } else if (error.code === 'auth/email-already-in-use') {
+      throw new Error('Email provided is already in use.');
+    } else if (error.code === 'auth/wrong-password') {
+      throw new Error('Incorrect password given');
+    }
+  }
 };
 
 export const updatePassword = async (
@@ -153,6 +180,27 @@ export const updatePassword = async (
     const message = responseJson.message;
 
     throw new Error(message);
+  }
+
+  try {
+    const currentUserEmail = firebaseAuth.currentUser?.email;
+    if (currentUserEmail) {
+      const userCredentials = emailAuthProvider.credential(
+        currentUserEmail,
+        data.oldPassword
+      );
+
+      await firebaseAuth.currentUser?.reauthenticateWithCredential(
+        userCredentials
+      );
+      await firebaseAuth.currentUser?.updatePassword(data.newPassword);
+    }
+  } catch (error) {
+    if (error.code === 'auth/weak-password') {
+      throw new Error('Password provided is weak.');
+    } else if (error.code === 'auth/wrong-password') {
+      throw new Error('Incorrect password given');
+    }
   }
 };
 

@@ -12,3 +12,4 @@ firebase.initializeApp({
 });
 export const firebaseStorage = firebase.storage().ref();
 export const firebaseAuth = firebase.auth();
+export const emailAuthProvider = firebase.auth.EmailAuthProvider;

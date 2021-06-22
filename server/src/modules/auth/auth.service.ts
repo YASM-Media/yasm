@@ -101,6 +101,7 @@ export class AuthService {
     // Delete the user if password is correct else throw an error.
     if (checkUser) {
       await this.userService.deleteUser(user);
+      await admin.auth().deleteUser(checkUser.id);
     } else {
       throw new HttpException('Password is incorrect', HttpStatus.FORBIDDEN);
     }
