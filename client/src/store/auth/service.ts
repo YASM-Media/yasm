@@ -1,7 +1,8 @@
+import { LoginUser } from './../../types/loginUser.type';
 import { UserType } from './../../types/user.type';
 import { UpdatePasswordType } from './../../types/updatePassword.type';
 import { UpdateProfileType } from './../../types/updateProfile.type';
-import { firebaseStorage } from '../../utils/firebase';
+import { firebaseAuth, firebaseStorage } from '../../utils/firebase';
 import { UpdateEmailType } from '../../types/updateEmail.type';
 import { User } from '../../models/user.model';
 
@@ -22,6 +23,25 @@ export const register = async (user: UserType): Promise<void> => {
     const message = responseJson.message;
 
     throw new Error(message);
+  }
+};
+
+export const login = async (user: LoginUser) => {
+  try {
+    await firebaseAuth.signInWithEmailAndPassword(
+      user.emailAddress,
+      user.password
+    );
+  } catch (error) {
+    // If user does not exist.
+    if (error.code === 'auth/user-not-found') {
+      throw new Error('This email is not registered to any account.');
+    }
+
+    // If user provided a wrong password.
+    if (error.code === 'auth/wrong-password') {
+      throw new Error('You have typed a wrong password, please try again.');
+    }
   }
 };
 
