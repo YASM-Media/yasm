@@ -3,6 +3,7 @@ import { JwtAuthGuard } from './../../guards/auth.guard';
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { User } from 'src/models/user.model';
+import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
 
 /**
  * Follow API Controller Implementation
@@ -18,7 +19,7 @@ export class FollowController {
    * @param id ID of the user to follow
    * @returns User object with follow details
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('follow/:id')
   public async followUser(
     @LoggedInUser() user: User,
@@ -33,7 +34,7 @@ export class FollowController {
    * @param id ID of the user to unfollow
    * @returns User object with follow details
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('unfollow/:id')
   public async unfollowUser(
     @LoggedInUser() user: User,
@@ -47,7 +48,7 @@ export class FollowController {
    * @param user Logged In User Details
    * @returns User object with follow details
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get')
   public async getFollowersAndFollowing(
     @LoggedInUser() user: User,
@@ -60,7 +61,7 @@ export class FollowController {
    * @param id ID of the user for details.
    * @returns User object with follow details
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/:id')
   public async getFollowersAndFollowingForUser(
     @Param('id') id: string,

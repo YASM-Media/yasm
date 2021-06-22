@@ -1,7 +1,7 @@
 import { UpdatePostType } from './../../types/posts/updatePost.type';
 import { CreatePostType } from './../../types/posts/createPost.type';
 import { Post } from '../../models/post.model';
-import { firebaseStorage } from '../../utils/firebase';
+import { firebaseAuth, firebaseStorage } from '../../utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { Image } from '../../models/image.model';
 
@@ -16,6 +16,9 @@ export const fetchNewPosts = async (): Promise<Post[]> => {
   const response = await fetch('/v1/api/posts/get/new', {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+    },
   });
 
   // Check for errors and send error message to client.
@@ -40,6 +43,9 @@ export const fetchBestPosts = async (): Promise<Post[]> => {
   const response = await fetch('/v1/api/posts/get/best', {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+    },
   });
 
   // Check for errors and return error to the client.
@@ -64,6 +70,9 @@ export const fetchSuggestedPosts = async (): Promise<Post[]> => {
   const response = await fetch('/v1/api/posts/get/suggested', {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+    },
   });
 
   // Check for errors and return error to the client.
@@ -89,6 +98,9 @@ export const fetchPostsByUser = async (userId?: string): Promise<Post[]> => {
   const response = await fetch(`/v1/api/posts/get/user/${userId}`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+    },
   });
 
   // Check for errors and send the client the error messsage.
@@ -114,6 +126,9 @@ export const fetchPostById = async (postId?: string): Promise<Post> => {
     const response = await fetch(`/v1/api/posts/get/post/${postId}`, {
       method: 'GET',
       credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
+      },
     });
 
     if (!response.ok) {
@@ -181,6 +196,7 @@ export const createPost = async (post: CreatePostType): Promise<void> => {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify({
       images: firebaseImages,
@@ -219,6 +235,7 @@ export const updatePost = async (post: UpdatePostType): Promise<void> => {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify({
       id: post.id,
@@ -247,6 +264,7 @@ export const deletePost = async (id: string): Promise<void> => {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify({ id }),
   });

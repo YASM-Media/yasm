@@ -9,6 +9,7 @@ import UserProfile from '../../components/profile/UserProfile.component';
 import FAB from '../../components/utility/FAB.component';
 import { User } from '../../models/user.model';
 import { AuthState } from '../../store/auth/types';
+import { firebaseAuth } from '../../utils/firebase';
 
 export interface CompleteUserProfileProps {
   ownProfile?: boolean;
@@ -51,7 +52,16 @@ const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
         : `/v1/api/follow-api/get/${uid}`;
 
       // Fetch the required data.
-      fetch(apiRoute, { credentials: 'include' })
+      firebaseAuth.currentUser
+        ?.getIdToken()
+        .then((token) =>
+          fetch(apiRoute, {
+            credentials: 'include',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        )
         .then((response) => response.json())
         .then((data) => {
           // Save followers to temporary arrays.

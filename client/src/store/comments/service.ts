@@ -2,6 +2,7 @@ import { CreateCommentType } from './../../types/comments/createComment.type';
 import { DeleteCommentType } from '../../types/comments/deleteComment.type';
 import { Post } from '../../models/post.model';
 import { UpdateCommentType } from '../../types/comments/updateComment.type';
+import { firebaseAuth } from '../../utils/firebase';
 
 /**
  * Send a POST request to the server and save the new comment.
@@ -16,6 +17,7 @@ export const createComment = async (
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify(createCommentType),
   });
@@ -44,6 +46,7 @@ export const updateComment = async (
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify(updateCommentType),
   });
@@ -72,6 +75,7 @@ export const deleteComment = async (
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify(deleteCommentType),
   });

@@ -1,3 +1,4 @@
+import { firebaseAuth } from './../../utils/firebase';
 import { AuthAction } from './types.d';
 import * as actionTypes from './actionTypes';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
@@ -13,6 +14,7 @@ export const login = (
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
       },
       body: JSON.stringify(user),
     });
@@ -51,10 +53,7 @@ export const autoLogin = (user: User): AuthAction => ({
 
 export const logout = () => {
   return async (dispatch: ThunkDispatch<{}, {}, AuthAction>) => {
-    await fetch('/v1/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    });
+    await firebaseAuth.signOut();
 
     return dispatch({
       type: actionTypes.LOGOUT,
@@ -71,6 +70,7 @@ export const deleteAccount = (password: string) => {
       body: JSON.stringify({ password }),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
       },
     });
 
@@ -81,6 +81,8 @@ export const deleteAccount = (password: string) => {
 
       throw new Error(message);
     }
+
+    await firebaseAuth.signOut();
 
     return dispatch({
       type: actionTypes.LOGOUT,

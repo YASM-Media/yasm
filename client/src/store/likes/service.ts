@@ -1,4 +1,5 @@
 import { Like } from '../../models/like.model';
+import { firebaseAuth } from '../../utils/firebase';
 
 /**
  * Like the post with given ID.
@@ -11,6 +12,7 @@ export const likePost = async (id: string): Promise<Like> => {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify({ postId: id }),
   });
@@ -38,6 +40,7 @@ export const unlikePost = async (id: string): Promise<void> => {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
     },
     body: JSON.stringify({ postId: id }),
   });

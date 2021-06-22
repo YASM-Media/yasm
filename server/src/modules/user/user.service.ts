@@ -10,6 +10,7 @@ import { In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PasswordUpdateDto } from 'src/DTOs/passwordUpdate.dto';
 import * as _ from 'lodash';
+import admin from 'src/utils/firebase-admin';
 
 /**
  * Implementation for the user service.
@@ -185,6 +186,11 @@ export class UserService {
     loggedInUser.lastName = profileDto.lastName;
     loggedInUser.biography = profileDto.biography;
     loggedInUser.imageUrl = profileDto.imageUrl;
+
+    await admin.auth().updateUser(loggedInUser.id, {
+      displayName: `${profileDto.firstName} ${profileDto.lastName}`,
+      photoURL: profileDto.imageUrl,
+    });
 
     // Save it to the database.
     return await this.userRepository.save(loggedInUser);

@@ -4,6 +4,7 @@ import { SearchService } from './search.service';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import { Post } from 'src/models/post.model';
+import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
 
 /**
  * Controller Implementation for search module.
@@ -18,7 +19,7 @@ export class SearchController {
    * @param searchQueryDto DTO for search params
    * @returns User array of search results.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('user')
   public async searchForUsers(
     @Query() searchQueryDto: SearchQueryDto,
@@ -31,7 +32,7 @@ export class SearchController {
    * @param searchQueryDto DTO for search params
    * @returns User array of search results.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('post')
   public async searchForPosts(
     @Query() searchQueryDto: SearchQueryDto,

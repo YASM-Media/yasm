@@ -7,6 +7,7 @@ import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { Post as PostModel } from 'src/models/post.model';
 import { User } from 'src/models/user.model';
 import { UpdateCommentDto } from 'src/DTOs/comments/updateComment.dto';
+import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
 
 /**
  * Controller implementation for Comments Module.
@@ -20,7 +21,7 @@ export class CommentsController {
    * @param postId Post ID
    * @returns Array sorted by best comments
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/best/:id')
   public async fetchBestComments(
     @Param('id') postId: string,
@@ -33,7 +34,7 @@ export class CommentsController {
    * @param postId Post ID
    * @returns Array sorted by new comments
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Get('get/new/:id')
   public async fetchNewComments(
     @Param('id') postId: string,
@@ -47,7 +48,7 @@ export class CommentsController {
    * @param user Logged In User
    * @returns Saved Post Object.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('create')
   public async createComment(
     @Body() createCommentDto: CreateCommentDto,
@@ -62,7 +63,7 @@ export class CommentsController {
    * @param user Logged In User
    * @returns Updated Comment Model
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('update')
   public async updateComment(
     @Body() updateCommentDto: UpdateCommentDto,
@@ -76,7 +77,7 @@ export class CommentsController {
    * @param createPostDto DTO for comments deletion.
    * @returns Updated Post Object.
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @Post('delete')
   public async deleteComment(
     @Body() deleteCommentDto: DeleteCommentDto,

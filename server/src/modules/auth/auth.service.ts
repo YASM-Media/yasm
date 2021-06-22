@@ -6,6 +6,7 @@ import { User } from 'src/models/user.model';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from 'src/DTOs/loginUser.dto';
 import { JwtService } from '@nestjs/jwt';
+import admin from 'src/utils/firebase-admin';
 
 /**
  * Service Implementation for Authentication Module.
@@ -26,13 +27,26 @@ export class AuthService {
   public async registerUser(registerUserDto: RegisterUserDto): Promise<User> {
     const saltOrRounds = 10;
 
+    const userPassword = registerUserDto.password;
+
     // Hash the password before saving it to the database.
     registerUserDto.password = await bcrypt.hash(
       registerUserDto.password,
       saltOrRounds,
     );
 
-    return await this.userService.registerNewUser(registerUserDto);
+    const registeredUser = await this.userService.registerNewUser(
+      registerUserDto,
+    );
+
+    await admin.auth().createUser({
+      uid: registeredUser.id,
+      email: registerUserDto.emailAddress,
+      password: userPassword,
+      displayName: `${registerUserDto.firstName} ${registerUserDto.lastName}`,
+    });
+
+    return registeredUser;
   }
 
   /**
@@ -87,6 +101,7 @@ export class AuthService {
     // Delete the user if password is correct else throw an error.
     if (checkUser) {
       await this.userService.deleteUser(user);
+      await admin.auth().deleteUser(checkUser.id);
     } else {
       throw new HttpException('Password is incorrect', HttpStatus.FORBIDDEN);
     }

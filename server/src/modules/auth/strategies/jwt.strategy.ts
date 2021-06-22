@@ -1,4 +1,4 @@
-import { Strategy } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
@@ -18,21 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param userService Injected User Service from the NestJS Context.
    */
   constructor(userService: UserService) {
-    /**
-     * Custom method for extraction of JWT Token from cookies.
-     * @param request Express Request Type. Holds information for the incoming request.
-     * @returns JWT Token or null
-     */
-    const fromCookies = (request: Request): string => {
-      if (request && request.cookies) {
-        return request.cookies.accessToken;
-      }
-      return null;
-    };
-
     // Setting up the extraction technique for the JWT Token.
     super({
-      jwtFromRequest: fromCookies,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: 'secret',
     });
