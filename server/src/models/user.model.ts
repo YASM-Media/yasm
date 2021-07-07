@@ -42,12 +42,6 @@ export class User {
   })
   emailAddress: string;
 
-  @Column({
-    type: 'text',
-    nullable: false,
-  })
-  password: string;
-
   @ManyToMany(() => User, (user) => user.followers, { onDelete: 'CASCADE' })
   @JoinTable()
   followers: User[];

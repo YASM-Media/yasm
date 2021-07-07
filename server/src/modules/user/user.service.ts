@@ -1,4 +1,3 @@
-import { Token } from './../../types/token.type';
 import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ProfileDto } from './../../DTOs/profile.dto';
@@ -7,10 +6,9 @@ import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import { PasswordUpdateDto } from 'src/DTOs/passwordUpdate.dto';
 import * as _ from 'lodash';
 import admin from 'src/utils/firebase-admin';
+import fetch from 'node-fetch';
 
 /**
  * Implementation for the user service.
@@ -154,7 +152,6 @@ export class UserService {
       user.emailAddress = registerUserDto.emailAddress;
       user.firstName = registerUserDto.firstName;
       user.lastName = registerUserDto.lastName;
-      user.password = registerUserDto.password;
 
       // Save the user to the database.
       await this.userRepository.save(user);
@@ -205,75 +202,19 @@ export class UserService {
   public async updateEmailAddress(
     user: User,
     emailUpdateDto: EmailUpdateDto,
-  ): Promise<Token> {
+  ): Promise<void> {
     // To check if the password given is the correct password or not.
-    const checkPassword = await bcrypt.compare(
+    const check = await this.validateFirebaseUser(
+      user.emailAddress,
       emailUpdateDto.password,
-      user.password,
     );
 
-    if (checkPassword === true) {
+    if (check) {
       // Update the email address and save the updated object to the database.
       user.emailAddress = emailUpdateDto.emailAddress;
-      const updatedUser = await this.userRepository.save(user);
-
-      // Regenerate the access token for continue of usage for the user.
-      const accessToken = this.jwtService.sign(
-        {
-          email: updatedUser.emailAddress,
-          accessTimeLimit: this.getFifteenMinutesLater(),
-          refreshTimeLimit: this.getSevenDaysLater(),
-        },
-        {
-          expiresIn: '7d',
-        },
-      );
-
-      // Returning the token and the user.
-      return {
-        accessToken: accessToken,
-        user: updatedUser,
-      };
+      await this.userRepository.save(user);
     }
     // Throwing an HttpException if the password's don't match.
-    else {
-      throw new HttpException(
-        'Your password is incorrect',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-  }
-
-  /**
-   * To update the logged in user's password.
-   * @param user Logged In User Details.
-   * @param passwordUpdateDto User Password Update DTO.
-   * @returns Updated User Object.
-   */
-  public async updatePassword(
-    user: User,
-    passwordUpdateDto: PasswordUpdateDto,
-  ): Promise<User> {
-    // To check if the old passwords match.
-    const checkPassword = await bcrypt.compare(
-      passwordUpdateDto.oldPassword,
-      user.password,
-    );
-
-    if (checkPassword === true) {
-      // Hashing the new password.
-      const saltOrRounds = 10;
-      const passwordHash = await bcrypt.hash(
-        passwordUpdateDto.newPassword,
-        saltOrRounds,
-      );
-
-      // Updating the user object and saving it in the database.
-      user.password = passwordHash;
-      return await this.userRepository.save(user);
-    }
-
-    // Throw an exception if the password's don't match.
     else {
       throw new HttpException(
         'Your password is incorrect',
@@ -310,5 +251,71 @@ export class UserService {
     date.setMinutes(date.getMinutes() + 1);
 
     return date;
+  }
+
+  /**
+   * Check user credentials with firebase.
+   * @param emailAddress Email Address given by the user.
+   * @param password Password given by the user.
+   * @returns Corresponding user object.
+   */
+  public async validateFirebaseUser(
+    emailAddress: string,
+    password: string,
+  ): Promise<User | null> {
+    // Read the firebase web key from environment.
+    const firebaseWebApiKey = process.env.FIREBASE_WEB_API_KEY;
+
+    // Try to log in with the given credentials to check credentials.
+    const response = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseWebApiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: emailAddress,
+          password: password,
+          returnSecureToken: true,
+        }),
+      },
+    );
+
+    // Get the response code and json.
+    const responseCode = response.status;
+    const responseJson = await response.json();
+
+    // Handle error with firebase codes.
+    if (responseCode !== 200) {
+      if (responseJson['error']['message'] === 'INVALID_PASSWORD') {
+        throw new HttpException('Your password is wrong', HttpStatus.FORBIDDEN);
+      } else if (responseJson['error']['message'] === 'EMAIL_NOT_FOUND') {
+        throw new HttpException(
+          'Account does not exist with the given email address',
+          HttpStatus.FORBIDDEN,
+        );
+      } else if (
+        responseJson['error']['message'] === 'TOO_MANY_ATTEMPTS_TRY_LATER'
+      ) {
+        throw new HttpException(
+          'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.',
+          HttpStatus.FORBIDDEN,
+        );
+      } else if (responseJson['error']['message'] === 'USER_DISABLED') {
+        throw new HttpException(
+          'The user account has been disabled by an administrator.',
+          HttpStatus.FORBIDDEN,
+        );
+      } else {
+        throw new HttpException(
+          'Either the email address or the password is wrong. Please try again.',
+          HttpStatus.FORBIDDEN,
+        );
+      }
+    }
+
+    // Return the user object corresponding to the credentials
+    return await this.findOneUserByEmailAddress(emailAddress);
   }
 }

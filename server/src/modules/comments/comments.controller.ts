@@ -1,7 +1,6 @@
 import { DeleteCommentDto } from './../../DTOs/comments/deleteComment.dto';
 import { CreateCommentDto } from './../../DTOs/comments/createComment.dto';
 import { CommentsService } from './comments.service';
-import { JwtAuthGuard } from './../../guards/auth.guard';
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { Post as PostModel } from 'src/models/post.model';

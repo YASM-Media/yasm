@@ -1,9 +1,7 @@
 import { FirebaseAuthGuard } from './../../guards/firebase-auth.guard';
-import { PasswordUpdateDto } from './../../DTOs/passwordUpdate.dto';
 import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
 import { UserService } from 'src/modules/user/user.service';
 import { ProfileDto } from './../../DTOs/profile.dto';
-import { JwtAuthGuard } from './../../guards/auth.guard';
 import { User } from 'src/models/user.model';
 import { LoggedInUser } from './../../decorators/logged-in-user.decorator';
 import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
@@ -68,33 +66,9 @@ export class UserController {
   public async updateEmailAddress(
     @Body() emailUpdateDto: EmailUpdateDto,
     @LoggedInUser() user: User,
-    @Res() response: Response,
-  ): Promise<Response> {
-    const token = await this.userService.updateEmailAddress(
-      user,
-      emailUpdateDto,
-    );
+  ): Promise<String> {
+    await this.userService.updateEmailAddress(user, emailUpdateDto);
 
-    response.cookie('accessToken', token.accessToken, {
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-
-    return response.json(token.user);
-  }
-
-  /**
-   * API Endpoint for User Password Update.
-   * @param passwordUpdateDto User Password Update DTO
-   * @param user Logged In User
-   * @returns User Details with updated details.
-   */
-  @UseGuards(FirebaseAuthGuard)
-  @Post('update/password')
-  public async updatePassword(
-    @Body() passwordUpdateDto: PasswordUpdateDto,
-    @LoggedInUser() user: User,
-  ): Promise<User> {
-    return await this.userService.updatePassword(user, passwordUpdateDto);
+    return 'OK';
   }
 }

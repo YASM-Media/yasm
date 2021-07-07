@@ -1,12 +1,11 @@
-import { Token } from './../../types/token.type';
 import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto } from 'src/DTOs/loginUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import admin from 'src/utils/firebase-admin';
+import fetch from 'node-fetch';
 
 /**
  * Service Implementation for Authentication Module.
@@ -50,45 +49,6 @@ export class AuthService {
   }
 
   /**
-   * Validate the User details with the database and return a token
-   * @param loginUserDto User Login DTO
-   * @returns Logged In User Details with access token
-   */
-  public async loginUser(loginUserDto: LoginUserDto): Promise<Token> {
-    // Validate the user details.
-    const user = await this.validateUser(
-      loginUserDto.emailAddress,
-      loginUserDto.password,
-    );
-
-    // CASE 1: If there is a valid user object present.
-    if (user) {
-      // Return the validated user object with the access token
-      return {
-        accessToken: this.jwtService.sign(
-          {
-            email: user.emailAddress,
-            accessTimeLimit: this.getFifteenMinutesLater(),
-            refreshTimeLimit: this.getSevenDaysLater(),
-          },
-          {
-            expiresIn: '7d',
-          },
-        ),
-        user,
-      };
-    }
-
-    // CASE 2: If there is no valid user, return an error for wrong details.
-    else {
-      throw new HttpException(
-        'Either email address or password is incorrect',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-  }
-
-  /**
    * Delete the user from database.
    * @param user User details
    * @param password User password
@@ -96,7 +56,10 @@ export class AuthService {
    */
   public async deleteUser(user: User, password: string): Promise<string> {
     // Validate the user details.
-    const checkUser = await this.validateUser(user.emailAddress, password);
+    const checkUser = await this.validateFirebaseUser(
+      user.emailAddress,
+      password,
+    );
 
     // Delete the user if password is correct else throw an error.
     if (checkUser) {
@@ -110,47 +73,69 @@ export class AuthService {
   }
 
   /**
-   * Checks the validity of the given email address and password.
-   * @param emailAddress Email Address from the request.
-   * @param password Password from the request.
-   * @returns Validated User Object or null
+   * Check user credentials with firebase.
+   * @param emailAddress Email Address given by the user.
+   * @param password Password given by the user.
+   * @returns Corresponding user object.
    */
-  public async validateUser(
+  public async validateFirebaseUser(
     emailAddress: string,
     password: string,
   ): Promise<User | null> {
-    // Check if a user exists with the given email address.
-    const checkUser = await this.userService.findOneUserByEmailAddress(
-      emailAddress,
+    // Read the firebase web key from environment.
+    const firebaseWebApiKey = process.env.FIREBASE_WEB_API_KEY;
+
+    // Try to log in with the given credentials to check credentials.
+    const response = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseWebApiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: emailAddress,
+          password: password,
+          returnSecureToken: true,
+        }),
+      },
     );
 
-    // CASE 1: If there is a user existing with given email address.
-    if (checkUser) {
-      // Compare the hashed password and the given password.
-      const checkPassword = await bcrypt.compare(password, checkUser.password);
+    // Get the response code and json.
+    const responseCode = response.status;
+    const responseJson = await response.json();
 
-      // CASE 1A: If the password matches the hashed password from database,
-      // return the user object.
-      if (checkPassword === true) {
-        return checkUser;
-      }
-
-      // CASE 1B: If the password doesn't matches than that stored in the database,
-      // Return an error with the error message as password does not matches.
-      else {
+    // Handle error with firebase codes.
+    if (responseCode !== 200) {
+      if (responseJson['error']['message'] === 'INVALID_PASSWORD') {
+        throw new HttpException('Your password is wrong', HttpStatus.FORBIDDEN);
+      } else if (responseJson['error']['message'] === 'EMAIL_NOT_FOUND') {
         throw new HttpException(
-          'Your password is incorrect',
+          'Account does not exist with the given email address',
+          HttpStatus.FORBIDDEN,
+        );
+      } else if (
+        responseJson['error']['message'] === 'TOO_MANY_ATTEMPTS_TRY_LATER'
+      ) {
+        throw new HttpException(
+          'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.',
+          HttpStatus.FORBIDDEN,
+        );
+      } else if (responseJson['error']['message'] === 'USER_DISABLED') {
+        throw new HttpException(
+          'The user account has been disabled by an administrator.',
+          HttpStatus.FORBIDDEN,
+        );
+      } else {
+        throw new HttpException(
+          'Either the email address or the password is wrong. Please try again.',
           HttpStatus.FORBIDDEN,
         );
       }
     }
 
-    // CASE 2: If the user does not exist with the given email address,
-    // Return an error with the error message as the account does not exist.
-    throw new HttpException(
-      'Account does not exist with the given email address',
-      HttpStatus.FORBIDDEN,
-    );
+    // Return the user object corresponding to the credentials
+    return await this.userService.findOneUserByEmailAddress(emailAddress);
   }
 
   /**

@@ -165,23 +165,6 @@ export const updateEmailAddress = async (
 export const updatePassword = async (
   data: UpdatePasswordType
 ): Promise<void> => {
-  const response = await fetch('/v1/api/user/update/password', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${await firebaseAuth.currentUser?.getIdToken()}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const responseJson = await response.json();
-    const message = responseJson.message;
-
-    throw new Error(message);
-  }
-
   try {
     const currentUserEmail = firebaseAuth.currentUser?.email;
     if (currentUserEmail) {
