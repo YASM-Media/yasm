@@ -1,10 +1,8 @@
-import { Token } from './../../types/token.type';
 import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto } from 'src/DTOs/loginUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import admin from 'src/utils/firebase-admin';
 import fetch from 'node-fetch';
@@ -48,32 +46,6 @@ export class AuthService {
     });
 
     return registeredUser;
-  }
-
-  /**
-   * Validate the User details with the database and return a token
-   * @param loginUserDto User Login DTO
-   * @returns Logged In User Details with access token
-   */
-  public async loginUser(loginUserDto: LoginUserDto): Promise<void> {
-    // Validate the user details.
-    const user = await this.validateFirebaseUser(
-      loginUserDto.emailAddress,
-      loginUserDto.password,
-    );
-
-    // CASE 1: If there is a valid user object present.
-    if (user) {
-      // Return the validated user object with the access token
-    }
-
-    // CASE 2: If there is no valid user, return an error for wrong details.
-    else {
-      throw new HttpException(
-        'Either email address or password is incorrect',
-        HttpStatus.FORBIDDEN,
-      );
-    }
   }
 
   /**
