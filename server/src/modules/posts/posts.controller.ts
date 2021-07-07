@@ -1,7 +1,6 @@
 import { DeletePostDto } from './../../DTOs/posts/deletePost.dto';
 import { UpdatePostDto } from './../../DTOs/posts/updatePost.dto';
 import { CreatePostDto } from './../../DTOs/posts/createPost.dto';
-import { JwtAuthGuard } from './../../guards/auth.guard';
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostModel } from 'src/models/post.model';

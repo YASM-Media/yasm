@@ -1,5 +1,4 @@
 import { FollowService } from './follow.service';
-import { JwtAuthGuard } from './../../guards/auth.guard';
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { User } from 'src/models/user.model';

@@ -1,5 +1,4 @@
 import { SearchQueryDto } from './../../DTOs/search/searchQuery.dto';
-import { JwtAuthGuard } from './../../guards/auth.guard';
 import { SearchService } from './search.service';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { User } from 'src/models/user.model';

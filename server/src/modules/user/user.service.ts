@@ -1,5 +1,3 @@
-import { AuthService } from './../auth/auth.service';
-import { Token } from './../../types/token.type';
 import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ProfileDto } from './../../DTOs/profile.dto';
@@ -204,7 +202,7 @@ export class UserService {
   public async updateEmailAddress(
     user: User,
     emailUpdateDto: EmailUpdateDto,
-  ): Promise<Token> {
+  ): Promise<void> {
     // To check if the password given is the correct password or not.
     const check = await this.validateFirebaseUser(
       user.emailAddress,
@@ -214,25 +212,7 @@ export class UserService {
     if (check) {
       // Update the email address and save the updated object to the database.
       user.emailAddress = emailUpdateDto.emailAddress;
-      const updatedUser = await this.userRepository.save(user);
-
-      // Regenerate the access token for continue of usage for the user.
-      const accessToken = this.jwtService.sign(
-        {
-          email: updatedUser.emailAddress,
-          accessTimeLimit: this.getFifteenMinutesLater(),
-          refreshTimeLimit: this.getSevenDaysLater(),
-        },
-        {
-          expiresIn: '7d',
-        },
-      );
-
-      // Returning the token and the user.
-      return {
-        accessToken: accessToken,
-        user: updatedUser,
-      };
+      await this.userRepository.save(user);
     }
     // Throwing an HttpException if the password's don't match.
     else {

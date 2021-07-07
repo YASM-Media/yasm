@@ -1,6 +1,5 @@
 import { LikeService } from './like.service';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/guards/auth.guard';
 import { LikeDto } from 'src/DTOs/like/like.dto';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { User } from 'src/models/user.model';
