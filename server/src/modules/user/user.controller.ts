@@ -82,19 +82,4 @@ export class UserController {
 
     return response.json(token.user);
   }
-
-  /**
-   * API Endpoint for User Password Update.
-   * @param passwordUpdateDto User Password Update DTO
-   * @param user Logged In User
-   * @returns User Details with updated details.
-   */
-  @UseGuards(FirebaseAuthGuard)
-  @Post('update/password')
-  public async updatePassword(
-    @Body() passwordUpdateDto: PasswordUpdateDto,
-    @LoggedInUser() user: User,
-  ): Promise<User> {
-    return await this.userService.updatePassword(user, passwordUpdateDto);
-  }
 }
