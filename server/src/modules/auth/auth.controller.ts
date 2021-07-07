@@ -41,16 +41,9 @@ export class AuthController {
     @Res() response: Response,
   ): Promise<Response> {
     // Get the access token for the user.
-    const token: Token = await this.authService.loginUser(loginUserDto);
+    await this.authService.loginUser(loginUserDto);
 
-    // Send the token as a cookie.
-    response.cookie('accessToken', token.accessToken, {
-      sameSite: 'strict',
-      httpOnly: true,
-      expires: this.authService.getSevenDaysLater(),
-    });
-
-    return response.json(token.user);
+    return response.send('OK');
   }
 
   /**
