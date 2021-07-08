@@ -1,7 +1,7 @@
 import { FirebaseAuthGuard } from './../../guards/firebase-auth.guard';
-import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
+import { EmailUpdateDto } from '../../DTOs/user/emailUpdate.dto';
 import { UserService } from 'src/modules/user/user.service';
-import { ProfileDto } from './../../DTOs/profile.dto';
+import { ProfileDto } from '../../DTOs/user/profile.dto';
 import { User } from 'src/models/user.model';
 import { LoggedInUser } from './../../decorators/logged-in-user.decorator';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';

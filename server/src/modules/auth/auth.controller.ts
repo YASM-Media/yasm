@@ -1,4 +1,5 @@
-import { RegisterUserDto } from './../../DTOs/registerUser.dto';
+import { RegisterGoogleUserDto } from './../../DTOs/auth/registerGoogleUser.dto';
+import { RegisterUserDto } from '../../DTOs/auth/registerUser.dto';
 import { AuthService } from './auth.service';
 import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { User } from 'src/models/user.model';
@@ -33,9 +34,9 @@ export class AuthController {
    */
   @Post('/register/google')
   public async registerGoogleUser(
-    @Body() registerUserDto: RegisterUserDto,
+    @Body() registerGoogleUserDto: RegisterGoogleUserDto,
   ): Promise<User> {
-    return this.authService.registerUser(registerUserDto);
+    return this.authService.registerGoogleUser(registerGoogleUserDto);
   }
 
   /**

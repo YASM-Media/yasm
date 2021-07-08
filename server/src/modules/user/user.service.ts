@@ -1,8 +1,8 @@
-import { EmailUpdateDto } from './../../DTOs/emailUpdate.dto';
-import { JwtService } from '@nestjs/jwt';
-import { ProfileDto } from './../../DTOs/profile.dto';
+import { RegisterGoogleUserDto } from './../../DTOs/auth/registerGoogleUser.dto';
+import { EmailUpdateDto } from '../../DTOs/user/emailUpdate.dto';
+import { ProfileDto } from '../../DTOs/user/profile.dto';
 import { User } from 'src/models/user.model';
-import { RegisterUserDto } from './../../DTOs/registerUser.dto';
+import { RegisterUserDto } from '../../DTOs/auth/registerUser.dto';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
@@ -19,7 +19,6 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly jwtService: JwtService,
   ) {}
 
   /**
@@ -166,6 +165,37 @@ export class UserService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
+  }
+
+  /**
+   * Save a google user to the database aka registration.
+   * @param registerUserDto Register User DTO
+   * @returns Registered User Object
+   */
+  public async registerGoogleUser(
+    registerGoogleUserDto: RegisterGoogleUserDto,
+  ): Promise<User> {
+    // To check if the user already exists in the database.
+    const checkUser = await this.findOneUserByEmailAddress(
+      registerGoogleUserDto.emailAddress,
+    );
+
+    if (!checkUser) {
+      // Create a new user and copy all the details into it.
+      const user = new User();
+
+      user.emailAddress = registerGoogleUserDto.emailAddress;
+      user.firstName = registerGoogleUserDto.firstName;
+      user.lastName = registerGoogleUserDto.lastName;
+
+      // Save the user to the database.
+      await this.userRepository.save(user);
+
+      return await this.findOneUserByEmailAddress(user.emailAddress);
+    }
+
+    // If user already exists, just return the database version of user.
+    return checkUser;
   }
 
   /**
