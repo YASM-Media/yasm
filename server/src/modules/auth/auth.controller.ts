@@ -27,6 +27,18 @@ export class AuthController {
   }
 
   /**
+   * API Endpoint for Google User Registration.
+   * @param registerUserDto Body for registration API Endpoint
+   * @returns Registered User details.
+   */
+  @Post('/register/google')
+  public async registerGoogleUser(
+    @Body() registerUserDto: RegisterUserDto,
+  ): Promise<User> {
+    return this.authService.registerUser(registerUserDto);
+  }
+
+  /**
    * API Endpoint for User Delete.
    * @param user User details
    * @param password User password
