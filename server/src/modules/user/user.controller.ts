@@ -4,8 +4,7 @@ import { UserService } from 'src/modules/user/user.service';
 import { ProfileDto } from './../../DTOs/profile.dto';
 import { User } from 'src/models/user.model';
 import { LoggedInUser } from './../../decorators/logged-in-user.decorator';
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 /**
  * Controller Implementation for User Profile.

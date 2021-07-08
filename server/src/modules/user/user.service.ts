@@ -232,28 +232,6 @@ export class UserService {
   }
 
   /**
-   * Returns date object of seven days later.
-   * @returns Date seven days later
-   */
-  getSevenDaysLater(): Date {
-    const date = new Date();
-    date.setDate(date.getDate() + 7);
-
-    return date;
-  }
-
-  /**
-   * Returns date object of fifteen minutes later.
-   * @returns Date fifteen minutes later
-   */
-  getFifteenMinutesLater(): Date {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() + 1);
-
-    return date;
-  }
-
-  /**
    * Check user credentials with firebase.
    * @param emailAddress Email Address given by the user.
    * @param password Password given by the user.

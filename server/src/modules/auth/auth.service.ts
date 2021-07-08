@@ -2,7 +2,6 @@ import { RegisterUserDto } from './../../DTOs/registerUser.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/models/user.model';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import admin from 'src/utils/firebase-admin';
 import fetch from 'node-fetch';
@@ -24,15 +23,7 @@ export class AuthService {
    * @returns Registered User Object
    */
   public async registerUser(registerUserDto: RegisterUserDto): Promise<User> {
-    const saltOrRounds = 10;
-
     const userPassword = registerUserDto.password;
-
-    // Hash the password before saving it to the database.
-    registerUserDto.password = await bcrypt.hash(
-      registerUserDto.password,
-      saltOrRounds,
-    );
 
     const registeredUser = await this.userService.registerNewUser(
       registerUserDto,
@@ -44,6 +35,21 @@ export class AuthService {
       password: userPassword,
       displayName: `${registerUserDto.firstName} ${registerUserDto.lastName}`,
     });
+
+    return registeredUser;
+  }
+
+  /**
+   * Record the details of the new google user in the database.
+   * @param registerUserDto User Registration DTO
+   * @returns Registered User Object
+   */
+  public async registerGoogleUser(
+    registerUserDto: RegisterUserDto,
+  ): Promise<User> {
+    const registeredUser = await this.userService.registerNewUser(
+      registerUserDto,
+    );
 
     return registeredUser;
   }
@@ -136,43 +142,6 @@ export class AuthService {
 
     // Return the user object corresponding to the credentials
     return await this.userService.findOneUserByEmailAddress(emailAddress);
-  }
-
-  /**
-   * Returns date object of seven days later.
-   * @returns Date seven days later
-   */
-  getSevenDaysLater(): Date {
-    const date = new Date();
-    date.setDate(date.getDate() + 7);
-
-    return date;
-  }
-
-  /**
-   * Returns date object of fifteen minutes later.
-   * @returns Date fifteen minutes later
-   */
-  getFifteenMinutesLater(): Date {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() + 1);
-
-    return date;
-  }
-
-  // Wrapper method for JWT Service Verify
-  async jwtVerify(jwt: string): Promise<any> {
-    return await this.jwtService.verify(jwt);
-  }
-
-  // Wrapper method for JWT Service Decode
-  jwtDecode(jwt: string): any {
-    return this.jwtService.decode(jwt);
-  }
-
-  // Wrapper method for JWT Service Sign
-  jwtSign(payload: any, expiresIn: string): string {
-    return this.jwtService.sign(payload, { expiresIn });
   }
 
   // Wrapper method for User Service Find By Email Address
