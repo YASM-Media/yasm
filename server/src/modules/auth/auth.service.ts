@@ -1,8 +1,8 @@
-import { RegisterUserDto } from './../../DTOs/registerUser.dto';
+import { RegisterGoogleUserDto } from './../../DTOs/auth/registerGoogleUser.dto';
+import { RegisterUserDto } from '../../DTOs/auth/registerUser.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/models/user.model';
-import { JwtService } from '@nestjs/jwt';
 import admin from 'src/utils/firebase-admin';
 import fetch from 'node-fetch';
 
@@ -12,10 +12,7 @@ import fetch from 'node-fetch';
 @Injectable()
 export class AuthService {
   // Injecting the User and JWT Services.
-  constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   /**
    * Record the details of the new user in the database.
@@ -45,10 +42,10 @@ export class AuthService {
    * @returns Registered User Object
    */
   public async registerGoogleUser(
-    registerUserDto: RegisterUserDto,
+    registerGoogleUserDto: RegisterGoogleUserDto,
   ): Promise<User> {
-    const registeredUser = await this.userService.registerNewUser(
-      registerUserDto,
+    const registeredUser = await this.userService.registerGoogleUser(
+      registerGoogleUserDto,
     );
 
     return registeredUser;
