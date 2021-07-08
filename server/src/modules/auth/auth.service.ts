@@ -138,43 +138,6 @@ export class AuthService {
     return await this.userService.findOneUserByEmailAddress(emailAddress);
   }
 
-  /**
-   * Returns date object of seven days later.
-   * @returns Date seven days later
-   */
-  getSevenDaysLater(): Date {
-    const date = new Date();
-    date.setDate(date.getDate() + 7);
-
-    return date;
-  }
-
-  /**
-   * Returns date object of fifteen minutes later.
-   * @returns Date fifteen minutes later
-   */
-  getFifteenMinutesLater(): Date {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() + 1);
-
-    return date;
-  }
-
-  // Wrapper method for JWT Service Verify
-  async jwtVerify(jwt: string): Promise<any> {
-    return await this.jwtService.verify(jwt);
-  }
-
-  // Wrapper method for JWT Service Decode
-  jwtDecode(jwt: string): any {
-    return this.jwtService.decode(jwt);
-  }
-
-  // Wrapper method for JWT Service Sign
-  jwtSign(payload: any, expiresIn: string): string {
-    return this.jwtService.sign(payload, { expiresIn });
-  }
-
   // Wrapper method for User Service Find By Email Address
   public async findUserByEmailAddress(emailAddress: string): Promise<User> {
     return await this.userService.findOneUserByEmailAddress(emailAddress);
