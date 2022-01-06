@@ -24,9 +24,9 @@ import { join } from 'path';
             entities: [User, Image, Post, Like],
             synchronize: true,
             logging: true,
-            ssl: {
-              rejectUnauthorized: false,
-            },
+            // ssl: {
+            //   rejectUnauthorized: false,
+            // },
           }),
           UserModule,
           AuthModule,
