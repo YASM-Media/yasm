@@ -11,7 +11,7 @@ const Loading: React.FunctionComponent<LoadingProps> = ({ message }) => {
       <Player
         autoplay
         loop
-        src='https://assets10.lottiefiles.com/packages/lf20_tlwia2uf.json'
+        src='https://assets9.lottiefiles.com/packages/lf20_szlepvdh.json'
         style={{ height: '300px', width: '300px' }}
       />
       <Text fontSize='lg'>{message}</Text>

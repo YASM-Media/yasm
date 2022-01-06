@@ -47,7 +47,7 @@ const PostList: React.FunctionComponent<PostListProps> = ({
         duration: 5000,
         isClosable: true,
       });
-    } catch (error) {
+    } catch (error: any) {
       // Toast the user error.
       toast({
         title: 'Error Occured',

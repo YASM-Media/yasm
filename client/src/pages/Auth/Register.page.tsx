@@ -61,7 +61,7 @@ const Register: React.FunctionComponent<RegisterProps> = () => {
       });
 
       history.push('/login');
-    } catch (error) {
+    } catch (error: any) {
       onClose();
       toast({
         title: 'Error Occured',

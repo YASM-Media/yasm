@@ -109,7 +109,7 @@ const PostForm: React.FunctionComponent<PostFormProps> = ({
         duration: 5000,
         isClosable: true,
       });
-    } catch (error) {
+    } catch (error: any) {
       // Set loading state as false.
       setLoading(false);
 

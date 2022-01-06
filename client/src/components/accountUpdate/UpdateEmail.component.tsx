@@ -47,7 +47,7 @@ const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
         duration: 5000,
         isClosable: true,
       });
-    } catch (error) {
+    } catch (error: any) {
       onClose();
       toast({
         title: 'Error Occured',

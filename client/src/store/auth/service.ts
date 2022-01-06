@@ -2,15 +2,18 @@ import { LoginUser } from './../../types/loginUser.type';
 import { UserType } from './../../types/user.type';
 import { UpdatePasswordType } from './../../types/updatePassword.type';
 import { UpdateProfileType } from './../../types/updateProfile.type';
-import {
-  emailAuthProvider,
-  firebaseAuth,
-  firebaseStorage,
-} from '../../utils/firebase';
 import { UpdateEmailType } from '../../types/updateEmail.type';
 import { User } from '../../models/user.model';
+import {
+  EmailAuthProvider,
+  signInWithEmailAndPassword,
+  reauthenticateWithCredential,
+  updateEmail,
+  updatePassword as FAupdatePassword,
+} from 'firebase/auth';
 
-const profilePictureStorage = firebaseStorage.child('/profile-pictures');
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { firebaseAuth, firebaseStorage } from '../../utils/firebase';
 
 export const register = async (user: UserType): Promise<void> => {
   const response = await fetch('/v1/api/auth/register', {
@@ -53,11 +56,12 @@ export const getLoggedInUser = async (): Promise<User> => {
 
 export const login = async (user: LoginUser) => {
   try {
-    await firebaseAuth.signInWithEmailAndPassword(
+    await signInWithEmailAndPassword(
+      firebaseAuth,
       user.emailAddress,
       user.password
     );
-  } catch (error) {
+  } catch (error: any) {
     // If user does not exist.
     if (error.code === 'auth/user-not-found') {
       throw new Error('This email is not registered to any account.');
@@ -141,17 +145,18 @@ export const updateEmailAddress = async (
   try {
     const currentUserEmail = firebaseAuth.currentUser?.email;
     if (currentUserEmail) {
-      const userCredentials = emailAuthProvider.credential(
+      const userCredentials = EmailAuthProvider.credential(
         currentUserEmail,
         data.password
       );
 
-      await firebaseAuth.currentUser?.reauthenticateWithCredential(
+      await reauthenticateWithCredential(
+        firebaseAuth.currentUser!,
         userCredentials
       );
-      await firebaseAuth.currentUser?.updateEmail(data.emailAddress);
+      await updateEmail(firebaseAuth.currentUser!, data.emailAddress);
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 'auth/invalid-email') {
       throw new Error('Email provided is in an invalid format');
     } else if (error.code === 'auth/email-already-in-use') {
@@ -168,17 +173,18 @@ export const updatePassword = async (
   try {
     const currentUserEmail = firebaseAuth.currentUser?.email;
     if (currentUserEmail) {
-      const userCredentials = emailAuthProvider.credential(
+      const userCredentials = EmailAuthProvider.credential(
         currentUserEmail,
         data.oldPassword
       );
 
-      await firebaseAuth.currentUser?.reauthenticateWithCredential(
+      await reauthenticateWithCredential(
+        firebaseAuth.currentUser!,
         userCredentials
       );
-      await firebaseAuth.currentUser?.updatePassword(data.newPassword);
+      await FAupdatePassword(firebaseAuth.currentUser!, data.newPassword);
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 'auth/weak-password') {
       throw new Error('Password provided is weak.');
     } else if (error.code === 'auth/wrong-password') {
@@ -191,7 +197,11 @@ export const uploadProfileImage = async (
   file: File | Blob | ArrayBuffer | Uint8Array,
   uid: string
 ) => {
-  await profilePictureStorage.child(`${uid}.jpg`).put(file);
+  const profilePictureStorage = ref(
+    firebaseStorage,
+    `/profile-pictures/${uid}.jpg`
+  );
+  await uploadBytes(profilePictureStorage, file);
 
-  return await profilePictureStorage.child(`${uid}.jpg`).getDownloadURL();
+  return await getDownloadURL(profilePictureStorage);
 };

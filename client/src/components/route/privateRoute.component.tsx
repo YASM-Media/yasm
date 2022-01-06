@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, RouteProps, Route } from 'react-router-dom';
-import { firebaseAuth } from '../../utils/firebase';
 import Loading from '../lottie/Loading.animation';
 import * as AuthService from './../../store/auth/service';
 import * as AuthActions from './../../store/auth/actionCreators';
 import { useDispatch } from 'react-redux';
+import { onAuthStateChanged } from 'firebase/auth';
+import { firebaseAuth } from '../../utils/firebase';
 
 export type PrivateRouteProps = RouteProps & {
   redirectTo: string;
@@ -17,7 +18,7 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
 
   useEffect(
     () =>
-      firebaseAuth.onAuthStateChanged(async (user) => {
+      onAuthStateChanged(firebaseAuth, async (user) => {
         if (user) {
           setAuthenticated(true);
           dispatch(AuthActions.autoLogin(await AuthService.getLoggedInUser()));

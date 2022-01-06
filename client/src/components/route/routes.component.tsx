@@ -1,17 +1,24 @@
 import { Box } from '@chakra-ui/react';
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from '../../pages/Auth/Login.page';
-import Register from '../../pages/Auth/Register.page';
-import _404 from '../../pages/Error/_404.page';
-import Landing from '../../pages/Landing/Landing.page';
-import PostForm from '../../pages/Post/PostForm.page';
-import Posts from '../../pages/Post/Posts.page';
-import CompleteUserProfile from '../../pages/Profile/CompleteUserProfile.page';
-import Search from '../../pages/Search/Search.page';
-import Splash from '../../pages/Splash.page';
-import UpdateAccount from '../../pages/UpdateAccount/UpdateAccount.page';
+
+import Loading from '../lottie/Loading.animation';
 import PrivateRoute from './privateRoute.component';
+
+const Login = lazy(() => import('../../pages/Auth/Login.page'));
+const Register = lazy(() => import('../../pages/Auth/Register.page'));
+const _404 = lazy(() => import('../../pages/Error/_404.page'));
+const Landing = lazy(() => import('../../pages/Landing/Landing.page'));
+const PostForm = lazy(() => import('../../pages/Post/PostForm.page'));
+const Posts = lazy(() => import('../../pages/Post/Posts.page'));
+const CompleteUserProfile = lazy(
+  () => import('../../pages/Profile/CompleteUserProfile.page')
+);
+const Search = lazy(() => import('../../pages/Search/Search.page'));
+const Splash = lazy(() => import('../../pages/Splash.page'));
+const UpdateAccount = lazy(
+  () => import('../../pages/UpdateAccount/UpdateAccount.page')
+);
 
 export interface RoutesProps {}
 
@@ -19,66 +26,68 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
   return (
     <Box bgColor='white' minH='100vh'>
       <Router>
-        <Switch>
-          <Route exact path='/' component={Splash} />
-          <Route exact path='/landing' component={Landing} />
-          <Route exact path='/register' component={Register} />
-          <Route exact path='/login' component={Login} />
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/account/update'
-            component={UpdateAccount}
-          />
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/account/profile/me'
-            component={CompleteUserProfile}
-          />
+        <Suspense fallback={<Loading message='Welcome To YASM!!🌟' />}>
+          <Switch>
+            <Route exact path='/' component={Splash} />
+            <Route exact path='/landing' component={Landing} />
+            <Route exact path='/register' component={Register} />
+            <Route exact path='/login' component={Login} />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/account/update'
+              component={UpdateAccount}
+            />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/account/profile/me'
+              component={CompleteUserProfile}
+            />
 
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/account/profile/:id'
-            render={(props) => (
-              <CompleteUserProfile
-                ownProfile={false}
-                uid={props.match.params.id}
-              />
-            )}
-          />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/account/profile/:id'
+              render={(props) => (
+                <CompleteUserProfile
+                  ownProfile={false}
+                  uid={props.match.params.id}
+                />
+              )}
+            />
 
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/posts'
-            component={Posts}
-          />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/posts'
+              component={Posts}
+            />
 
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/posts/create'
-            component={PostForm}
-          />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/posts/create'
+              component={PostForm}
+            />
 
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/posts/update/:id'
-            render={(props) => (
-              <PostForm isEdit={true} postId={props.match.params.id} />
-            )}
-          />
-          <PrivateRoute
-            redirectTo='/login'
-            exact
-            path='/search'
-            component={Search}
-          />
-          <Route path='*' component={_404} />
-        </Switch>
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/posts/update/:id'
+              render={(props) => (
+                <PostForm isEdit={true} postId={props.match.params.id} />
+              )}
+            />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/search'
+              component={Search}
+            />
+            <Route path='*' component={_404} />
+          </Switch>
+        </Suspense>
       </Router>
     </Box>
   );

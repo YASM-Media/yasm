@@ -1,4 +1,4 @@
-FROM node:latest AS react_build
+FROM node:16-alpine AS react_build
 
 WORKDIR /user/src/app
 
@@ -18,9 +18,9 @@ ENV REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${REACT_APP_FIREBASE_MESSAGING_SENDER
 ENV REACT_APP_FIREBASE_PROJECT_ID=${REACT_APP_FIREBASE_PROJECT_ID}
 ENV REACT_APP_FIREBASE_STORAGE_BUCKET=${REACT_APP_FIREBASE_STORAGE_BUCKET}
 
-RUN npm install && npm run build
+RUN npm install --legacy-peer-deps && npm run build
 
-FROM node:latest AS server_build
+FROM node:16-alpine AS server_build
 
 WORKDIR /yasm
 
@@ -28,7 +28,7 @@ COPY --from=react_build /user/src/app/build ./react
 
 COPY server/package*.json ./
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY server/ ./
 

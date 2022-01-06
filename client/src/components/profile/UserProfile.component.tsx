@@ -99,7 +99,7 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
 
       // Save opposite state to following state.
       setIsFollowing(!isFollowing);
-    } catch (error) {
+    } catch (error: any) {
       // Display error messages.
       toast({
         title: 'Error Occured',

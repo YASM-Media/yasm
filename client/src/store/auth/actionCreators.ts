@@ -1,9 +1,10 @@
-import { firebaseAuth } from './../../utils/firebase';
 import { AuthAction } from './types.d';
 import * as actionTypes from './actionTypes';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { LoginUser } from '../../types/loginUser.type';
 import { User } from '../../models/user.model';
+import { signOut } from 'firebase/auth';
+import { firebaseAuth } from '../../utils/firebase';
 
 export const login = (
   user: LoginUser
@@ -53,7 +54,7 @@ export const autoLogin = (user: User): AuthAction => ({
 
 export const logout = () => {
   return async (dispatch: ThunkDispatch<{}, {}, AuthAction>) => {
-    await firebaseAuth.signOut();
+    await signOut(firebaseAuth);
 
     return dispatch({
       type: actionTypes.LOGOUT,
@@ -82,7 +83,7 @@ export const deleteAccount = (password: string) => {
       throw new Error(message);
     }
 
-    await firebaseAuth.signOut();
+    await signOut(firebaseAuth);
 
     return dispatch({
       type: actionTypes.LOGOUT,
