@@ -72,7 +72,7 @@ const PostModal: React.FunctionComponent<PostModalProps> = ({
       });
 
       history.go(0);
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'An Error Occured!',
         description: error.message,

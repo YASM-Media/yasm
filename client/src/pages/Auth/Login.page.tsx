@@ -49,7 +49,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
       });
 
       history.push('/posts');
-    } catch (error) {
+    } catch (error: any) {
       onClose();
       console.log(error);
       toast({

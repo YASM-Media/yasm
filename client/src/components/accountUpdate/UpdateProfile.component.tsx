@@ -48,7 +48,7 @@ const UpdateProfile: React.FunctionComponent<UpdateProfileProps> = ({
           isClosable: true,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       onClose();
       toast({
         title: 'Error Occured',
@@ -92,7 +92,7 @@ const UpdateProfile: React.FunctionComponent<UpdateProfileProps> = ({
         duration: 5000,
         isClosable: true,
       });
-    } catch (error) {
+    } catch (error: any) {
       onClose();
       toast({
         title: 'Error Occured',

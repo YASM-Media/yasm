@@ -11,7 +11,7 @@ const NoData: React.FunctionComponent<NoDataProps> = ({ message }) => {
       <Player
         autoplay
         loop
-        src='https://assets1.lottiefiles.com/packages/lf20_qpi4erm0.json'
+        src='https://assets4.lottiefiles.com/packages/lf20_ugfqunra.json'
         style={{ height: '300px', width: '300px' }}
       />
       <Text fontSize='lg'>{message}</Text>

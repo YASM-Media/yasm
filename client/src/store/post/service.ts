@@ -1,11 +1,10 @@
 import { UpdatePostType } from './../../types/posts/updatePost.type';
 import { CreatePostType } from './../../types/posts/createPost.type';
 import { Post } from '../../models/post.model';
-import { firebaseAuth, firebaseStorage } from '../../utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { Image } from '../../models/image.model';
-
-const postsPictureStorage = firebaseStorage.child('/posts');
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { firebaseAuth, firebaseStorage } from '../../utils/firebase';
 
 /**
  * Fetch Posts By New
@@ -167,11 +166,10 @@ const uploadPostImage = async (
   // Generate UUID for the image.
   const uuid = uuidv4();
 
-  // Upload the image to Firebase.
-  await postsPictureStorage.child(`${uuid}.jpg`).put(file);
+  const postsImageStorage = ref(firebaseStorage, `/posts/${uuid}.jpg`);
+  await uploadBytes(postsImageStorage, file);
 
-  // Generate URL and return the same.
-  return await postsPictureStorage.child(`${uuid}.jpg`).getDownloadURL();
+  return await getDownloadURL(postsImageStorage);
 };
 
 /**

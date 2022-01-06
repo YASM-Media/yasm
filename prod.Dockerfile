@@ -1,4 +1,4 @@
-FROM node:latest AS react_build
+FROM node:16-alpine AS react_build
 
 WORKDIR /user/src/app
 
@@ -20,7 +20,7 @@ ENV REACT_APP_FIREBASE_STORAGE_BUCKET=${REACT_APP_FIREBASE_STORAGE_BUCKET}
 
 RUN npm install && npm run build
 
-FROM node:latest AS server_build
+FROM node:16-alpine AS server_build
 
 WORKDIR /yasm
 

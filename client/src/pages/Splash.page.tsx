@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import Loading from '../components/lottie/Loading.animation';
-import { firebaseAuth } from '../utils/firebase';
 import * as AuthService from './../store/auth/service';
 import * as AuthActions from './../store/auth/actionCreators';
 import { useDispatch } from 'react-redux';
+import { onAuthStateChanged } from 'firebase/auth';
+import { firebaseAuth } from '../utils/firebase';
 
 export interface SplashProps {}
 
@@ -15,7 +16,7 @@ const Splash: React.FunctionComponent<SplashProps> = () => {
 
   useEffect(
     () =>
-      firebaseAuth.onAuthStateChanged(async (user) => {
+      onAuthStateChanged(firebaseAuth, async (user) => {
         if (user) {
           setAuthenticated(true);
           dispatch(AuthActions.autoLogin(await AuthService.getLoggedInUser()));

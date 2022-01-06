@@ -53,7 +53,7 @@ const CommentList: React.FunctionComponent<CommentListProps> = ({
       await CommentsService.deleteComment(deleteCommentType);
 
       deleteCommentFromState(deleteCommentType.commentId);
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'An Error Occured!',
         description: error.message,
