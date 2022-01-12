@@ -1,3 +1,5 @@
+import { StoryModule } from './modules/story/story.module';
+import { Story } from './models/story.model';
 import { SearchModule } from './modules/search/search.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { LikeModule } from './modules/like/like.module';
@@ -21,7 +23,7 @@ import { join } from 'path';
           TypeOrmModule.forRoot({
             type: 'postgres',
             url: process.env.DATABASE_URL,
-            entities: [User, Image, Post, Like],
+            entities: [User, Image, Post, Like, Story],
             synchronize: true,
             logging: true,
             ssl: {
@@ -35,6 +37,7 @@ import { join } from 'path';
           LikeModule,
           CommentsModule,
           SearchModule,
+          StoryModule,
           ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'react'),
           }),
@@ -49,7 +52,7 @@ import { join } from 'path';
             database: process.env.DATABASE_NAME,
             synchronize: true,
             logging: true,
-            entities: [User, Image, Post, Like],
+            entities: [User, Image, Post, Like, Story],
           }),
           UserModule,
           AuthModule,
@@ -58,6 +61,7 @@ import { join } from 'path';
           LikeModule,
           CommentsModule,
           SearchModule,
+          StoryModule,
         ],
   controllers: [],
   providers: [],
