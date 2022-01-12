@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStoryDto } from 'src/DTOs/story/create-story.dto';
+import { DeleteStoryDto } from 'src/DTOs/story/delete-story.dto';
 import { Story } from 'src/models/story.model';
 import { User } from 'src/models/user.model';
 import { Repository } from 'typeorm';
@@ -21,5 +22,23 @@ export class StoryService {
     newStory.user = user;
 
     return await this.storyRepository.save(newStory);
+  }
+
+  public async deleteStory(
+    user: User,
+    deleteStoryDto: DeleteStoryDto,
+  ): Promise<Story> {
+    const checkStory = await this.storyRepository.findOne({
+      where: {
+        user: user,
+        id: deleteStoryDto.storyId,
+      },
+    });
+
+    if (checkStory) {
+      return await this.storyRepository.remove(checkStory);
+    } else {
+      throw new NotFoundException('Story Not Found');
+    }
   }
 }
