@@ -1,17 +1,43 @@
+import { UserService } from 'src/modules/user/user.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStoryDto } from 'src/DTOs/story/create-story.dto';
 import { DeleteStoryDto } from 'src/DTOs/story/delete-story.dto';
 import { Story } from 'src/models/story.model';
 import { User } from 'src/models/user.model';
-import { Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 
 @Injectable()
 export class StoryService {
   constructor(
     @InjectRepository(Story)
     private readonly storyRepository: Repository<Story>,
+
+    private readonly userService: UserService,
   ) {}
+
+  public async fetchStories(user: User): Promise<User[]> {
+    const dbUser =
+      await this.userService.findOneUserByEmailAddressWithRelations(
+        user.emailAddress,
+      );
+
+    // Getting 24 hours earlier date.
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+
+    const dbStories = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.stories', 'story')
+      .where('user.id IN (:...ids)', {
+        ids: dbUser.following.map((usr) => usr.id),
+      })
+      .andWhere('story.createdAt > :date', { date: date })
+      .orderBy('story.createdAt', 'DESC')
+      .getMany();
+
+    return dbStories;
+  }
 
   public async createStory(
     user: User,
