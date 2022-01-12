@@ -1,5 +1,5 @@
 import { DeleteStoryDto } from 'src/DTOs/story/delete-story.dto';
-import { Body, Controller, Delete, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { LoggedInUser } from 'src/decorators/logged-in-user.decorator';
 import { CreateStoryDto } from 'src/DTOs/story/create-story.dto';
 import { FirebaseAuthGuard } from 'src/guards/firebase-auth.guard';
@@ -11,6 +11,11 @@ import { StoryService } from './story.service';
 @UseGuards(FirebaseAuthGuard)
 export class StoryController {
   constructor(private readonly storyService: StoryService) {}
+
+  @Get()
+  public async fetchStories(@LoggedInUser() user): Promise<User[]> {
+    return await this.storyService.fetchStories(user);
+  }
 
   @Post()
   public async createStory(
