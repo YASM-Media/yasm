@@ -1,3 +1,4 @@
+import { Story } from './story.model';
 import { userIndex } from './../utils/algolia';
 import {
   Column,
@@ -52,6 +53,9 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user, { cascade: true })
   posts: Post[];
+
+  @OneToMany(() => Story, (story) => story.user, { cascade: true })
+  stories: Story[];
 
   @OneToMany(() => Like, (like) => like.user, { cascade: true })
   likes: Like[];
