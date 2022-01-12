@@ -39,6 +39,17 @@ export class StoryService {
     return dbStories;
   }
 
+  public async fetchArchivedStories(user: User): Promise<Story[]> {
+    return await this.storyRepository.find({
+      where: {
+        user: user,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   public async createStory(
     user: User,
     createStoryDto: CreateStoryDto,
