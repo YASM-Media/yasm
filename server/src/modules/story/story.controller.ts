@@ -17,6 +17,11 @@ export class StoryController {
     return await this.storyService.fetchStories(user);
   }
 
+  @Get('archive')
+  public async fetchArchvedStories(@LoggedInUser() user): Promise<Story[]> {
+    return await this.storyService.fetchArchivedStories(user);
+  }
+
   @Post()
   public async createStory(
     @LoggedInUser() user: User,
