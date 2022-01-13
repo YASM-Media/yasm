@@ -5,7 +5,7 @@ import { CreateStoryDto } from 'src/DTOs/story/create-story.dto';
 import { DeleteStoryDto } from 'src/DTOs/story/delete-story.dto';
 import { Story } from 'src/models/story.model';
 import { User } from 'src/models/user.model';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class StoryService {
@@ -15,6 +15,28 @@ export class StoryService {
 
     private readonly userService: UserService,
   ) {}
+
+  public async fetchStoriesForUser(userId: string): Promise<Story[]> {
+    const dbUser = await this.userService.findOneUserById(userId);
+
+    if (!dbUser) {
+      throw new NotFoundException('User Not Found');
+    }
+
+    // Getting 24 hours earlier date.
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+
+    return await this.storyRepository.find({
+      where: {
+        user: dbUser,
+        createdAt: MoreThanOrEqual(date),
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
 
   public async fetchStories(user: User): Promise<User[]> {
     const dbUser =
