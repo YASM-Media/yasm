@@ -1,3 +1,4 @@
+import { FirebaseModule } from './modules/firebase/firebase.module';
 import { StoryModule } from './modules/story/story.module';
 import { Story } from './models/story.model';
 import { SearchModule } from './modules/search/search.module';
@@ -30,6 +31,7 @@ import { join } from 'path';
               rejectUnauthorized: false,
             },
           }),
+          FirebaseModule,
           UserModule,
           AuthModule,
           FollowModule,
@@ -54,6 +56,7 @@ import { join } from 'path';
             logging: true,
             entities: [User, Image, Post, Like, Story],
           }),
+          FirebaseModule,
           UserModule,
           AuthModule,
           FollowModule,
