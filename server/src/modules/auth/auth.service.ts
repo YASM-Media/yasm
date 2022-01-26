@@ -1,9 +1,9 @@
+import { FirebaseService } from './../firebase/firebase.service';
 import { RegisterGoogleUserDto } from './../../DTOs/auth/registerGoogleUser.dto';
 import { RegisterUserDto } from '../../DTOs/auth/registerUser.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/models/user.model';
-import admin from 'src/utils/firebase-admin';
 import fetch from 'node-fetch';
 
 /**
@@ -12,7 +12,10 @@ import fetch from 'node-fetch';
 @Injectable()
 export class AuthService {
   // Injecting the User and JWT Services.
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly firebaseService: FirebaseService,
+  ) {}
 
   /**
    * Record the details of the new user in the database.
@@ -26,7 +29,7 @@ export class AuthService {
       registerUserDto,
     );
 
-    await admin.auth().createUser({
+    await this.firebaseService.firebaseAuth.createUser({
       uid: registeredUser.id,
       email: registerUserDto.emailAddress,
       password: userPassword,
@@ -67,7 +70,7 @@ export class AuthService {
     // Delete the user if password is correct else throw an error.
     if (checkUser) {
       await this.userService.deleteUser(user);
-      await admin.auth().deleteUser(checkUser.id);
+      await this.firebaseService.firebaseAuth.deleteUser(checkUser.id);
     } else {
       throw new HttpException('Password is incorrect', HttpStatus.FORBIDDEN);
     }
