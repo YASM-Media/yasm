@@ -1,3 +1,4 @@
+import { FirebaseService } from './../modules/firebase/firebase.service';
 import { Request } from 'express';
 import {
   CanActivate,
@@ -6,12 +7,14 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import admin from 'src/utils/firebase-admin';
 import { UserService } from 'src/modules/user/user.service';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly firebaseService: FirebaseService,
+  ) {}
 
   private async validateAuthenticationHeader(
     request: Request,
@@ -23,7 +26,8 @@ export class FirebaseAuthGuard implements CanActivate {
       ) {
         const authToken = request.headers.authorization.split(' ')[1];
 
-        const firebaseUser = await admin.auth().verifyIdToken(authToken);
+        const firebaseUser =
+          await this.firebaseService.firebaseAuth.verifyIdToken(authToken);
 
         request.user = this.userService.findOneUserById(firebaseUser.uid);
         return true;

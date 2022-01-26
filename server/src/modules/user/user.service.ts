@@ -7,8 +7,8 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import * as _ from 'lodash';
-import admin from 'src/utils/firebase-admin';
 import fetch from 'node-fetch';
+import { FirebaseService } from '../firebase/firebase.service';
 
 /**
  * Implementation for the user service.
@@ -19,6 +19,8 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   /**
@@ -214,7 +216,7 @@ export class UserService {
     loggedInUser.biography = profileDto.biography;
     loggedInUser.imageUrl = profileDto.imageUrl;
 
-    await admin.auth().updateUser(loggedInUser.id, {
+    await this.firebaseService.firebaseAuth.updateUser(loggedInUser.id, {
       displayName: `${profileDto.firstName} ${profileDto.lastName}`,
       photoURL: profileDto.imageUrl,
     });
