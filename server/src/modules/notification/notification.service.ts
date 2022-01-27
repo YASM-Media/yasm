@@ -16,8 +16,14 @@ export class NotificationService {
       user,
     );
 
+    const fcmTokens = await this.fetchFcmTokensByUserIds(filteredParticipants);
+
+    if (fcmTokens.length === 0) {
+      return;
+    }
+
     await this.sendNotification(
-      filteredParticipants,
+      fcmTokens,
       {
         thread: chatNotificationDto.threadId,
         user: user.id,

@@ -44,6 +44,10 @@ export class StoryService {
         user.emailAddress,
       );
 
+    if (dbUser.following.length === 0) {
+      return [];
+    }
+
     // Getting 24 hours earlier date.
     const date = new Date();
     date.setDate(date.getDate() - 1);
