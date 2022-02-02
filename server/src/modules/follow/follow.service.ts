@@ -1,3 +1,4 @@
+import { ActivityService } from './../activity/activity.service';
 import { UserService } from 'src/modules/user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +15,7 @@ export class FollowService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly userService: UserService,
+    private readonly activityService: ActivityService,
   ) {}
 
   /**
@@ -55,7 +57,14 @@ export class FollowService {
       followUserWithRelations.followers.push(loggedInUser);
 
       await this.userRepository.save(followUserWithRelations);
-      return await this.userRepository.save(rootUserWithRelations);
+      const follow = await this.userRepository.save(rootUserWithRelations);
+
+      await this.activityService.createActivityForFollow(
+        followUserWithRelations,
+        rootUserWithRelations,
+      );
+
+      return follow;
     }
 
     // If the logged in user already follows the give user, throw an error.
