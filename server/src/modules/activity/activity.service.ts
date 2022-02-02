@@ -49,4 +49,20 @@ export class ActivityService {
 
     return savedActivity;
   }
+
+  public async createActivityForFollow(
+    mainUser: User,
+    triggeredByUser: User,
+  ): Promise<Activity> {
+    const newActivity = new Activity();
+    newActivity.activityType = ActivityType.Follow;
+    newActivity.mainUser = mainUser;
+    newActivity.triggeredByUser = triggeredByUser;
+
+    const savedActivity = await this.activityRepository.save(newActivity);
+
+    await this.notificationService.sendActivityNotification(savedActivity);
+
+    return savedActivity;
+  }
 }
