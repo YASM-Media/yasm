@@ -32,4 +32,21 @@ export class ActivityService {
 
     return savedActivity;
   }
+
+  public async createActivityForComment(
+    post: Post,
+    triggeredByUser: User,
+  ): Promise<Activity> {
+    const newActivity = new Activity();
+    newActivity.activityType = ActivityType.Comment;
+    newActivity.mainUser = post.user;
+    newActivity.triggeredByUser = triggeredByUser;
+    newActivity.post = post;
+
+    const savedActivity = await this.activityRepository.save(newActivity);
+
+    await this.notificationService.sendActivityNotification(savedActivity);
+
+    return savedActivity;
+  }
 }
