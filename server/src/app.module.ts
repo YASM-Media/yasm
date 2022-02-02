@@ -17,6 +17,7 @@ import { PostsModule } from './modules/posts/posts.module';
 import { Like } from './models/like.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { Activity } from './models/activity.model';
 
 @Module({
   imports:
@@ -25,7 +26,7 @@ import { join } from 'path';
           TypeOrmModule.forRoot({
             type: 'postgres',
             url: process.env.DATABASE_URL,
-            entities: [User, Image, Post, Like, Story],
+            entities: [User, Image, Post, Like, Story, Activity],
             synchronize: true,
             logging: true,
             ssl: {
@@ -56,7 +57,7 @@ import { join } from 'path';
             database: process.env.DATABASE_NAME,
             synchronize: true,
             logging: true,
-            entities: [User, Image, Post, Like, Story],
+            entities: [User, Image, Post, Like, Story, Activity],
           }),
           FirebaseModule,
           UserModule,
