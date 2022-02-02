@@ -16,6 +16,30 @@ export class ActivityService {
     private readonly notificationService: NotificationService,
   ) {}
 
+  public async fetchActivity(user: User): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: {
+        mainUser: user,
+      },
+      relations: [
+        'mainUser',
+        'triggeredByUser',
+        'post',
+        'post.user',
+        'post.images',
+        'post.likes',
+        'post.likes.user',
+        'post.comments',
+        'post.comments.likes',
+        'post.comments.user',
+        'post.comments.likes.user',
+      ],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   public async createActivityForLike(
     post: Post,
     triggeredByUser: User,
