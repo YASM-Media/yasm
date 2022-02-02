@@ -10,16 +10,8 @@ export class NotificationService {
   constructor(private readonly firebaseService: FirebaseService) {}
 
   public async sendActivityNotification(activity: Activity): Promise<void> {
-    const fcmTokens = await this.fetchFcmTokensByUserIds([
-      activity.mainUser.id,
-    ]);
-
-    if (fcmTokens.length === 0) {
-      return;
-    }
-
     await this.sendNotification(
-      fcmTokens,
+      [activity.mainUser.id],
       {
         type: 'activity',
       },
@@ -49,14 +41,8 @@ export class NotificationService {
       user,
     );
 
-    const fcmTokens = await this.fetchFcmTokensByUserIds(filteredParticipants);
-
-    if (fcmTokens.length === 0) {
-      return;
-    }
-
     await this.sendNotification(
-      fcmTokens,
+      filteredParticipants,
       {
         thread: chatNotificationDto.threadId,
         user: user.id,
