@@ -1,3 +1,5 @@
+import { ActivityType } from './../../enum/activity-type.enum';
+import { Activity } from './../../models/activity.model';
 import { ChatNotificationDto } from './../../DTOs/notification/chat-notification.dto';
 import { FirebaseService } from './../firebase/firebase.service';
 import { Injectable } from '@nestjs/common';
@@ -6,6 +8,29 @@ import { User } from 'src/models/user.model';
 @Injectable()
 export class NotificationService {
   constructor(private readonly firebaseService: FirebaseService) {}
+
+  public async sendActivityNotification(activity: Activity): Promise<void> {
+    await this.sendNotification(
+      [activity.mainUser.id],
+      {
+        type: 'activity',
+      },
+      {
+        title:
+          activity.activityType === ActivityType.Comment
+            ? 'New Comment!'
+            : activity.activityType === ActivityType.Follow
+            ? 'New Follow!'
+            : 'New Like!',
+        body:
+          activity.activityType === ActivityType.Comment
+            ? `${activity.triggeredByUser.firstName} ${activity.triggeredByUser.lastName} commented on your post!`
+            : activity.activityType === ActivityType.Follow
+            ? `${activity.triggeredByUser.firstName} ${activity.triggeredByUser.lastName} followed you!`
+            : `${activity.triggeredByUser.firstName} ${activity.triggeredByUser.lastName} liked your post!`,
+      },
+    );
+  }
 
   public async handleChatNotifications(
     user: User,
@@ -16,14 +41,8 @@ export class NotificationService {
       user,
     );
 
-    const fcmTokens = await this.fetchFcmTokensByUserIds(filteredParticipants);
-
-    if (fcmTokens.length === 0) {
-      return;
-    }
-
     await this.sendNotification(
-      fcmTokens,
+      filteredParticipants,
       {
         thread: chatNotificationDto.threadId,
         user: user.id,

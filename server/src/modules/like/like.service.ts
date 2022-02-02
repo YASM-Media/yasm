@@ -1,3 +1,4 @@
+import { ActivityService } from './../activity/activity.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LikeDto } from 'src/DTOs/like/like.dto';
@@ -18,6 +19,7 @@ export class LikeService {
     private readonly likeRepository: Repository<Like>,
 
     private readonly postsService: PostsService,
+    private readonly activityService: ActivityService,
   ) {}
 
   /**
@@ -27,10 +29,16 @@ export class LikeService {
    * @returns Like Model Object
    */
   public async likePost(likeDto: LikeDto, user: User): Promise<Like> {
-    return await this.likeRepository.save({
+    const post = await this.postsService.getPostById(likeDto.postId);
+
+    const like = await this.likeRepository.save({
       user: user,
-      post: await this.postsService.getPostByIdNormal(likeDto.postId),
+      post: post,
     });
+
+    await this.activityService.createActivityForLike(post, user);
+
+    return like;
   }
 
   /**
