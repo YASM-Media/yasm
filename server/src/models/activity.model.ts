@@ -24,7 +24,7 @@ export class Activity {
   @Column()
   public activityType: ActivityType;
 
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, { nullable: true })
   public post: Post;
 
   @CreateDateColumn()

@@ -18,6 +18,7 @@ import { Like } from './models/like.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { Activity } from './models/activity.model';
+import { ActivityModule } from './modules/activity/activity.module';
 
 @Module({
   imports:
@@ -43,6 +44,7 @@ import { Activity } from './models/activity.model';
           SearchModule,
           StoryModule,
           NotificationModule,
+          ActivityModule,
           ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'react'),
           }),
@@ -69,6 +71,7 @@ import { Activity } from './models/activity.model';
           SearchModule,
           StoryModule,
           NotificationModule,
+          ActivityModule,
         ],
   controllers: [],
   providers: [],
