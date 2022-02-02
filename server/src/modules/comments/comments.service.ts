@@ -1,3 +1,4 @@
+import { ActivityService } from './../activity/activity.service';
 import { DeleteCommentDto } from './../../DTOs/comments/deleteComment.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,6 +25,7 @@ export class CommentsService {
     private readonly imageRepository: Repository<Image>,
 
     private readonly postService: PostsService,
+    private readonly activityService: ActivityService,
   ) {}
 
   /**
@@ -94,16 +96,19 @@ export class CommentsService {
     user: User,
   ): Promise<Post> {
     // Create the post model and assign values to it.
+
+    const post = await this.postService.getPostById(createCommentDto.postId);
+
     const postModel = new Post();
     postModel.postType = PostType.Comment;
     postModel.user = user;
     postModel.text = createCommentDto.text;
-    postModel.post = await this.postService.getPostByIdNormal(
-      createCommentDto.postId,
-    );
+    postModel.post = post;
 
     // Save the post model to database.
     const savedComment = await this.postRepository.save(postModel);
+
+    await this.activityService.createActivityForComment(post, user);
 
     // Return the comment.
     return await this.postService.getPostById(savedComment.id);
