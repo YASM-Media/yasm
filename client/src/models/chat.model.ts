@@ -29,7 +29,7 @@ export class Chat {
       id: this.id,
       userId: this.userId,
       message: this.message,
-      createdAt: new Timestamp(this.createdAt.getSeconds(), 0),
+      createdAt: Timestamp.fromDate(this.createdAt),
     };
   }
 }
