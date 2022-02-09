@@ -1,3 +1,4 @@
+import { DeleteMessageDto } from './../../dto/chat/delete-message.dto';
 import { CreateMessageDto } from './../../dto/chat/create-message.dto';
 import { CreateThreadDto } from './../../dto/chat/create-thread.dto';
 import {
@@ -96,7 +97,31 @@ export const createNewMessage = async (
     thread.seen = [userId];
     const updateRawThread = thread.toJson();
 
-    console.log(updateRawThread);
+    await setDoc(doc(firebaseFirestore, 'threads', thread.id), updateRawThread);
+  } catch (error) {
+    console.log(error);
+
+    throw new Error('Something went wrong, please try again later');
+  }
+};
+
+export const deleteMessage = async (
+  deleteMessageDto: DeleteMessageDto
+): Promise<void> => {
+  try {
+    const userId = firebaseAuth.currentUser!.uid;
+
+    const threadDocument = await getDoc(
+      doc(firebaseFirestore, 'threads', deleteMessageDto.threadId)
+    );
+    const rawThread = threadDocument.data();
+    const thread = Thread.fromJson(rawThread);
+
+    thread.messages = thread.messages.filter(
+      (message) => message.id !== deleteMessageDto.messageId
+    );
+
+    const updateRawThread = thread.toJson();
 
     await setDoc(doc(firebaseFirestore, 'threads', thread.id), updateRawThread);
   } catch (error) {
