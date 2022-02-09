@@ -1,3 +1,4 @@
+import { CreateThreadDto } from './../../dto/chat/create-thread.dto';
 import {
   collection,
   doc,
@@ -47,6 +48,30 @@ export const markThreadSeen = async (thread: Thread): Promise<void> => {
   } catch (error) {
     console.log(error);
     throw new Error('Something went wrong, please try again later');
+  }
+};
+
+export const createNewThread = async (
+  createThreadDto: CreateThreadDto
+): Promise<string> => {
+  try {
+    const checkForDuplicateThreads = await checkForDuplicates(
+      createThreadDto.participants
+    );
+
+    if (checkForDuplicateThreads !== 'EMPTY') return checkForDuplicateThreads;
+
+    const thread = Thread.newThread(v4(), createThreadDto.participants);
+
+    const rawThread = thread.toJson();
+
+    await setDoc(doc(firebaseFirestore, 'threads', thread.id), rawThread);
+
+    return thread.id;
+  } catch (error) {
+    console.log(error);
+
+    throw new Error('createNewThread error');
   }
 };
 
