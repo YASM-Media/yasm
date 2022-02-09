@@ -1,6 +1,8 @@
 import {
   collection,
+  doc,
   DocumentData,
+  DocumentReference,
   Query,
   query,
   where,
@@ -16,4 +18,12 @@ export const listenToThreads = (): Query<DocumentData> => {
   );
 
   return threadsQuery;
+};
+
+export const listenToThread = (
+  threadId: string
+): DocumentReference<DocumentData> => {
+  const threadDocument = doc(firebaseFirestore, 'threads', threadId);
+
+  return threadDocument;
 };
