@@ -1,9 +1,11 @@
+import { CreateMessageDto } from './../../dto/chat/create-message.dto';
 import { CreateThreadDto } from './../../dto/chat/create-thread.dto';
 import {
   collection,
   doc,
   DocumentData,
   DocumentReference,
+  getDoc,
   getDocs,
   Query,
   query,
@@ -13,6 +15,7 @@ import {
 import { Thread } from '../../models/thread.model';
 import { firebaseAuth, firebaseFirestore } from './../../utils/firebase';
 import { v4 } from 'uuid';
+import { Chat } from '../../models/chat.model';
 
 export const listenToThreads = (): Query<DocumentData> => {
   const userId = firebaseAuth.currentUser!.uid;
@@ -71,7 +74,35 @@ export const createNewThread = async (
   } catch (error) {
     console.log(error);
 
-    throw new Error('createNewThread error');
+    throw new Error('Something went wrong, please try again later');
+  }
+};
+
+export const createNewMessage = async (
+  createMessageDto: CreateMessageDto
+): Promise<void> => {
+  try {
+    const userId = firebaseAuth.currentUser!.uid;
+
+    const newChat = Chat.newMessage(v4(), userId, createMessageDto.message);
+
+    const threadDocument = await getDoc(
+      doc(firebaseFirestore, 'threads', createMessageDto.threadId)
+    );
+    const rawThread = threadDocument.data();
+    const thread = Thread.fromJson(rawThread);
+
+    thread.messages.push(newChat);
+    thread.seen = [userId];
+    const updateRawThread = thread.toJson();
+
+    console.log(updateRawThread);
+
+    await setDoc(doc(firebaseFirestore, 'threads', thread.id), updateRawThread);
+  } catch (error) {
+    console.log(error);
+
+    throw new Error('Something went wrong, please try again later');
   }
 };
 
