@@ -109,8 +109,6 @@ export const deleteMessage = async (
   deleteMessageDto: DeleteMessageDto
 ): Promise<void> => {
   try {
-    const userId = firebaseAuth.currentUser!.uid;
-
     const threadDocument = await getDoc(
       doc(firebaseFirestore, 'threads', deleteMessageDto.threadId)
     );
