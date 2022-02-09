@@ -7,6 +7,16 @@ export class Thread {
   public messages: Chat[] = [];
   public seen: string[] = [];
 
+  static newThread(id: string, participants: string[]): Thread {
+    const thread = new Thread();
+    thread.id = id;
+    thread.participants = participants;
+    thread.messages = [];
+    thread.seen = participants;
+
+    return thread;
+  }
+
   static fromJson(json: any): Thread {
     const thread = new Thread();
 
