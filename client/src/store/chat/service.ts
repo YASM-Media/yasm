@@ -1,8 +1,10 @@
+import { DeleteThreadDto } from './../../dto/chat/delete-thread.dto';
 import { DeleteMessageDto } from './../../dto/chat/delete-message.dto';
 import { CreateMessageDto } from './../../dto/chat/create-message.dto';
 import { CreateThreadDto } from './../../dto/chat/create-thread.dto';
 import {
   collection,
+  deleteDoc,
   doc,
   DocumentData,
   DocumentReference,
@@ -104,6 +106,11 @@ export const createNewMessage = async (
     throw new Error('Something went wrong, please try again later');
   }
 };
+
+export const deleteThread = async (
+  deleteThreadDto: DeleteThreadDto
+): Promise<void> =>
+  await deleteDoc(doc(firebaseFirestore, 'threads', deleteThreadDto.threadId));
 
 export const deleteMessage = async (
   deleteMessageDto: DeleteMessageDto
