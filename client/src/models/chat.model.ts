@@ -6,6 +6,16 @@ export class Chat {
   public message: string = '';
   public createdAt: Date = new Date(Date.now());
 
+  static newMessage(id: string, userId: string, message: string): Chat {
+    const chat = new Chat();
+
+    chat.id = id;
+    chat.userId = userId;
+    chat.message = message;
+
+    return chat;
+  }
+
   static fromJson(json: any): Chat {
     const chat = new Chat();
 
