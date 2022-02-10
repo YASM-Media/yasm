@@ -4,7 +4,7 @@ import { RootStateOrAny, useSelector } from 'react-redux';
 import { Thread } from '../../models/thread.model';
 import { User } from '../../models/user.model';
 import { AuthState } from '../../store/auth/types';
-import * as userService from './../../store/user/service';
+import * as userService from '../../store/user/service';
 
 export interface ThreadTileProps {
   thread: Thread;

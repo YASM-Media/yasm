@@ -6,7 +6,7 @@ import { BsChatFill } from 'react-icons/bs';
 import * as chatService from './../../store/chat/service';
 import { AuthState } from '../../store/auth/types';
 import { RootStateOrAny, useSelector } from 'react-redux';
-import DisplayThreads from './DisplayThreads.component';
+import DisplayThreads from '../chat/DisplayThreads.component';
 import { useHistory } from 'react-router-dom';
 
 const NavChat: React.FunctionComponent = () => {

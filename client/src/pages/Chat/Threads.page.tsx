@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Thread } from '../../models/thread.model';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import * as chatService from './../../store/chat/service';
-import ThreadList from '../../components/nav/ThreadList.component';
+import ThreadList from '../../components/chat/ThreadList.component';
 
 const Threads: React.FC = () => {
   const [threads, setThreads] = useState<Thread[]>([]);
