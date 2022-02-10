@@ -19,7 +19,7 @@ const ThreadList: React.FC<ThreadListProps> = ({
         <Box
           position='absolute'
           bgColor='white'
-          w='16em'
+          w='18em'
           zIndex={99}
           maxH='sm'
           overflowY='scroll'

@@ -53,16 +53,21 @@ const ThreadTile: React.FC<ThreadTileProps> = ({ thread }) => {
       />
       <Flex direction='column'>
         <Box w='10em' m='0.01em'>
-          <Text>
+          <Text fontWeight={checkUnread ? 'bold' : 'normal'}>
             {user?.firstName} {user?.lastName}
           </Text>
         </Box>
         <Box w='10em' m='0.01em'>
-          <Text fontSize='xs' color='gray'>
+          <Text
+            fontSize='xs'
+            color={checkUnread ? 'black' : 'grey'}
+            fontWeight={checkUnread ? 'bold' : 'normal'}
+          >
             {thread.messages[thread.messages.length - 1].message}
           </Text>
         </Box>
       </Flex>
+      {checkUnread && <Text fontSize='1.5em'>•</Text>}
     </Flex>
   );
 
