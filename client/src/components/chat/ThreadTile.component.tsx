@@ -1,4 +1,4 @@
-import { Flex, Avatar, Box, Text } from '@chakra-ui/react';
+import { Flex, Avatar, Box, Text, Link } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { Thread } from '../../models/thread.model';
@@ -45,30 +45,32 @@ const ThreadTile: React.FC<ThreadTileProps> = ({ thread }) => {
   );
 
   const loadedTile = () => (
-    <Flex direction='row' justify='space-evenly' align='center' m='0.7em'>
-      <Avatar
-        src={user?.imageUrl}
-        name={`${user?.firstName} ${user?.lastName}`}
-        marginX='0.5em'
-      />
-      <Flex direction='column'>
-        <Box w='10em' m='0.01em'>
-          <Text fontWeight={checkUnread ? 'bold' : 'normal'}>
-            {user?.firstName} {user?.lastName}
-          </Text>
-        </Box>
-        <Box w='10em' m='0.01em'>
-          <Text
-            fontSize='xs'
-            color={checkUnread ? 'black' : 'grey'}
-            fontWeight={checkUnread ? 'bold' : 'normal'}
-          >
-            {thread.messages[thread.messages.length - 1].message}
-          </Text>
-        </Box>
+    <Link href={`/threads/${thread.id}`}>
+      <Flex direction='row' justify='space-evenly' align='center' m='0.7em'>
+        <Avatar
+          src={user?.imageUrl}
+          name={`${user?.firstName} ${user?.lastName}`}
+          marginX='0.5em'
+        />
+        <Flex direction='column'>
+          <Box w='10em' m='0.01em'>
+            <Text fontWeight={checkUnread ? 'bold' : 'normal'}>
+              {user?.firstName} {user?.lastName}
+            </Text>
+          </Box>
+          <Box w='10em' m='0.01em'>
+            <Text
+              fontSize='xs'
+              color={checkUnread ? 'black' : 'grey'}
+              fontWeight={checkUnread ? 'bold' : 'normal'}
+            >
+              {thread.messages[thread.messages.length - 1].message}
+            </Text>
+          </Box>
+        </Flex>
+        {checkUnread && <Text fontSize='1.5em'>•</Text>}
       </Flex>
-      {checkUnread && <Text fontSize='1.5em'>•</Text>}
-    </Flex>
+    </Link>
   );
 
   return loading ? loadingTile() : loadedTile();
