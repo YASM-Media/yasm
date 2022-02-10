@@ -19,6 +19,8 @@ const Splash = lazy(() => import('../../pages/Splash.page'));
 const UpdateAccount = lazy(
   () => import('../../pages/UpdateAccount/UpdateAccount.page')
 );
+const Threads = lazy(() => import('../../pages/Chat/Threads.page'));
+const Chat = lazy(() => import('../../pages/Chat/Chat.page'));
 
 export interface RoutesProps {}
 
@@ -84,6 +86,20 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
               exact
               path='/search'
               component={Search}
+            />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/threads'
+              component={Threads}
+            />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/threads/:id'
+              render={(props) => (
+                <Chat threadId={props.match.params.id as string} />
+              )}
             />
             <Route path='*' component={_404} />
           </Switch>
