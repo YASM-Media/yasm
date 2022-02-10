@@ -28,7 +28,7 @@ const ThreadTile: React.FC<ThreadTileProps> = ({ thread }) => {
       .then((fetchedUser) => setUser(fetchedUser))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }, [thread]);
+  }, [thread, auth.loggedInUser.id]);
 
   const checkUnread =
     thread.seen.filter((id) => id === auth.loggedInUser.id).length === 0;

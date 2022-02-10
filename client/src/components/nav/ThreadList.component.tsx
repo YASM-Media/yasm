@@ -1,36 +1,20 @@
-import { Box, Flex, Portal } from '@chakra-ui/react';
 import { Thread } from '../../models/thread.model';
+import NoData from '../lottie/NoData.animation';
 import ThreadTile from './ThreadTile.component';
 
 export interface ThreadListProps {
-  containerRef: React.RefObject<HTMLElement | null>;
   threads: Thread[];
-  display: boolean;
 }
 
-const ThreadList: React.FC<ThreadListProps> = ({
-  containerRef,
-  threads,
-  display,
-}) => {
+const ThreadList: React.FC<ThreadListProps> = ({ threads }) => {
   return (
-    <Portal containerRef={containerRef}>
-      <Box display={!display ? 'none' : 'block'}>
-        <Box
-          position='absolute'
-          bgColor='white'
-          w='18em'
-          zIndex={99}
-          maxH='sm'
-          overflowY='scroll'
-        >
-          {threads.length > 0 &&
-            threads.map((thread) => (
-              <ThreadTile key={thread.id} thread={thread} />
-            ))}
-        </Box>
-      </Box>
-    </Portal>
+    <>
+      {threads.length > 0 ? (
+        threads.map((thread) => <ThreadTile key={thread.id} thread={thread} />)
+      ) : (
+        <NoData message='You have no messages' />
+      )}{' '}
+    </>
   );
 };
 

@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Flex,
-  IconButton,
-  Stack,
-} from '@chakra-ui/react';
+import { Avatar, AvatarBadge, Box, Stack } from '@chakra-ui/react';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import React, { useEffect, useState, useRef } from 'react';
 import { Thread } from '../../models/thread.model';
@@ -13,12 +6,14 @@ import { BsChatFill } from 'react-icons/bs';
 import * as chatService from './../../store/chat/service';
 import { AuthState } from '../../store/auth/types';
 import { RootStateOrAny, useSelector } from 'react-redux';
-import ThreadList from './ThreadList.component';
+import DisplayThreads from './DisplayThreads.component';
+import { useHistory } from 'react-router-dom';
 
 const NavChat: React.FunctionComponent = () => {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [threads, setThreads] = useState<Thread[]>([]);
   const [displayThreads, setDisplayThreads] = useState<boolean>(false);
+  const history = useHistory();
 
   const containerRef = useRef(null);
 
@@ -49,12 +44,12 @@ const NavChat: React.FunctionComponent = () => {
     );
 
     return threadsSubscription;
-  }, []);
+  }, [auth.loggedInUser.id]);
 
   return (
     <React.Fragment>
       <Box
-        display='block'
+        display={{ base: 'none', md: 'block' }}
         ref={containerRef}
         onClick={() => setDisplayThreads(!displayThreads)}
       >
@@ -72,7 +67,25 @@ const NavChat: React.FunctionComponent = () => {
           </Avatar>
         </Stack>
       </Box>
-      <ThreadList
+      <Box
+        display={{ base: 'block', md: 'none' }}
+        onClick={() => history.push('/threads')}
+      >
+        <Stack direction='row' spacing={4}>
+          <Avatar
+            icon={<BsChatFill color='white' size='1.75em' />}
+            size='sm'
+            backgroundColor='transparent'
+          >
+            {unreadCount > 0 && (
+              <AvatarBadge boxSize='1.5em' bg='pink.600' color='white'>
+                {unreadCount}
+              </AvatarBadge>
+            )}
+          </Avatar>
+        </Stack>
+      </Box>
+      <DisplayThreads
         containerRef={containerRef}
         threads={threads}
         display={displayThreads}
