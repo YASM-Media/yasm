@@ -91,6 +91,10 @@ export class NotificationService {
   ): Promise<void> {
     const fcmTokens = await this.fetchFcmTokensByUserIds(recipientIds);
 
+    if (fcmTokens.length === 0) {
+      return;
+    }
+
     await this.firebaseService.firebaseMessaging.sendToDevice(
       fcmTokens,
       {

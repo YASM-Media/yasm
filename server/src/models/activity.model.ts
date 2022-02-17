@@ -24,7 +24,10 @@ export class Activity {
   @Column()
   public activityType: ActivityType;
 
-  @ManyToOne(() => Post, { nullable: true })
+  @ManyToOne(() => Post, (post) => post.activities, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   public post: Post;
 
   @CreateDateColumn()

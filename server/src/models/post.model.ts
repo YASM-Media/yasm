@@ -1,3 +1,4 @@
+import { Activity } from 'src/models/activity.model';
 import { postIndex } from 'src/utils/algolia';
 import {
   AfterInsert,
@@ -51,6 +52,9 @@ export class Post {
 
   @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
   post: Post;
+
+  @OneToMany(() => Activity, (activity) => activity.post, { cascade: true })
+  activities: Activity[];
 
   @CreateDateColumn()
   createdAt: Date;
