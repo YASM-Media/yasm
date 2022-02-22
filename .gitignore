@@ -6,3 +6,4 @@ algolia.env
 firebase.env
 docker-compose.prod.yml
 firebase-admin.env
+prod.env
