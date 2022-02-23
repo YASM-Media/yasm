@@ -35,7 +35,8 @@ export class Activity {
       User.newEmptyUser(),
       '',
       new Date(Date.now()),
-      new Date(Date.now())
+      new Date(Date.now()),
+      Post.newPost()
     );
 
     return activity;
