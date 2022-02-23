@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import Branding from './Branding.component';
+import NavActivity from './NavActivity.component';
 import NavChat from './NavChat.component';
 import NavMenu from './NavMenu.component';
 import Searchbar from './Searchbar.component';
@@ -28,6 +29,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = () => {
         <Flex direction='row' justify='center' align='center'>
           <NavMenu />
           <NavChat />
+          <NavActivity />
         </Flex>
       </Flex>
     </React.Fragment>

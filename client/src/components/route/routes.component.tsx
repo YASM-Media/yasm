@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Activities from '../../pages/Activity/Activities.page';
 
 import Loading from '../lottie/Loading.animation';
 import PrivateRoute from './privateRoute.component';
@@ -100,6 +101,12 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
               render={(props) => (
                 <Chat threadId={props.match.params.id as string} />
               )}
+            />
+            <PrivateRoute
+              redirectTo='/login'
+              exact
+              path='/activities'
+              component={Activities}
             />
             <Route path='*' component={_404} />
           </Switch>
