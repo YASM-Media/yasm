@@ -46,6 +46,22 @@ export class Post {
   static fromJson(json: any): Post {
     const post = Post.newPost();
 
+    post.id = json.id ?? '';
+    post.text = json.text ?? '';
+    post.createdAt = json.created
+      ? new Date(json.createdAt)
+      : new Date(Date.now());
+    post.user = json.user ? User.fromJson(json.user) : User.newEmptyUser();
+    post.images = json.images
+      ? json.images.map((image: any) => Image.fromJson(image))
+      : [];
+    post.likes = json.likes
+      ? json.likes.map((like: any) => Like.fromJson(like))
+      : [];
+    post.comments = json.comments
+      ? json.comments.map((comment: any) => Post.fromJson(comment))
+      : [];
+
     return post;
   }
 
