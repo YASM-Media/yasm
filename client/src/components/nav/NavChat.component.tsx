@@ -49,13 +49,14 @@ const NavChat: React.FunctionComponent = () => {
   return (
     <React.Fragment>
       <Box
+        m='0.5em'
         display={{ base: 'none', md: 'block' }}
         ref={containerRef}
         onClick={() => setDisplayThreads(!displayThreads)}
       >
         <Stack direction='row' spacing={4}>
           <Avatar
-            icon={<BsChatFill color='white' size='1.75em' />}
+            icon={<BsChatFill color='white' size='2em' />}
             size='sm'
             backgroundColor='transparent'
           >
