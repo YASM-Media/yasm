@@ -24,9 +24,7 @@ export interface CompleteUserProfileProps {
 const CompleteUserProfile: React.FunctionComponent<CompleteUserProfileProps> =
   ({ ownProfile = true, uid }) => {
     // User Profile and followers, following state.
-    const [user, setUser] = useState<User>(
-      new User('', '', '', '', '', '', [], [])
-    );
+    const [user, setUser] = useState<User>(User.newEmptyUser());
     const [followers, setFollowers] = useState<User[]>([]);
     const [following, setFollowing] = useState<User[]>([]);
 

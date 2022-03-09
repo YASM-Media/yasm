@@ -6,7 +6,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React from 'react';
-import { User } from '../../models/user.model';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import FormField from '../form/formField.component';
