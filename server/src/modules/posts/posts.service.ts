@@ -25,12 +25,6 @@ export class PostsService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
 
-    @InjectRepository(Like)
-    private readonly likeRepository: Repository<Like>,
-
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-
     private readonly userService: UserService,
   ) {}
 

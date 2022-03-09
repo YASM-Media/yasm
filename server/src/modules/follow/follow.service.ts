@@ -27,9 +27,7 @@ export class FollowService {
   public async followUser(loggedInUser: User, followId: string): Promise<User> {
     // Get the follow details of the logged in user.
     const rootUserWithRelations =
-      await this.userService.findOneUserByEmailAddressWithRelations(
-        loggedInUser.emailAddress,
-      );
+      await this.userService.findOneUserByIdWithRelations(loggedInUser.id);
 
     // Get the details of the user to be followed.
     const followUser = await this.userService.findOneUserById(followId);
@@ -88,9 +86,7 @@ export class FollowService {
   ): Promise<User> {
     // Get the follow details of the logged in user.
     const rootUserWithRelations =
-      await this.userService.findOneUserByEmailAddressWithRelations(
-        loggedInUser.emailAddress,
-      );
+      await this.userService.findOneUserByIdWithRelations(loggedInUser.id);
 
     // Get the details of the user to be followed.
     const followUser = await this.userService.findOneUserById(followId);
@@ -142,9 +138,7 @@ export class FollowService {
    * @returns User object with follow details
    */
   public async getFollowersAndFollowing(loggedInUser: User): Promise<User> {
-    return await this.userService.findOneUserByEmailAddressWithRelations(
-      loggedInUser.emailAddress,
-    );
+    return await this.userService.findOneUserByIdWithRelations(loggedInUser.id);
   }
 
   /**

@@ -1,3 +1,4 @@
+import { PostType } from 'src/models/post.model';
 import { ActivityService } from './../activity/activity.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -36,7 +37,8 @@ export class LikeService {
       post: post,
     });
 
-    await this.activityService.createActivityForLike(post, user);
+    if (post.postType === PostType.Post)
+      await this.activityService.createActivityForLike(post, user);
 
     return like;
   }
