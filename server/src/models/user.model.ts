@@ -40,6 +40,7 @@ export class User {
   @Column({
     type: 'character varying',
     nullable: false,
+    select: false,
   })
   emailAddress: string;
 

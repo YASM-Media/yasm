@@ -28,8 +28,7 @@ export class FirebaseAuthGuard implements CanActivate {
 
         const firebaseUser =
           await this.firebaseService.firebaseAuth.verifyIdToken(authToken);
-
-        request.user = this.userService.findOneUserById(firebaseUser.uid);
+        request.user = await this.userService.findOneUserById(firebaseUser.uid);
         return true;
       } else {
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
