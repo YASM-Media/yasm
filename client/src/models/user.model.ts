@@ -4,7 +4,6 @@ export class User {
   public lastName: string = '';
   public biography: string = '';
   public imageUrl: string = '';
-  public emailAddress: string = '';
   public followers: User[] = [];
   public following: User[] = [];
 
@@ -14,7 +13,6 @@ export class User {
     lastName: string,
     biography: string,
     imageUrl: string,
-    emailAddress: string,
     followers: User[],
     following: User[]
   ) {
@@ -23,26 +21,24 @@ export class User {
     this.lastName = lastName;
     this.biography = biography;
     this.imageUrl = imageUrl;
-    this.emailAddress = emailAddress;
     this.followers = followers;
     this.following = following;
   }
 
   static newEmptyUser(): User {
-    const user = new User('', '', '', '', '', '', [], []);
+    const user = new User('', '', '', '', '', [], []);
 
     return user;
   }
 
   static fromJson(json: any): User {
-    const user = new User('', '', '', '', '', '', [], []);
+    const user = User.newEmptyUser();
 
     user.id = json.id ?? '';
     user.firstName = json.firstName ?? '';
     user.lastName = json.lastName ?? '';
     user.biography = json.biography ?? '';
     user.imageUrl = json.imageUrl ?? '';
-    user.emailAddress = json.emailAddress ?? '';
     user.followers = json.followers
       ? json.followers.map((jsonUser: any) => User.fromJson(jsonUser))
       : [];
@@ -59,7 +55,6 @@ export class User {
     lastName: string;
     biography: string;
     imageUrl: string;
-    emailAddress: string;
     followers: any[];
     following: any[];
   } {
@@ -69,7 +64,6 @@ export class User {
       lastName: this.firstName,
       biography: this.biography,
       imageUrl: this.imageUrl,
-      emailAddress: this.emailAddress,
       followers: this.followers.map((user) => user.toJson()),
       following: this.following.map((user) => user.toJson()),
     };

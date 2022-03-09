@@ -75,7 +75,6 @@ export class Post {
       lastName: string;
       biography: string;
       imageUrl: string;
-      emailAddress: string;
       followers: any[];
       following: any[];
     };
@@ -88,7 +87,6 @@ export class Post {
         lastName: string;
         biography: string;
         imageUrl: string;
-        emailAddress: string;
         followers: any[];
         following: any[];
       };

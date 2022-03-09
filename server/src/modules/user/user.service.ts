@@ -57,6 +57,15 @@ export class UserService {
     return this.userRepository.findOne({ id: id });
   }
 
+  public async findUserWithEmailAddressById(id: string): Promise<User> {
+    return await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      select: ['emailAddress'],
+    });
+  }
+
   /**
    * Find a corresponding user for the given id.
    * @param id ID of the given user.
@@ -235,14 +244,23 @@ export class UserService {
     user: User,
     emailUpdateDto: EmailUpdateDto,
   ): Promise<void> {
+    console.log('lobjbb');
+
+    console.log(emailUpdateDto);
+
     // To check if the password given is the correct password or not.
     const check = await this.validateFirebaseUser(
-      user.emailAddress,
+      user.id,
       emailUpdateDto.password,
     );
 
+    console.log('lol');
+
     if (check) {
       // Update the email address and save the updated object to the database.
+
+      console.log('lol2');
+
       user.emailAddress = emailUpdateDto.emailAddress;
       await this.userRepository.save(user);
     }
@@ -270,9 +288,16 @@ export class UserService {
    * @returns Corresponding user object.
    */
   public async validateFirebaseUser(
-    emailAddress: string,
+    id: string,
     password: string,
   ): Promise<User | null> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+      select: ['emailAddress'],
+    });
+
     // Read the firebase web key from environment.
     const firebaseWebApiKey = process.env.FIREBASE_WEB_API_KEY;
 
@@ -285,7 +310,7 @@ export class UserService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: emailAddress,
+          email: user.emailAddress,
           password: password,
           returnSecureToken: true,
         }),
@@ -318,6 +343,8 @@ export class UserService {
           HttpStatus.FORBIDDEN,
         );
       } else {
+        console.log(responseJson);
+
         throw new HttpException(
           'Either the email address or the password is wrong. Please try again.',
           HttpStatus.FORBIDDEN,
@@ -326,6 +353,6 @@ export class UserService {
     }
 
     // Return the user object corresponding to the credentials
-    return await this.findOneUserByEmailAddress(emailAddress);
+    return await this.findOneUserByEmailAddress(user.emailAddress);
   }
 }

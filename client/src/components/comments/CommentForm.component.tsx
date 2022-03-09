@@ -31,15 +31,7 @@ type FormAttributes = {
 const CommentForm: React.FunctionComponent<CommentFormProps> = ({
   isEdit = false,
   postId,
-  comment = new Post(
-    '',
-    '',
-    new Date(),
-    new User('', '', '', '', '', '', [], []),
-    [],
-    [],
-    []
-  ),
+  comment = new Post('', '', new Date(), User.newEmptyUser(), [], [], []),
   addCommentToState,
 }) => {
   const [commentState] = useState(comment);

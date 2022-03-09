@@ -6,7 +6,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React from 'react';
-import { User } from '../../models/user.model';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import FormField from '../form/formField.component';
@@ -15,16 +14,12 @@ import CustomModal from '../../components/modal/modal.component';
 import { UpdateEmailType } from '../../types/updateEmail.type';
 import Loading from '../lottie/Loading.animation';
 
-export interface UpdateEmailProps {
-  user: User;
-}
-
-const UpdateEmail: React.FunctionComponent<UpdateEmailProps> = ({ user }) => {
+const UpdateEmail: React.FunctionComponent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   const initialValues: UpdateEmailType = {
-    emailAddress: user.emailAddress,
+    emailAddress: '',
     password: '',
   };
 

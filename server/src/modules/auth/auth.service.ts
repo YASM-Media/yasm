@@ -62,10 +62,7 @@ export class AuthService {
    */
   public async deleteUser(user: User, password: string): Promise<string> {
     // Validate the user details.
-    const checkUser = await this.validateFirebaseUser(
-      user.emailAddress,
-      password,
-    );
+    const checkUser = await this.validateFirebaseUser(user.id, password);
 
     // Delete the user if password is correct else throw an error.
     if (checkUser) {
@@ -85,11 +82,13 @@ export class AuthService {
    * @returns Corresponding user object.
    */
   public async validateFirebaseUser(
-    emailAddress: string,
+    id: string,
     password: string,
   ): Promise<User | null> {
     // Read the firebase web key from environment.
     const firebaseWebApiKey = process.env.FIREBASE_WEB_API_KEY;
+
+    const user = await this.userService.findUserWithEmailAddressById(id);
 
     // Try to log in with the given credentials to check credentials.
     const response = await fetch(
@@ -100,7 +99,7 @@ export class AuthService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: emailAddress,
+          email: user.emailAddress,
           password: password,
           returnSecureToken: true,
         }),
@@ -141,7 +140,7 @@ export class AuthService {
     }
 
     // Return the user object corresponding to the credentials
-    return await this.userService.findOneUserByEmailAddress(emailAddress);
+    return await this.userService.findOneUserByEmailAddress(user.emailAddress);
   }
 
   // Wrapper method for User Service Find By Email Address

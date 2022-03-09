@@ -72,7 +72,6 @@ export class Activity {
       lastName: string;
       biography: string;
       imageUrl: string;
-      emailAddress: string;
       followers: any[];
       following: any[];
     };
@@ -82,7 +81,6 @@ export class Activity {
       lastName: string;
       biography: string;
       imageUrl: string;
-      emailAddress: string;
       followers: any[];
       following: any[];
     };
@@ -99,7 +97,6 @@ export class Activity {
         lastName: string;
         biography: string;
         imageUrl: string;
-        emailAddress: string;
         followers: any[];
         following: any[];
       };
@@ -112,7 +109,6 @@ export class Activity {
           lastName: string;
           biography: string;
           imageUrl: string;
-          emailAddress: string;
           followers: any[];
           following: any[];
         };

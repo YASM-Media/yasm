@@ -3,7 +3,6 @@ import { DeleteCommentDto } from './../../DTOs/comments/deleteComment.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCommentDto } from 'src/DTOs/comments/createComment.dto';
-import { Image } from 'src/models/image.model';
 import { Post, PostType } from 'src/models/post.model';
 import { User } from 'src/models/user.model';
 import { Repository } from 'typeorm';
@@ -20,9 +19,6 @@ export class CommentsService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
-
-    @InjectRepository(Image)
-    private readonly imageRepository: Repository<Image>,
 
     private readonly postService: PostsService,
     private readonly activityService: ActivityService,

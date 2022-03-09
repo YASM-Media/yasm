@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { setLocale } from 'yup';
 import ActivityList from '../../components/activity/ActivityList.component';
 import Loading from '../../components/lottie/Loading.animation';
 import { Activity } from '../../models/activity.model';

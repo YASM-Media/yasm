@@ -31,15 +31,7 @@ const CommentList: React.FunctionComponent<CommentListProps> = ({
   updateCommentInState,
 }) => {
   const [commentState, setCommentState] = useState<Post>(
-    new Post(
-      '',
-      '',
-      new Date(),
-      new User('', '', '', '', '', '', [], []),
-      [],
-      [],
-      []
-    )
+    new Post('', '', new Date(), User.newEmptyUser(), [], [], [])
   );
 
   const toast = useToast();

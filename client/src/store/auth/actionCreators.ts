@@ -37,7 +37,6 @@ export const login = (
         userJson.lastName,
         userJson.biography,
         userJson.imageUrl,
-        userJson.emailAddress,
         [],
         []
       ),
@@ -58,7 +57,7 @@ export const logout = () => {
 
     return dispatch({
       type: actionTypes.LOGOUT,
-      user: new User('', '', '', '', '', '', [], []),
+      user: User.newEmptyUser(),
     });
   };
 };
@@ -87,7 +86,7 @@ export const deleteAccount = (password: string) => {
 
     return dispatch({
       type: actionTypes.LOGOUT,
-      user: new User('', '', '', '', '', '', [], []),
+      user: User.newEmptyUser(),
     });
   };
 };

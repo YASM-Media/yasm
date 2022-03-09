@@ -46,7 +46,7 @@ const UpdateAccount: React.FunctionComponent<UpdateAccountProps> = () => {
               <UpdateProfile user={auth.loggedInUser} />
             </TabPanel>
             <TabPanel>
-              <UpdateEmail user={auth.loggedInUser} />
+              <UpdateEmail />
             </TabPanel>
             <TabPanel>
               <UpdatePassword />

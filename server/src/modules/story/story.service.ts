@@ -39,10 +39,7 @@ export class StoryService {
   }
 
   public async fetchStories(user: User): Promise<User[]> {
-    const dbUser =
-      await this.userService.findOneUserByEmailAddressWithRelations(
-        user.emailAddress,
-      );
+    const dbUser = await this.userService.findOneUserByIdWithRelations(user.id);
 
     if (dbUser.following.length === 0) {
       return [];

@@ -31,7 +31,6 @@ export class Like {
       lastName: string;
       biography: string;
       imageUrl: string;
-      emailAddress: string;
       followers: any[];
       following: any[];
     };

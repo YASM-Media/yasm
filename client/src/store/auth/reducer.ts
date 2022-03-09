@@ -3,7 +3,7 @@ import * as actionTypes from './actionTypes';
 import { User } from '../../models/user.model';
 
 const intialState: AuthState = {
-  loggedInUser: new User('', '', '', '', '', '', [], []),
+  loggedInUser: User.newEmptyUser(),
   isLoggedIn: false,
 };
 
@@ -23,7 +23,7 @@ const authReducer = (
     case actionTypes.LOGOUT: {
       return {
         ...state,
-        loggedInUser: new User('', '', '', '', '', '', [], []),
+        loggedInUser: User.newEmptyUser(),
         isLoggedIn: false,
       };
     }
