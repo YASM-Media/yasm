@@ -14,7 +14,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ activity }) => {
       href={
         activity.activityType === 'FOLLOW'
           ? `/account/profile/${activity.triggeredByUser.id}`
-          : `/account/profile/${activity.mainUser.id}`
+          : `/post/${activity.post?.id}`
       }
     >
       <Flex direction='row' justify='space-evenly' align='center' m='0.7em'>
