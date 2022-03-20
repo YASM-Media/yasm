@@ -13,7 +13,9 @@ import { User } from '../../models/user.model';
 import CustomModal from '../modal/modal.component';
 import UserList from './UserList.component';
 import * as FollowService from './../../store/follow/service';
+import * as ChatService from './../../store/chat/service';
 import { AuthState } from '../../store/auth/types';
+import { CreateThreadDto } from '../../dto/chat/create-thread.dto';
 
 export interface UserProfileProps {
   user: User;
@@ -111,6 +113,21 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
     }
   };
 
+  const startChat = async () => {
+    try {
+      const createThreadDto = CreateThreadDto.newCreateThreadDto([
+        auth.loggedInUser.id,
+        user.id,
+      ]);
+
+      const threadId = await ChatService.createNewThread(createThreadDto);
+
+      history.push(`/threads/${threadId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <React.Fragment>
       <Flex
@@ -171,9 +188,14 @@ const UserProfile: React.FunctionComponent<UserProfileProps> = ({
           </Flex>
 
           {!ownProfile && (
-            <Button onClick={followOrUnfollowUser} variant='ghost'>
-              {isFollowing ? 'Unfollow' : 'Follow'}
-            </Button>
+            <Flex flexDirection='row' justify='space-evenly' align='center'>
+              <Button onClick={followOrUnfollowUser} variant='ghost'>
+                {isFollowing ? 'Unfollow' : 'Follow'}
+              </Button>
+              <Button onClick={startChat} variant='ghost'>
+                Chat
+              </Button>
+            </Flex>
           )}
           {ownProfile && (
             <Button

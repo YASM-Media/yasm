@@ -64,7 +64,9 @@ const ThreadTile: React.FC<ThreadTileProps> = ({ thread }) => {
               color={checkUnread ? 'black' : 'grey'}
               fontWeight={checkUnread ? 'bold' : 'normal'}
             >
-              {thread.messages[thread.messages.length - 1].message}
+              {thread.messages.length > 0
+                ? thread.messages[thread.messages.length - 1].message
+                : '(no message)'}
             </Text>
           </Box>
         </Flex>
