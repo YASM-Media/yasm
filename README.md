@@ -1,8 +1,6 @@
 <h1 align="center"> YASM Media!!🌟 (Beta) </h1> <br>
 <p align="center">
-  <a href="https://gitpoint.co/">
-    <img alt="GitPoint" title="GitPoint" src="https://firebasestorage.googleapis.com/v0/b/yasm-react.appspot.com/o/assets%2Fpng%2Fg1003.png?alt=media" width="250">
-  </a>
+    <img alt="YASM" title="YASM" src="https://firebasestorage.googleapis.com/v0/b/yasm-react.appspot.com/o/assets%2Fpng%2Fg1003.png?alt=media" width="250">
 </p>
 
 <p align="center">
@@ -23,14 +21,6 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Introduction
-<p align="center">
-
-![Github Issues](https://img.shields.io/github/issues/khatrivarun/yasm?style=for-the-badge&logo=appveyor)
-![Github Forks](https://img.shields.io/github/forks/khatrivarun/yasm?style=for-the-badge&logo=appveyor)
-![Github Stars](https://img.shields.io/github/stars/khatrivarun/yasm?style=for-the-badge&logo=appveyor)
-![Github License](https://img.shields.io/github/license/khatrivarun/yasm?style=for-the-badge&logo=appveyor)
-
-</p>
 
 A pretty fast and reliable social media app where you can meet new people, share memories or just go crazy and follow people lives as they happen!
 
